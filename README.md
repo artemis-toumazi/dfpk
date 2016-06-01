@@ -33,17 +33,17 @@ More instructions on how to use **dfpk** are given in the package's vignette.
 ```{r vignette, eval=FALSE}
 vignette("dfpk") 
 ``` 
-# FAQ
+### FAQ
 
-## Can I avoid compiling models? 
+#### Can I avoid compiling models? 
 
 Unfortunately, fitting your model with **dfpk**, there is currently no way to avoid the compilation. 
 
-## What is the difference between dfpk and dfcrm? 
+#### What is the difference between dfpk and dfcrm? 
 
 **dfcrm** is an R package similar to **dfpk** that also allows to fit Bayesian models for the dose finding methods. **dfcrm** package uses Dose-finding by the continual reassessment method. 
 Contrary to **dfcrm**, **dfpk** comes with **Stan** models, it offers more flexibility in model specification than **dfcrm**. Also, a combination of PKLIM model(a modified model shown in Patterson et al(1999) and Whitehead et al, 2001) and the CRM model is currently fitted a bit more efficiently in **dfpk**. For a detailed comparison of **dfpk** with other common R packages implementing Stan models, type `vignette("dfpk")` in R. 
 
-## What is the best way to ask a question or propose a new feature? 
+#### What is the best way to ask a question or propose a new feature? 
 
 You can either open an issue on [github](https://github.com/artemis-toumazi/dfpk) or write me an email (artemis.toumazi@gmail.com).
