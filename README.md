@@ -2,16 +2,16 @@
 
 The **dfpk** R package provides an interface to fit Bayesian generalized (non-)linear mixed models using Stan, which is a C++ package for obtaining Bayesian inference using the No-U-turn sampler (see http://mc-stan.org/). The formula syntax is very similar to that of the R package dfcrm to provide a simple interface for performing pharmacokinetics(PK) analyses.
 
-## Installation
+### Installation
 
-### Establish Version
+#### Establish Version
 
 **dfpk** is now on CRAN and can be installed and loaded via
 ```{r}
 install.packages("dfpk")
 library(dfpk)
 ```
-### Development Version
+#### Development Version
 To install the **dfpk** package from GitHub, first make sure that you can install the **rstan** package and C++ toolchain by following these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). The program Rtools (available on https://cran.r-project.org/bin/windows/Rtools/) comes with a C++ compiler for Windows. On OS-X, you should install Xcode. Once **rstan** is successfully installed, you can install **dfpk** from GitHub using the **devtools** package by executing the following in R:
 
 ```{r}
