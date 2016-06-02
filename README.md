@@ -2,6 +2,10 @@
 
 The **dfpk** R package provides an interface to fit Bayesian generalized (non-)linear mixed models using Stan, which is a C++ package for obtaining Bayesian inference using the No-U-turn sampler (see http://mc-stan.org/). The formula syntax is very similar to that of the R package dfcrm to provide a simple interface for performing pharmacokinetics(PK) analyses.
 
+### Description 
+
+The **dfpk** package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter pharmacokinetics(PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs.
+
 ### Installation
 
 #### Establish Version
