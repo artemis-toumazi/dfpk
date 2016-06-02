@@ -1,13 +1,17 @@
-Package: dfpk2
+Package: dfpk
 Type: Package
-Title: What the package does (short line)
+Title: "A Bayesian dose-finding design using pharmacokinetics(PK) for Phase I clinical trials.
 Version: 1.0
 Date: 2016-05-31
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Artemis Toumazi <artemis.toumazi@gmail.com>
+Maintainer: Artemis Toumazi <artemis.toumazi@gmail.com> and Moreno Ursino <moreno.ursino@inserm.fr>
+Description: dfpk package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs.
+License: GPL (>= 3)
 Depends: R (>= 3.0.2), Rcpp (>= 0.11.0)
-Imports: rstan (>= 2.8.1)
+Imports: rstan (>= 2.8.1), ggplot2 (>= 2.0.0)
+Suggests: roxygen2, arm, MASS, rmarkdown, testthat
 LinkingTo: StanHeaders (>= 2.8.0), rstan (>= 2.8.1), BH (>= 1.58.0), Rcpp (>= 0.11.0), RcppEigen
 RcppModules:  stan_fit4logit_cov2_mod, stan_fit4logit_reg_mod, stan_fit4logit_reg_dtox_mod, stan_fit4logit_reg_pkpop_mod, stan_fit4reg_auc2_mod 
+URL: http://github.com/artemis-toumazi/dfpk
+BugReports: http://github.com/artemis-toumazi/dfpk/issues
+RoxygenNote: 5.0.1
