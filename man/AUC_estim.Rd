@@ -1,67 +1,47 @@
 \name{AUC_estim}
 \alias{AUC_estim}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Estimation of AUC, area under the curve
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+In the field of pharmacokinetics, the area under the curve (AUC) is the area under the curve (mathematically known as definite integral) in a plot of concentration of drug in blood plasma against time. AUC is computed as the doses over the second pk parameter, clearance(CL). 
 }
+
 \usage{
 AUC_estim(t, conc, dose)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{t}{
-%%     ~~Describe \code{t} here~~
+the time 
 }
   \item{conc}{
-%%     ~~Describe \code{conc} here~~
+the concentration of the drug in blood plasma 
 }
   \item{dose}{
-%%     ~~Describe \code{dose} here~~
+the doses' levels of the drug
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\references{
+Moreno et al, 2016
+}
+
+\author{
+Artemis Toumazi
+}
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{pk.estim}}, \code{\link{sim}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (t, conc, dose) 
-{
-    out_pk = optim(c(1, 5, 50), pk.estim, t = t, dose = dose, 
-        conc = conc, method = "L-BFGS-B", lower = c(0.1, 0.2, 
-            1))
-    dose/out_pk$par[2]
-  }
+\dontrun{
+dose = c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+conc = c(20,30,40,50,60,70)
+t = seq(0,24,length.out=48)
+auc_estimation <- AUC_estim(t,conc,dose)	
+auc_estimation
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+
+

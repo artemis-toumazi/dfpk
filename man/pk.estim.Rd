@@ -1,75 +1,48 @@
 \name{pk.estim}
 \alias{pk.estim}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+PK measure of exposure
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Estimation of the PK measure of exposure. 
 }
 \usage{
 pk.estim(par, t, dose, conc)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{par}{
-%%     ~~Describe \code{par} here~~
+PK parameters
 }
   \item{t}{
-%%     ~~Describe \code{t} here~~
+the time sampling
 }
   \item{dose}{
-%%     ~~Describe \code{dose} here~~
+the doses' levels of the drug
 }
   \item{conc}{
-%%     ~~Describe \code{conc} here~~
+the concentration of the drug in blood plasma
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\references{
+Moreno et al, 2016
+}
+
+\author{
+Artemis Toumazi
+}
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{AUC_estim}}, \code{\link{sim}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (par, t, dose, conc) 
-{
-    ka <- par[1]
-    CL <- par[2]
-    V <- par[3]
-    s <- dose * ka/V/(ka - CL/V) * (exp(-CL/V * t) - exp(-ka * 
-        t))
-    if (any(is.nan(s))) 
-        cat("ka=", ka, "\n V=", V, "\n CL=", CL, "\n")
-    s[s == 0] = rep(2^(-1074), length(s[s == 0]))
-    sum((log(s) - log(conc))^2)
-  }
+\examples{
+par <- c(2,10,100) 
+conc <- c(20,30,40,50,60,70)
+t <- seq(0,24,length.out=48)
+dose <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+
+pk.estim(par,t,dose,conc)
+
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

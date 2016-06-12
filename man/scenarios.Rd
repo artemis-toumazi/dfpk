@@ -1,118 +1,74 @@
 \name{scenarios}
 \alias{scenarios}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Generate New Scenarios
 }
+
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function can be used to generate several scenarios.
 }
+
 \usage{
 scenarios(param_pk, omega2, omega_a, sigma2, preal, limit_tox, time_sampling, N)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{param_pk}{
-%%     ~~Describe \code{param_pk} here~~
+Subject's pharmacokinetics(PK) parameters 
 }
-  \item{omega2}{
-%%     ~~Describe \code{omega2} here~~
+  \item{omega2}{standard deviation of the log-normal distribution that the PK parameters clearance(CL) and volume(V) come from. Is equal to 70\% or 30\% in different scenarios. 
 }
-  \item{omega_a}{
-%%     ~~Describe \code{omega_a} here~~
+  \item{omega_a}{standard deviation of the log-normal distribution which the sensitivity parameter \eqn{\alpha} comes from. 
 }
   \item{sigma2}{
-%%     ~~Describe \code{sigma2} here~~
+additive or proportional error
 }
   \item{preal}{
-%%     ~~Describe \code{preal} here~~
+the true probabilities of toxicity
 }
   \item{limit_tox}{
-%%     ~~Describe \code{limit_tox} here~~
+the threashold on toxicity
 }
   \item{time_sampling}{
-%%     ~~Describe \code{time_sampling} here~~
+time sampling
 }
   \item{N}{
-%%     ~~Describe \code{N} here~~
+number of patients
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+
 \references{
-%% ~put references to the literature/web site here ~
+Moreno et al, 2016 
 }
 \author{
-%%  ~~who you are~~
+Artemis Toumazi
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{sim}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (param_pk, omega2, omega_a, sigma2, preal, limit_tox, 
-    time_sampling, N) 
-{
-    pk.model <- function(t, dose, ka, CL, V) {
-        dose * ka/V/(ka - CL/V) * (exp(-CL/V * t) - exp(-ka * 
-            t))
-    }
-    n_pk <- length(time_sampling)
-    doses <- exp(qnorm(preal) * sqrt(omega2^2 + omega_a^2) + 
-        log(limit_tox) + log(param_pk[2]))
-    parameter <- NULL
-    sens_AUC <- NULL
-    alphatot <- NULL
-    tab <- c(0, time_sampling, time_sampling)
-    npar <- length(param_pk) - 1
-    for (i in 1:N) {
-        ipar <- (param_pk[2:3]) * exp(rnorm(npar, sd = omega2))
-        ipar <- c(param_pk[1], ipar)
-        parameter <- rbind(parameter, ipar)
-        for (j in doses) {
-            concen <- pk.model(time_sampling, dose = j, ka = ipar[1], 
-                CL = ipar[2], V = ipar[3])
-            conc_pred <- concen * (1 + rnorm(2 * n_pk, sd = sigma2))
-            tab <- rbind(tab, c(i, conc_pred))
-            alfa <- exp(rnorm(1, sd = omega_a))
-            CL <- ipar[2]
-            sens <- alfa * j/CL
-            sens_AUC <- c(sens_AUC, sens)
-            alphatot <- c(alphatot, alfa)
-        }
-    }
-    concentration <- NULL
-    for (k in 1:length(doses)) {
-        conc <- pk.model(time_sampling, dose = doses[k], ka = ipar[1], 
-            CL = ipar[2], V = ipar[3])
-        concentration <- cbind(concentration, conc)
-    }
-    tox <- matrix(sens_AUC >= limit_tox, ncol = length(doses), 
-        byrow = T)
-    data <- list(n_pk = n_pk, conc_pred = conc_pred, concentration = concentration, 
-        doses = doses, tab = tab, tox = tox, parameters = parameter, 
-        alfa_AUC = sens_AUC)
-  }
+\examples{
+#####################################
+######### Scenario Inputs  ##########
+#####################################
+
+limit_tox <- 10.96                  
+N <- 42                             # number of patients
+param_pk <- c(2,10,100)             # PK parameters ka,CL,V
+omega2 <- 0.7                       # Inter-individual
+omega_a <- 0                        # IIV   
+preal <- c(0.001,.05,0.1,.2,0.35,0.45)    # true prob of toxicity
+time_sampling <- seq(0,24,length.out=48)  # time sampling
+sigma2 <- c(rep(0.2,length(time_sampling)),rep(0.2,length(time_sampling)))           
+# sigma2: Additive or proportional error
+
+#############################################
+############ Test the scenario ##############
+#############################################
+
+gen.scen <- scenarios(param_pk,omega2,omega_a,sigma2,preal,limit_tox,time_sampling, N)
+gen.scen 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{models}

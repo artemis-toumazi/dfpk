@@ -1,65 +1,50 @@
 \name{f_logit}
 \alias{f_logit}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Logit link function 
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+A logit function that is used in the posterior probability of toxicity of the model PKLOGIT.
 }
+
 \usage{
 f_logit(v, lambda, parmt)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{v}{
-%%     ~~Describe \code{v} here~~
+
 }
   \item{lambda}{
-%%     ~~Describe \code{lambda} here~~
+
 }
   \item{parmt}{
-%%     ~~Describe \code{parmt} here~~
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\references{
+Moreno et al, 2016
+}
+
+\author{
+Artemis Toumazi
+}
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{pklogit}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (v, lambda, parmt) 
-{
-    invlogit(lambda[1] + lambda[2] * v) * dnorm(v, parmt[1], 
-        sqrt(parmt[2]))
-  }
+\examples{
+a <- -4.1419339 
+b <- 1.3873627 
+c <- 0.7402598 
+d <- -13.3335144
+e <- 5.9044069 
+doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+
+pstim <- NULL 
+for (o in 1:length(doses)){
+        parmt = c(a + b*log(doses[o]),c)
+        pstim <- c(pstim, integrate(f_logit,-Inf,Inf, lambda=c(d,e), parmt=parmt)$value)
+	}
+pstim
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

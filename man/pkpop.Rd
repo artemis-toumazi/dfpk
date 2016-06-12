@@ -1,104 +1,79 @@
 \name{pkpop}
 \alias{pkpop}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Dose finding method PKPOP
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+A variation of PKLOGIT model, that we call PKPOP, consists of replacing AUCs with AUC of the population (AUCpop). AUCpop is the mean value of the logarithm of AUC at dose k predicted by th hierarchical model. In other words we replaced the value of patient with the mean value of the population. In this way we passes directly to the population level. 
 }
 \usage{
 pkpop(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
-  \item{y}{
-%%     ~~Describe \code{y} here~~
+ \item{y}{
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
 }
   \item{auc}{
-%%     ~~Describe \code{auc} here~~
+the auc numbers of each patient
 }
   \item{doses}{
-%%     ~~Describe \code{doses} here~~
+the doses levels of the drug
 }
   \item{lev}{
-%%     ~~Describe \code{lev} here~~
+the levels 
 }
   \item{theta}{
-%%     ~~Describe \code{theta} here~~
+the target probability of toxicity
 }
   \item{p_0}{
-%%     ~~Describe \code{p_0} here~~
+Skeleton of CRM
 }
   \item{L}{
-%%     ~~Describe \code{L} here~~
+a threshold set before starting the trial.
 }
   \item{betapriors}{
-%%     ~~Describe \code{betapriors} here~~
+the betapriors of pkpop model; the default is NULL for this model.
 }
   \item{D_AUC}{
-%%     ~~Describe \code{D_AUC} here~~
+A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
 }
   \item{options}{
-%%     ~~Describe \code{options} here~~
+A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations.
+defaults to options <- list(nchains = 4,
+                            niter = 4000,
+                            nadapt = 0.8)}
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+
 \references{
-%% ~put references to the literature/web site here ~
+Moreno et al, 2016
+
 }
 \author{
-%%  ~~who you are~~
+Artemis Toumazi
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{scenarios}}, \code{\link{sim}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, 
-    options) 
-{
-    num <- length(lev)
-    dose1 <- cbind(rep(1, num), log(doses[lev]))
-    data_s <- list(N = num, auc = log(auc), dose = dose1)
-    reg1 <- sampling(sm_lrauc, data = data_s, iter = options$niter, 
-        chains = options$nchains, control = list(adapt_delta = options$nadapt))
-    a1 = get_posterior_mean(reg1)
-    beta1 <- a1[1:2, 5]
-    mu <- beta1[1] + beta1[2] * log(doses)
-    nu <- a1[3, 5]
-    mu1 <- cbind(rep(1, num), mu[lev])
-    data_s <- list(N = num, y = y, dose = mu1)
-    reg2 <- sampling(sm_lrPkpop, data = data_s, iter = options$niter, 
-        chains = options$nchains, control = list(adapt_delta = options$nadapt))
-    a2 = get_posterior_mean(reg2)
-    Beta <- a2[3:4, 5]
-    p_stim = invlogit(Beta[1] + Beta[2] * mu)
-    new_dose = order((abs(p_stim - theta)))[1]
-    list(new_dose = new_dose, pstim = p_stim, parameters = c(beta1, 
-        nu, Beta))
-  }
+\examples{
+p_0 = NULL                  
+L = NULL 
+d <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+theta <- 0.2      # choice
+options <- list(nchains = 2,
+        niter = 4000,
+        nadapt = 0.8)  
+AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
+x <- c(1,2,3,4,5,6)              
+y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
+D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
+
+### Betapriors ###
+betapriors = NULL
+
+pkpop(y, AUCs, d, x, theta, p_0, L, betapriors, D_AUC, options)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{models}

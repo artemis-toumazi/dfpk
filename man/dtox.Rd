@@ -1,98 +1,80 @@
 \name{dtox}
 \alias{dtox}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Dose finding method DTOX
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+The DTOX model was be introduced to test the behaviours of a way of estimating probabilities of toxicity. This way is to estimate posterior probability of toxicity($p_T$) versus dose directly. Therefore it represents a statistical model to link $p_T$ and dose. 
 }
 \usage{
 dtox(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{y}{
-%%     ~~Describe \code{y} here~~
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
 }
   \item{auc}{
-%%     ~~Describe \code{auc} here~~
+the auc numbers of each patient
 }
   \item{doses}{
-%%     ~~Describe \code{doses} here~~
+the doses levels of the drug
 }
   \item{lev}{
-%%     ~~Describe \code{lev} here~~
+the levels 
 }
   \item{theta}{
-%%     ~~Describe \code{theta} here~~
+the target probability of toxicity
 }
   \item{p_0}{
-%%     ~~Describe \code{p_0} here~~
+Skeleton of CRM
 }
   \item{L}{
-%%     ~~Describe \code{L} here~~
+a threshold set before starting the trial.
 }
   \item{betapriors}{
-%%     ~~Describe \code{betapriors} here~~
+the betapriors of dtox model.
 }
   \item{D_AUC}{
-%%     ~~Describe \code{D_AUC} here~~
+A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL. 
 }
   \item{options}{
-%%     ~~Describe \code{options} here~~
+A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations.
+defaults to options <- list(nchains = 4,
+                            niter = 4000,
+                            nadapt = 0.8)}
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+
 \references{
-%% ~put references to the literature/web site here ~
+Moreno et al, 2016
 }
 \author{
-%%  ~~who you are~~
+Artemis Toumazi
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{scenarios}}, \code{\link{sim}} 
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+### Betapriors ###
+param_pk <- c(2,10,100)
+beta0mean <- (log(param_pk[2])+log(10.96))/sqrt(0.7**2 + 0**2)
+beta1mean <- 1 / 0.7
+betapriors <- c(beta0mean, beta1mean)
 
-## The function is currently defined as
-function (y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, 
-    options) 
-{
-    num <- length(lev)
-    dose1 <- cbind(rep(1, num), log(doses[lev]))
-    data_s <- list(N = num, y = y, dose = dose1, beta0mean = betapriors[1], 
-        beta1mean = betapriors[2])
-    reg1 <- sampling(sm_lrDtox, data = data_s, iter = options$niter, 
-        chains = options$nchains, control = list(adapt_delta = options$nadapt))
-    a1 = get_posterior_mean(reg1)
-    beta <- a1[3:4, 5]
-    beta0 <- beta[1]
-    beta1 <- beta[2]
-    p_new <- pnorm(beta0 + beta1 * log(doses))
-    new_dose <- order(abs(p_new - theta))[1]
-    list(new_dose = new_dose, pstim = p_new, parameters = beta)
-  }
+p_0 = NULL              
+L = NULL 
+d <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+theta <- 0.2      # choice
+options <- list(nchains = 2,
+        niter = 4000,
+        nadapt = 0.8)  
+
+AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
+x <- c(1,2,3,4,5,6)              
+y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
+D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
+
+dtox(y, AUCs, d, x, theta, p_0, L,betapriors,D_AUC,options)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{models}

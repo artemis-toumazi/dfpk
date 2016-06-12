@@ -1,101 +1,87 @@
 \name{pkcov}
 \alias{pkcov}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Dose finding method PKCOV
 }
-
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+The PKCOV model is a modification of the model proposed by Piantadosi and Liu (1996). As in the original paper we maintained the idea to incorporate PK as covariate of \eqn{p_T} through the logit link. This model uses \eqn{\delta}z instead of \eqn{\delta}AUC in order to have both the covariates on the same scale. As the original paper uniform priors have been taken for \eqn{\beta_1} and \eqn{\beta_2}, independently of each other. 
 }
 \usage{
 pkcov(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
-  \item{y}{
-%%     ~~Describe \code{y} here~~
+ \item{y}{
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
 }
   \item{auc}{
-%%     ~~Describe \code{auc} here~~
+the auc numbers of each patient
 }
   \item{doses}{
-%%     ~~Describe \code{doses} here~~
+the doses levels of the drug
 }
   \item{lev}{
-%%     ~~Describe \code{lev} here~~
+the levels 
 }
   \item{theta}{
-%%     ~~Describe \code{theta} here~~
+the target probability of toxicity
 }
   \item{p_0}{
-%%     ~~Describe \code{p_0} here~~
+Skeleton of CRM
 }
   \item{L}{
-%%     ~~Describe \code{L} here~~
+a threshold set before starting the trial.
 }
   \item{betapriors}{
-%%     ~~Describe \code{betapriors} here~~
+the betapriors of pkcov model.
 }
   \item{D_AUC}{
-%%     ~~Describe \code{D_AUC} here~~
+A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
 }
   \item{options}{
-%%     ~~Describe \code{options} here~~
+A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations.
+defaults to options <- list(nchains = 4,
+                            niter = 4000,
+                            nadapt = 0.8)}
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+
 \references{
-%% ~put references to the literature/web site here ~
+Moreno et al, 2016
 }
 \author{
-%%  ~~who you are~~
+Artemis Toumazi
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{scenarios}}, \code{\link{sim}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, 
-    options) 
-{
-    num <- length(lev)
-    dose1 <- cbind(rep(1, num), log(doses[lev]))
-    dauc1 <- D_AUC[lev]
-    beta0mean <- betapriors[1]
-    beta1mean <- betapriors[2]
-    data_s <- list(N = num, y = y, dose = dose1, dauc = dauc1, 
-        beta0mean = beta0mean, beta1mean = beta1mean)
-    reg1 <- sampling(sm_lrCov, data = data_s, iter = options$niter, 
-        chains = options$nchains, control = list(adapt_delta = options$nadapt))
-    a1 = get_posterior_mean(reg1)
-    Beta <- a1[4:6, 5]
-    p_stim = 1/(1 + exp(Beta[1] + Beta[2] * log(doses)))
-    new_dose = order((abs(p_stim - theta)))[1]
-    list(new_dose = new_dose, pstim = p_stim, parameters = Beta, 
-        posterior = a1)
-  }
+\examples{
+
+p_0 = NULL                  
+L = NULL 
+d <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+theta <- 0.2      # choice
+options <- list(nchains = 2,
+        niter = 4000,
+        nadapt = 0.8)  
+AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
+x <- c(1,2,3,4,5,6)              
+y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
+D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
+
+### Betapriors ###
+param_pk <- c(2,10,100) 
+omega2 <- 0.7
+logit <- function(x) log(x/(1-x))
+xr <- d
+yr <- logit(pnorm((log(xr) - log(10.96) - log(param_pk[2]))/omega2))
+coeff <- lm(yr ~ log(xr))
+beta0mean <- -coeff$coefficients[1]
+beta1mean <- coeff$coefficients[2]
+betapriors <- c(beta0mean, beta1mean)
+
+pkcov(y, AUCs, d, x, theta, p_0, L, betapriors,D_AUC,options)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{models}
