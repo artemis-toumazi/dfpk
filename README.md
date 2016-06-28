@@ -4,13 +4,13 @@ The **dfpk** R package provides an interface to fit Bayesian generalized (non-)l
 
 ### Description
 
-dfpk package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs.
+**dfpk** package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs.
 
 #### Installation
 
 ### Establish Version
 
-**dfpk** is now on CRAN and can be installed and loaded via
+**dfpk**will be on CRAN soon and can be installed and loaded via
 
 ```{r}
 install.packages("dfpk")
@@ -46,11 +46,6 @@ vignette("dfpk")
 ### Can I avoid compiling models? 
 
 Unfortunately, fitting your model with **dfpk**, there is currently no way to avoid the compilation. 
-
-### What is the difference between dfpk and dfcrm? 
-
-**dfcrm** is an R package similar to **dfpk** that also allows to fit Bayesian models for the dose finding methods. **dfcrm** package uses Dose-finding by the continual reassessment method. 
-Contrary to **dfcrm**, **dfpk** comes with **Stan** models, it offers more flexibility in model specification than **dfcrm**. Also, a combination of PKLIM model(a modified model shown in Patterson et al(1999) and Whitehead et al, 2001) and the CRM model is currently fitted a bit more efficiently in **dfpk**. For a detailed comparison of **dfpk** with other common R packages implementing Stan models, type `vignette("dfpk")` in R.   
 
 ### What is the best way to ask a question or propose a new feature? 
 
