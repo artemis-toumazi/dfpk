@@ -10,7 +10,7 @@ The **dfpk** R package provides an interface to fit Bayesian generalized (non-)l
 
 ### Establish Version
 
-**dfpk**will be on CRAN soon and can be installed and loaded via
+**dfpk** will be on CRAN soon and can be installed and loaded via
 
 ```{r}
 install.packages("dfpk")
