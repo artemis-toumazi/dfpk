@@ -1,16 +1,16 @@
 # dfpk
 
-The **dfpk** R package provides an interface to fit Bayesian generalized (non-)linear mixed models using Stan, which is a C++ package for obtaining Bayesian inference using the No-U-turn sampler (see http://mc-stan.org/). The formula syntax is very similar to that of the R package dfcrm to provide a simple interface for performing pharmacokinetics(PK) analyses.
+The **dfpk** R package provides an interface to fit Bayesian generalized (non-)linear mixed models using Stan, which is a C++ package for obtaining Bayesian inference using the No-U-turn sampler (see http://mc-stan.org/). 
 
 ### Description
 
-**dfpk** package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs.
+dfpk package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs.  
 
 #### Installation
 
-### Establish Version
+### Establish Version 
 
-**dfpk** will be on CRAN soon and can be installed and loaded via
+**dfpk** will be soon on CRAN and can be installed and loaded via 
 
 ```{r}
 install.packages("dfpk")
@@ -36,11 +36,6 @@ Details on formula syntax, families and link functions, as well as prior distrib
 help(dfpk)
 ```
 
-More instructions on how to use **dfpk** are given in the package's vignette.
-```{r vignette, eval=FALSE}
-vignette("dfpk") 
-```
-
 #### FAQ
 
 ### Can I avoid compiling models? 
@@ -49,4 +44,5 @@ Unfortunately, fitting your model with **dfpk**, there is currently no way to av
 
 ### What is the best way to ask a question or propose a new feature? 
 
-You can either open an issue on [github](https://github.com/artemis-toumazi/dfpk) or write me an email (artemis.toumazi@gmail.com). 
+You can either open an issue on [github](https://github.com/artemis-toumazi/dfpk) or write me an email to (artemis.toumazi@gmail.com). 
+
