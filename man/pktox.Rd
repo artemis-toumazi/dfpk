@@ -4,29 +4,29 @@
 Dose finding method PKTOX
 }
 \description{
-The PKTOX model was be introduced to test the behaviour of one possible way tof estimating probabilities of toxicity. This way consists of estimating probabilities of toxicity of doses passing through the AUC or another PK measure of exposure. This models is essentially the PKLOGIT model with the difference that uses \eqn{\Phi} function instead of logit in the posterior probability of toxicity. 
-}
+The PKTOX model was be introduced to test the behaviour of one possible way tof estimating probabilities of toxicity. This way consists of estimating probabilities of toxicity of doses passing through the AUC or another PK measure of exposure. This models is essentially the PKLOGIT model with the difference that uses \eqn{\Phi} function instead of logit in the posterior probability of toxicity.
+ }
 \usage{
 pktox(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
 \arguments{
  \item{y}{
-A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient
+the auc numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug
+the doses levels of the drug.
 }
   \item{lev}{
-the levels 
+A vector of dose levels assigned to patients. 
 }
   \item{theta}{
-the target probability of toxicity
+the toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM
+Skeleton of CRM.
 }
   \item{L}{
 a threshold set before starting the trial.
@@ -46,12 +46,11 @@ defaults to options <- list(nchains = 4,
 
 \references{
 Moreno et al, 2016
-
 }
 
-\author{
-Artemis Toumazi
-}
+\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        }
 
 \seealso{
 \code{\link{scenarios}}, \code{\link{sim}}
@@ -73,7 +72,7 @@ D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
 ### Betapriors ###
 betapriors = NULL
 
-pktox(y, AUCs, d, x, theta, p_0, L, betapriors,D_AUC,options)
+pktox(y, AUCs, d, x, theta, p_0, L, betapriors, D_AUC,options)
 }
 
 \keyword{models}

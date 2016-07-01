@@ -3,31 +3,33 @@
 \title{
 Dose finding method DTOX
 }
+
 \description{
 The DTOX model was be introduced to test the behaviours of a way of estimating probabilities of toxicity. This way is to estimate posterior probability of toxicity($p_T$) versus dose directly. Therefore it represents a statistical model to link $p_T$ and dose. 
 }
+
 \usage{
 dtox(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
 
 \arguments{
   \item{y}{
-A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient
+the auc numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug
+the doses levels of the drug.
 }
   \item{lev}{
-the levels 
+A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the target probability of toxicity
+the toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM
+Skeleton of CRM.
 }
   \item{L}{
 a threshold set before starting the trial.
@@ -48,13 +50,14 @@ defaults to options <- list(nchains = 4,
 \references{
 Moreno et al, 2016
 }
-\author{
-Artemis Toumazi
-}
-
+\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        }
+        
 \seealso{
 \code{\link{scenarios}}, \code{\link{sim}} 
 }
+
 \examples{
 ### Betapriors ###
 param_pk <- c(2,10,100)
@@ -75,6 +78,7 @@ x <- c(1,2,3,4,5,6)
 y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
 D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
 
-dtox(y, AUCs, d, x, theta, p_0, L,betapriors,D_AUC,options)
+dtox(y, AUCs, d, x, theta, p_0, L,betapriors,D_AUC, options)
 }
+
 \keyword{models}

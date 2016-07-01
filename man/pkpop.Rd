@@ -12,22 +12,22 @@ pkpop(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 
 \arguments{
  \item{y}{
-A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient
+the auc numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug
+the doses levels of the drug.
 }
   \item{lev}{
-the levels 
+A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the target probability of toxicity
+the toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM
+Skeleton of CRM.
 }
   \item{L}{
 a threshold set before starting the trial.
@@ -49,9 +49,9 @@ defaults to options <- list(nchains = 4,
 Moreno et al, 2016
 
 }
-\author{
-Artemis Toumazi
-}
+\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        }
 
 \seealso{
 \code{\link{scenarios}}, \code{\link{sim}}

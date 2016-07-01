@@ -1,33 +1,33 @@
 \name{pkcrm}
 \alias{pkcrm}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Dose finding method PKCRM
 }
 \description{
-This models is a modification of CRM model i order to avoid the problem that we need to know the target AUC related to DLTs. Thus, we proposed a new model PKCRM, with power working model and normal prior on the parameter. 
+This model is a modification of CRM model which is constructed in order to avoid the problem that we need to know the target AUC related to DLTs. Thus, we proposed a new model PKCRM, with power working model and normal prior on the parameter. 
 }
 \usage{
 pkcrm(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
+
 \arguments{
   \item{y}{
-A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise
+A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient
+the auc numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug
+the doses levels of the drug.
 }
   \item{lev}{
-the levels 
+A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the target probability of toxicity
+the toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM
+Skeleton of CRM. 
 }
   \item{L}{
 a threshold set before starting the trial.
@@ -48,9 +48,9 @@ defaults to options <- list(nchains = 4,
 Moreno et al, 2016
 }
 
-\author{
-Artemis Toumazi
-}
+\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        }
 
 \seealso{
 \code{\link{scenarios}}, \code{\link{sim}}
@@ -60,10 +60,10 @@ Artemis Toumazi
 p_0 <- c(.01,.05,.1,.2,.35,0.45)      # Skeleton of CRM
 L = log(15.09)
 d <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2      # choice
+theta <- 0.2                # choice
 options <- list(nchains = 2,
-        niter = 4000,
-        nadapt = 0.8)  
+                niter = 4000,
+                nadapt = 0.8)  
 AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
 x <- c(1,2,3,4,5,6)                
 y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
@@ -71,8 +71,7 @@ D_AUC <- NULL
 
 ### Betapriors ###
 betapriors = NULL
-
-pkcrm(y, AUCs, d, x, theta, p_0, L, betapriors,D_AUC,options)
+pkcrm(y, AUCs, d, x, theta, p_0, L, betapriors, D_AUC,options)
 }
 
 \keyword{models}

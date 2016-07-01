@@ -25,9 +25,9 @@ f_logit(v, lambda, parmt)
 Moreno et al, 2016
 }
 
-\author{
-Artemis Toumazi
-}
+\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        }
 
 \seealso{
 \code{\link{pklogit}}
