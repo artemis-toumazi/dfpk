@@ -1,10 +1,9 @@
+#' @import ggplot2
 #' @import rstan
-#' @import parallel
-#' @import methods
-#' @import stats 
-#' @import arm
+#' @useDynLib dfpk, .registration = TRUE
 #' @export
-sim <- function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,options){ 
+sim <-
+function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options){ 
     
     MTD = NULL
     dose_levels = NULL
@@ -12,12 +11,12 @@ sim <- function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,o
     AUC_s = NULL
     AUCd = NULL
     
+    tox <- scenarios@tox          # toxicity from the scenarios
+    stab <- scenarios@tab 
+    n_pk <- scenarios@n_pk        # number of sampling times
+    doses <- scenarios@doses
+    d <- scenarios@doses
     ndos <- length(d)
-    tox <- scenarios$tox          
-    stab <- scenarios$tab 
-    n_pk <- scenarios$n_pk        
-    doses <- scenarios$doses
-    d <- scenarios$doses
     x <- rep(1,cohort)
     y <- tox[cbind(1:length(x),x)]  
     M = N/cohort
@@ -28,7 +27,7 @@ sim <- function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,o
         eval(parse(text = paste("conc",i," <- conc",i,"[icon]", sep=""))) 
         nd[x[i]] <- nd[x[i]] + 1
     }
-    
+    time <- as.vector(stab[1, 2:(n_pk +1)])
     time1 <- as.vector(stab[1, 2:(n_pk +1)])
     time1 <- time1[icon]
     
@@ -70,7 +69,7 @@ sim <- function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,o
         } else {
             
             results <- model(y,AUCs,d,x,theta,p_0,L,betapriors,D_AUC,options)
-            newdose <- min(results$new_dose, max(x) + 1)        
+            newdose <- min(results$new_dose, max(x) + 1)       
             # Check on the skippimg dose
             x <- c(x,rep(newdose,cohort))
             y <- c(y, tox[cbind(j,x[j])])       
@@ -90,6 +89,7 @@ sim <- function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,o
         }   
     } 
     
+    
     MtD = model(y,AUCs,d,x,theta,p_0,L,betapriors,D_AUC,options)$new_dose
     MTD = c(MTD, MtD)
     dose_levels = rbind(dose_levels,x)
@@ -97,16 +97,23 @@ sim <- function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,o
     AUC_s = rbind(AUC_s, AUCs)
     AUCd = rbind(AUCd, D_AUC)
     eval(parse(text = paste("pstim"," <- pstim_auctox", sep="")))
-    #}
+    nchains=options$nchains
+    niter = options$niter
+    nadapt = options$nadapt
+    pid = c(1:N)
+
+    # cat("\n")
+    # cat("\n")
+    # cat("Dose-Finding results:", "\n")
+    # cat("Next recommended dose level:", MTD,"\n")
+    # cat("Recommendation is based on a target toxicity probability of",theta,"\n")
+    # cat("and dose levels:", d, "\n")
+    # cat("\n")
+    # cat("NOTE: Print results to see more details about your outcomes")
+    # list(new_dose = MtD, pstim = results$pstim, dose_levels = dose_levels, 
+    # toxicity = toxicity, AUCs = AUC_s, AUCd = AUCd, parameters=results$parameters)
     
-    cat("\n")
-    cat("\n")
-    cat("Dose-Finding results:", "\n")
-    cat("\n")
-    cat("Next recommended dose level:", MTD,"\n")
-    cat("Recommendation is based on a target toxicity probability of",theta,"\n")
-    cat("and dose levels:", d, "\n")
-    cat("\n")
-    cat("NOTE: Print results to see more details about your outcomes")
-    list(new_dose = MtD, pstim = results$pstim, dose_levels = dose_levels,toxicity = toxicity, AUCs = AUC_s, AUCd = AUCd, parameters=results$parameters)
+    new("dosefinding", model="model", pid=pid, N = N, time = time, dose = d, conc = conci, p_0 = p_0 ,
+         L = L,  nchains=options$nchains, niter=options$niter, nadapt=options$nadapt, new_dose=MtD, 
+         theta = theta, dose_levels = dose_levels, toxicity = toxicity, AUCs = AUC_s)
 }

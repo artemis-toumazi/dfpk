@@ -1,3 +1,4 @@
+#' @useDynLib dfpk, .registration = TRUE
 #' @export
 f <-
 function(v,lambda,parmt){

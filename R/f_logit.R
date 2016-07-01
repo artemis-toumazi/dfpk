@@ -1,5 +1,4 @@
-#' @import arm
-#' @importFrom arm invlogit
+#' @useDynLib dfpk, .registration = TRUE
 #' @export
 f_logit <-
 function(v,lambda,parmt){

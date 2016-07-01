@@ -8,7 +8,7 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,options,
     toxicity = NULL
     AUC_s = NULL
     AUCd = NULL
-    
+
     for (tr in 1:TR){
         
         ndos <- length(d)
@@ -103,16 +103,16 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,options,
         pid = c(1:N)
     }
     
-    #cat("\n")
-    #cat("\n")
-    #cat("Dose-Finding results:", "\n")
-    #cat("\n")
-    #cat("Next recommended dose level:", MTD,"\n")
-    #cat("Recommendation is based on a target toxicity probability of",theta,"\n")
-    #cat("and dose levels:", d, "\n")
-    #cat("\n")
-    #cat("NOTE: Print results to see more details about your outcomes")
-    #list(new_dose = MtD, pstim = results$pstim, dose_levels = dose_levels,toxicity = toxicity, AUCs = AUC_s, AUCd = AUCd, parameters=results$parameters)
+    # cat("\n")
+    # cat("\n")
+    # cat("Dose-Finding results:", "\n")
+    # cat("\n")
+    # cat("Next recommended dose level:", MTD,"\n")
+    # cat("Recommendation is based on a target toxicity probability of",theta,"\n")
+    # cat("and dose levels:", d, "\n")
+    # cat("\n")
+    # cat("NOTE: Print results to see more details about your outcomes")
+    # list(new_dose = MtD, pstim = results$pstim, dose_levels = dose_levels,toxicity = toxicity, AUCs = AUC_s, AUCd = AUCd, parameters=results$parameters)
 
     new("dosefinding", model=model, pid=pid, N=N, time = time, dose=d, conc=conci, p_0 = p_0 ,
          L=L,  nchains=options$nchains, niter=options$niter, nadapt=options$nadapt, new_dose=MtD, 

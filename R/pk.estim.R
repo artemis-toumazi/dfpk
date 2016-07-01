@@ -1,3 +1,4 @@
+#' @useDynLib dfpk, .registration = TRUE
 #' @export
 pk.estim <-
 function(par,t,dose,conc){
