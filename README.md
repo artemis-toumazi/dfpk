@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/artemis-toumazi/dfpk.svg?branch=master)](https://travis-ci.org/artemis-toumazi/dfpk) [![Coverage Status]
+
 # dfpk
 
 The **dfpk** R package provides an interface to fit Bayesian generalized (non-)linear mixed models using Stan, which is a C++ package for obtaining Bayesian inference using the No-U-turn sampler (see http://mc-stan.org/). 
