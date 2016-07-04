@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/artemis-toumazi/dfpk.svg?branch=master)](https://travis-ci.org/artemis-toumazi/dfpk) [![Coverage Status](https://codecov.io/github/artemis-toumazi/dfpk/coverage.svg?branch=master)](https://codecov.io/github/artemis-toumazi/dfpk?branch=master)
+[![Build Status](https://travis-ci.org/artemis-toumazi/dfpk.svg?branch=master)](https://travis-ci.org/artemis-toumazi/dfpk) 
 
 # dfpk
 
