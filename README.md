@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/artemis-toumazi/dfpk.svg?branch=master)](https://travis-ci.org/artemis-toumazi/dfpk) 
+[![Build Status](https://travis-ci.org/artemis-toumazi/dfpk.svg?branch=master)](https://travis-ci.org/artemis-toumazi/dfpk) [![CRAN Version](http://www.r-pkg.org/badges/version/dfpk)](http://cran.r-project.org/package=dfpk)
 
 # dfpk
 
