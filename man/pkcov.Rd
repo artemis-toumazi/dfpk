@@ -4,7 +4,7 @@
 Dose finding method PKCOV
 }
 \description{
-The PKCOV model is a modification of the model proposed by Piantadosi and Liu (1996). As in the original paper we maintained the idea to incorporate PK as covariate of \eqn{p_T} through the logit link. This model uses \eqn{\delta}z instead of \eqn{\delta}AUC in order to have both the covariates on the same scale. As the original paper uniform priors have been taken for \eqn{\beta_1} and \eqn{\beta_2}, independently of each other. 
+The PKCOV model is a modification of the model proposed by Piantadosi and Liu (1996). As in the original paper we maintained the idea to incorporate PK as covariate of \eqn{p_T} through the logit link. This model uses \eqn{\Delta}z instead of \eqn{\Delta}AUC in order to have both the covariates on the same scale. As the original paper uniform priors have been taken for \eqn{\beta_1} and \eqn{\beta_2}, independently of each other. 
 }
 \usage{
 pkcov(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
@@ -15,25 +15,25 @@ pkcov(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient.
+The AUC numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug.
+The doses levels of the drug.
 }
   \item{lev}{
 A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the toxicity (probability) target.
+The toxicity (probability) target.
 }
   \item{p_0}{
 Skeleton of CRM.
 }
   \item{L}{
-a threshold set before starting the trial.
+A threshold set before starting the trial.
 }
   \item{betapriors}{
-the betapriors of pkcov model.
+A vector of the regression parameters in pkcov model.
 }
   \item{D_AUC}{
 A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
@@ -46,10 +46,14 @@ defaults to options <- list(nchains = 4,
 }
 
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+
+Piantadosi, S. and Liu, G. (1996) Improved designs for dose escalation studies using pharmacokinetic measurements. Statistics in Medicine, 15 (15), 1605-1618.
+
 }
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
 
 \seealso{

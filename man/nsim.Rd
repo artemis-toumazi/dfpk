@@ -11,34 +11,34 @@ nsim(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors, options, TR
 }
 \arguments{
   \item{d}{
-doses' levels.
+A vector of dose levels assigned to patients.
 }
   \item{N}{
-the number of patients enrolled. 
+The number of enrolled patients. 
 }
   \item{cohort}{
-number of cohorts.
+The number of cohorts.
 }
   \item{icon}{
-the index of real blood sampling.
+The index of real blood sampling.
 }
   \item{theta}{
-the toxicity (probability) target.
+The toxicity (probability) target.
 }
   \item{p_0}{
-skeleton of CRM.
+Skeleton of CRM.
 }
   \item{L}{
-a threshold set before starting the trial. 
+A threshold set before starting the trial. 
 }
   \item{model}{
 A character string to specify the working model used in the method.
 }
   \item{scenarios}{
-a scenarios with the PK data.
+A scenarios with the PK data.
 }
   \item{betapriors}{
-the betapriors of the specific model.
+A vector of the regression parameters for a specific model.
 }
   \item{options}{
 A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options <- list(nchains = 4, niter = 4000, nadapt = 0.8).
@@ -49,10 +49,11 @@ The number of simulations.
 }
 
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 }
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
 
 \seealso{

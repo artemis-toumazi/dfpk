@@ -14,22 +14,23 @@ AUC_estim(t, conc, dose)
 
 \arguments{
   \item{t}{
-the time.
+A vector of the sampling time.
 }
   \item{conc}{
-the concentration of the drug in blood plasma.
+The concentration of the drug in blood plasma.
 }
   \item{dose}{
-the doses' levels of the drug.
+A vector of dose levels assigned to patients.
 }
 }
 
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 }
 
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
 
 \seealso{

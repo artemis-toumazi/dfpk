@@ -5,7 +5,7 @@ Dose finding method DTOX
 }
 
 \description{
-The DTOX model was be introduced to test the behaviours of a way of estimating probabilities of toxicity. This way is to estimate posterior probability of toxicity($p_T$) versus dose directly. Therefore it represents a statistical model to link $p_T$ and dose. 
+The DTOX model was be introduced to test the behaviours of a way of estimating probabilities of toxicity. This way is to estimate posterior probability of toxicity \eqn{p_T} versus dose directly. Therefore it represents a statistical model to link \eqn{p_T} and dose. 
 }
 
 \usage{
@@ -17,25 +17,25 @@ dtox(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient.
+The AUC numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug.
+The doses levels of the drug.
 }
   \item{lev}{
 A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the toxicity (probability) target.
+The toxicity (probability) target.
 }
   \item{p_0}{
 Skeleton of CRM.
 }
   \item{L}{
-a threshold set before starting the trial.
+A threshold set before starting the trial.
 }
   \item{betapriors}{
-the betapriors of dtox model.
+A vector of the regression parameters in dtox model.
 }
   \item{D_AUC}{
 A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL. 
@@ -48,10 +48,12 @@ defaults to options <- list(nchains = 4,
 }
 
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+
 }
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
         
 \seealso{

@@ -2,6 +2,7 @@
 #' @import rstan
 #' @import Rcpp
 #' @import methods
+#' @import stats
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 pkcov <-

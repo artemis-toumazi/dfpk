@@ -2,13 +2,19 @@
 #' @import rstan
 #' @import Rcpp
 #' @import methods
+#' @import stats
 #' @useDynLib dfpk, .registration = TRUE
-#' @export
+#' @export pklogit
 pklogit <-
 function(y, auc, doses, lev, theta, p_0, L, betapriors,D_AUC, options){
+
+    f_logit <- function(v,lambda,parmt){
+        invlogit(lambda[1]+lambda[2]*v)*dnorm(v,parmt[1],sqrt(parmt[2]))
+    }
+
     num <- length(lev)                        # how many patients
     dose1 <- cbind(rep(1,num), log(doses[lev]))
-    # for STAN
+    # For STAN
     data_s <- list(N=num, auc=log(auc), dose=dose1)
     sm_lrauc <- stanmodels$reg_auc2
     reg1 <- sampling(sm_lrauc, data=data_s, iter=options$niter, chains=options$nchains,

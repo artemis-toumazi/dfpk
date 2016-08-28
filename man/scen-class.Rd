@@ -3,9 +3,9 @@
 \docType{class}
 \name{scen-class}
 \alias{scen-class}
-\title{An S4 class to represent a simulated scenarios}
+\title{An S4 class to represent a simulated scenarios.}
 \description{
-An S4 class to represent a simulated scenarios
+An S4 class to represent a simulated scenarios.
 }
 \section{Slots}{
 
@@ -16,19 +16,19 @@ An S4 class to represent a simulated scenarios
 
 \item{\code{time}}{The time sampling.}
 
-\item{\code{N}}{Number of patients.}
+\item{\code{N}}{The total number of patients.}
 
-\item{\code{doses}}{The dose levels.}
+\item{\code{doses}}{The doses levels of the drug.}
 
 \item{\code{limit_tox}}{Threshold in the toxicity.}
 
-\item{\code{omega2}}{A standard deviation of CL and V equals to.}
+\item{\code{omega2}}{A standard deviation of CL and V.}
 
 \item{\code{omega_a}}{A standard deviation omega_a.}
 
-\item{\code{conc}}{Concentration of the drug.}
+\item{\code{conc}}{The concentration of the drug (concentration without error).}
 
-\item{\code{conc_pred}}{The predicted concentration.}
+\item{\code{conc_pred}}{The predicted concentration of the drug (concentration with error).}
 
 \item{\code{tox}}{The toxicity outcomes.}
 

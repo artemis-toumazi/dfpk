@@ -1,7 +1,7 @@
 \name{sim}
 \alias{sim}
 \title{
-One simulation using PK measure in the dose finding design
+One simulation using PK measure in the dose finding design.
 }
 
 \description{
@@ -14,34 +14,34 @@ sim(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors, options)
 
 \arguments{
   \item{d}{
-doses' levels.
+A vector of dose levels assigned to patients.
 }
   \item{N}{
-the number of patients enrolled. 
+The number of enrolled patients. 
 }
   \item{cohort}{
-number of cohorts.
+The number of cohorts.
 }
   \item{icon}{
-the index of real blood sampling.
+The index of real blood sampling.
 }
   \item{theta}{
-the toxicity (probability) target.
+The toxicity (probability) target.
 }
   \item{p_0}{
-skeleton of CRM.
+Skeleton of CRM.
 }
   \item{L}{
-a threshold set before starting the trial. 
+A threshold set before starting the trial. 
 }
   \item{model}{
 A character string to specify the working model used in the method.
 }
   \item{scenarios}{
-a scenarios with the PK data.
+A scenarios with the PK data.
 }
   \item{betapriors}{
-the betapriors of the specific model.
+A vector of the regression parameters for a specific model.
 }
   \item{options}{
 A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options <- list(nchains = 4, niter = 4000, nadapt = 0.8).
@@ -49,11 +49,12 @@ A list of three integers specifying the stan model's number of chains, how many 
 }
 
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 }
 
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
 
 \seealso{
@@ -61,10 +62,7 @@ Moreno et al, 2016
 }
 
 \examples{
-##############################################
-############ Generate scenarios ##############
-##############################################
-
+  \dontrun{
 limit_tox <- 10.96                  
 N <- 42                         
 param_pk <- c(2,10,100)             # PK parameters ka,CL,V
@@ -73,9 +71,9 @@ omega_a <- 0
 preal <- c(0.001,.05,0.1,.2,0.35,0.45)         
 time_sampling <- seq(0, 24, length.out=48)      
 sigma2 <- c(rep(0.2, length(time_sampling)), rep(0.2, length(time_sampling)))          
-# sigma2: Additive or proportional error
 
-gen.scen <- scenarios(param_pk,omega2,omega_a,sigma2,preal,limit_tox,time_sampling, N)
+# Generate scenarios
+gen.scen <- scenarios(param_pk,omega2,omega_a,sigma2,preal,limit_tox,time_sampling, N) 
 
 cohort = 1
 scenarios <- gen.scen
@@ -89,7 +87,7 @@ L = 0
 ############### Models ###############
 ######################################
 
-model = pktox  # Use one of the models in the dfpk package 
+model = pktox   # Use one of the models in the dfpk package 
 betapriors = 0
 
 ################################################
@@ -106,4 +104,5 @@ options <- list(nchains = 4,
 
 results_sim <- sim(d, N, cohort, icon, theta, p_0, L, model, gen.scen, betapriors, options)
 results_sim
+  }
 }

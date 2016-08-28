@@ -2,10 +2,12 @@
 #' @import rstan
 #' @import Rcpp
 #' @import methods
+#' @import stats
 #' @useDynLib dfpk, .registration = TRUE
-#' @export
+#' @export 
 pkpop <-
 function(y,auc,doses,lev,theta,p_0,L,betapriors,D_AUC, options){
+
     num <- length(lev)                        # how many patients
     dose1 <- cbind(rep(1,num), log(doses[lev]))
     

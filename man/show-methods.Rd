@@ -5,7 +5,7 @@
 \alias{show,scen-method}
 \title{S4 Methods for Function \code{show}}
 \description{
- S4 Methods for function \code{show}  
+S4 Methods for function \code{show}.
 }
 \section{Methods}{
 \describe{

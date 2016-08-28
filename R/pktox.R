@@ -2,11 +2,17 @@
 #' @import rstan
 #' @import Rcpp
 #' @import methods
+#' @import stats
 #' @useDynLib dfpk, .registration = TRUE
-#' @export
+#' @export pktox
 pktox <-
 function(y,auc, doses, lev, theta, p_0, L, betapriors,D_AUC,options){
-    num <- length(lev)                       # how many patients
+
+    f <- function(v,lambda,parmt){
+    pnorm(lambda[1]+lambda[2]*v)*dnorm(v,parmt[1],parmt[2])
+    }
+
+    num <- length(lev)              # how many patients
     dose1 <- cbind(rep(1,num), log(doses[lev]))
     # For STAN model
     data_s <- list(N=num,auc=log(auc),dose=dose1)

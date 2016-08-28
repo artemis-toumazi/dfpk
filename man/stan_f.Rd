@@ -2,18 +2,15 @@
 \alias{stan_f}
 \docType{data}
 \title{
-Stan models
+The data stan_f includes all the Stan models that dfpk package uses.
 }
 \description{
 	A character vector with paths to .stan files to include in the package.
 }
 \usage{data("stan_f")}
-\format{
-  The format is:
- chr [1:5] "/Volumes/USB DISK/Inserm_1138/Artemis' code/STAN_models/RPackage/logit_cov2.stan" ...
-}
+
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 }
 \examples{
 data(stan_f)

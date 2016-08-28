@@ -4,7 +4,7 @@
 Dose finding method PKTOX
 }
 \description{
-The PKTOX model was be introduced to test the behaviour of one possible way tof estimating probabilities of toxicity. This way consists of estimating probabilities of toxicity of doses passing through the AUC or another PK measure of exposure. This models is essentially the PKLOGIT model with the difference that uses \eqn{\Phi} function instead of logit in the posterior probability of toxicity.
+The PKTOX model was be introduced to test the behaviour of one possible way to estimating probabilities of toxicity. This way consists of estimating probabilities of toxicity of doses passing through the AUC or another PK measure of exposure. This models is essentially the PKLOGIT model with the difference that uses \eqn{\Phi} function instead of logit in the posterior probability of toxicity.
  }
 \usage{
 pktox(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
@@ -14,25 +14,25 @@ pktox(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient.
+The AUC numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug.
+The doses levels of the drug.
 }
   \item{lev}{
-A vector of dose levels assigned to patients. 
+A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the toxicity (probability) target.
+The toxicity (probability) target.
 }
   \item{p_0}{
 Skeleton of CRM.
 }
   \item{L}{
-a threshold set before starting the trial.
+A threshold set before starting the trial.
 }
   \item{betapriors}{
-the betapriors of pktox model; the default is NULL for this model. 
+A vector of the regression parameters in pktox model; the default is NULL for this model. 
 }
   \item{D_AUC}{
 A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
@@ -45,15 +45,19 @@ defaults to options <- list(nchains = 4,
 }
 
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+
+Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayesian approach for dose-escalation in a phase i clincial trial incorporating pharmacodynamic endpoints. Journal of Biopharmaceutical Statistics, 17 (6), 1117-1129.
+
 }
 
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
 
 \seealso{
-\code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{pklogit}}, \code{\link{scenarios}}, \code{\link{sim}}
 }
 
 \examples{

@@ -3,6 +3,7 @@
 #' @import Rcpp
 #' @import dfcrm
 #' @import methods
+#' @import stats
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 pkcrm <-

@@ -3,9 +3,9 @@
 \docType{class}
 \name{dosefinding-class}
 \alias{dosefinding-class}
-\title{An S4 class to represent a dosefinding.}
+\title{An S4 class to represent a dosefinding results.}
 \description{
-An S4 class to represent a dosefinding.
+An S4 class to represent a dosefinding results.
 }
 \section{Slots}{
 
@@ -14,11 +14,11 @@ An S4 class to represent a dosefinding.
 
 \item{\code{pid}}{Patient ID provided in the study.}
 
-\item{\code{N}}{Number of patients.}
+\item{\code{N}}{The total number of patients.}
 
 \item{\code{time}}{The time sampling.}
 
-\item{\code{dose}}{dose levels.}
+\item{\code{dose}}{The doses levels of the drug.}
 
 \item{\code{conc}}{Concentration of the drug.}
 
@@ -26,17 +26,17 @@ An S4 class to represent a dosefinding.
 
 \item{\code{L}}{A threshold set before starting the trial.}
 
-\item{\code{nchains}}{Number of chains.}
+\item{\code{nchains}}{Number of chains for the stan model.}
 
-\item{\code{niter}}{Number of iterations.}
+\item{\code{niter}}{Number of iterations for the stan model.}
 
-\item{\code{nadapt}}{Number of warmup iterations.}
+\item{\code{nadapt}}{Number of warmup iterations for the stan model.}
 
-\item{\code{new_dose}}{The next maximum tolerated dose.}
+\item{\code{new_dose}}{The next maximum tolerated dose (MTD).}
 
 \item{\code{theta}}{The toxicity (probability) target.}
 
-\item{\code{dose_levels}}{The dose levels of drug for each patient during the trial.}
+\item{\code{dose_levels}}{A vector of dose levels assigned to patients in the trial.}
 
 \item{\code{toxicity}}{The toxicity outcome.}
 

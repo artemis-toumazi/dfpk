@@ -15,25 +15,25 @@ pkcrm(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-the auc numbers of each patient.
+The AUC numbers of each patient.
 }
   \item{doses}{
-the doses levels of the drug.
+The doses levels of the drug.
 }
   \item{lev}{
 A vector of dose levels assigned to patients.
 }
   \item{theta}{
-the toxicity (probability) target.
+The toxicity (probability) target.
 }
   \item{p_0}{
 Skeleton of CRM. 
 }
   \item{L}{
-a threshold set before starting the trial.
+A threshold set before starting the trial.
 }
   \item{betapriors}{
-the betapriors of pkcrm model.
+A vector of the regression parameters in pkcrm model. 
 }
   \item{D_AUC}{
 A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
@@ -45,11 +45,16 @@ defaults to options <- list(nchains = 4,
                             nadapt = 0.8)}
 }
 \references{
-Moreno et al, 2016
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+
+Patterson, S., Francis, S., Ireson, M., Webber, D., and Whitehead, J. (1999) A novel bayesian decision procesure for early-phase dose-finding studies. Journal of Biopharmaceutical Statistics, 9 (4), 583-597.
+
+Whitehead, J., Patterson, S., Webber, D., Francis, S., and Zhou, Y. (2001) Easy-to-implement bayesian methods for dose-escalation studies in healthy volunteers. Biostatistics, 2 (1), 47-61.
 }
 
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
-        Moreno Ursino \email{moreno.ursino@inserm.fr}
+        Moreno Ursino \email{moreno.ursino@inserm.fr},
+        Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
 
 \seealso{
