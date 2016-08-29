@@ -12,7 +12,7 @@ dfpk package includes methods involving PK measures in the dose allocation proce
 
 ### Establish Version 
 
-**dfpk** will be soon on CRAN and can be installed and loaded via 
+**dfpk** is on CRAN and can be installed and loaded via 
 
 ```{r}
 install.packages("dfpk")
