@@ -1,39 +1,42 @@
 \name{pkcrm}
 \alias{pkcrm}
+
 \title{
 Dose finding method PKCRM
 }
+
 \description{
-This model is a modification of CRM model which is constructed in order to avoid the problem that we need to know the target AUC related to DLTs. Thus, we proposed a new model PKCRM, with power working model and normal prior on the parameter. 
+The PKCRM model is an implementation of the Continual Reassessment Method's (CRM) model, which is constructed in order to avoid the necessary need to know the target AUC related to DLTs. Therefore, we proposed a new model called PKCRM, with power working model and normal prior on the parameter. 
 }
+
 \usage{
 pkcrm(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
-}
+} 
 
 \arguments{
   \item{y}{
-A vector of patient outcomes; TRUE indicates a toxicity, FALSE otherwise.
+A vector of patient's toxicity outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
   \item{auc}{
-The AUC numbers of each patient.
+The AUC values of each patient.
 }
   \item{doses}{
 The doses levels of the drug.
 }
   \item{lev}{
-A vector of dose levels assigned to patients.
+A vector of dose levels assigned to the patients.
 }
   \item{theta}{
 The toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM. 
+The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model) 
 }
   \item{L}{
-A threshold set before starting the trial.
+A threshold set before starting the trial; defaults to NULL. (must be defined only in the PKCRM model)
 }
   \item{betapriors}{
-A vector of the regression parameters in pkcrm model. 
+A vector of the regression parameters in the model. 
 }
   \item{D_AUC}{
 A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
@@ -44,6 +47,7 @@ defaults to options <- list(nchains = 4,
                             niter = 4000,
                             nadapt = 0.8)}
 }
+
 \references{
 Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 
@@ -63,9 +67,9 @@ Whitehead, J., Patterson, S., Webber, D., Francis, S., and Zhou, Y. (2001) Easy-
 
 \examples{
 p_0 <- c(.01,.05,.1,.2,.35,0.45)      # Skeleton of CRM
-L = log(15.09)
+L = log(15.09)                        # Threshold set
 d <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2                # choice
+theta <- 0.2                
 options <- list(nchains = 2,
                 niter = 4000,
                 nadapt = 0.8)  

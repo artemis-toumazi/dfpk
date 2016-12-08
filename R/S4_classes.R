@@ -6,7 +6,7 @@
 #' @slot time The time sampling.
 #' @slot dose The doses levels of the drug.
 #' @slot conc Concentration of the drug.
-#' @slot p_0  Skeleton of CRM. 
+#' @slot p_0  The skeleton of CRM. 
 #' @slot L  A threshold set before starting the trial.
 #' @slot nchains Number of chains for the stan model.
 #' @slot niter Number of iterations for the stan model.
@@ -23,6 +23,7 @@ setClass("dosefinding", slots = list(model="character", pid="numeric", N ="numer
           p_0 = "numeric", L = "numeric",  nchains = "numeric", niter = "numeric", nadapt = "numeric", new_dose = "numeric", 
           theta = "numeric", dose_levels="matrix", toxicity= "matrix", AUCs="matrix"))
 
+
 #' An S4 class to represent a simulated scenarios.
 #'
 #' @slot param_pk The subject's PK parameters.
@@ -37,8 +38,8 @@ setClass("dosefinding", slots = list(model="character", pid="numeric", N ="numer
 #' @slot conc_pred The predicted concentration of the drug (concentration with error). 
 #' @slot tox The toxicity outcomes.
 #' @slot tab The data summary of scenarios' outcomes.
-#' @slot parameters  The PK parameter's estimations of each patient.
-#' @slot alfa_AUC  AUC with sensitivity parameter. 
+#' @slot parameters The PK parameter's estimations of each patient.
+#' @slot alfa_AUC AUC with sensitivity parameter. 
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
@@ -48,12 +49,33 @@ setClass("scen", representation(param_pk="numeric", n_pk="numeric", time="numeri
           tox="matrix", tab="matrix", parameters="matrix", alfa_AUC="numeric"
           ))
 
+
+#' An S4 class to present the next recommended dose level in an ongoing trial.
+#' 
+#' @slot N A total number of enrolled patients.
+#' @slot y The toxicity outcome of each patient.
+#' @slot AUCs The AUCs values of each patient.
+#' @slot doses The doses levels of the drug.
+#' @slot x A vector of dose levels assigned to patients in the trial.
+#' @slot theta The toxicity (probability) target.
+#' @slot options The Stan model's options.
+#' @slot new_dose The next recommended dose level.
+#' @slot pstim The estimated probability of toxicity.
+#' @slot parameters The Stan model's estimated parameters.
+#' @import methods
+#' @useDynLib dfpk, .registration = TRUE
+#' @export 
+setClass("Dose", slots = list(N = "numeric", y = "logical", AUCs = "numeric", doses ="numeric", x = "numeric", 
+     theta = "numeric", options = "list", new_dose="numeric", pstim="numeric", parameters="numeric"
+     ))
+
+
 #' @export
 setMethod(f = "show",
           signature ="dosefinding",
           definition = function(object) {
                cat("Today: ", date(), "\n") 
-     		cat("\n","Data Summary (", object@model,") \n")
+     		cat("\n","Data Summary", "\n")
      	     cat("Total number of patients in the trial:", object@N, "\n")
      	     cat("The time sampling:", object@time, "\n")
                cat("Levels of Doses:", object@dose, "\n")
@@ -103,11 +125,31 @@ setMethod(f = "show",
                print(object@parameters)
                cat("\n")
          }
+) 
+
+#' @export
+setMethod(f = "show",
+          signature ="Dose",
+          definition = function(object) {
+               cat("Today: ", date(), "\n")
+               cat("Total number of enrolled patients in the trial: ", object@N, "\n")
+               cat("Levels of doses: ", object@doses, "\n")
+               cat("The Next Recommended Dose: ", "\n")
+               print(object@new_dose)
+               cat("\n")
+               cat("Estimated probability of toxicity: ", "\n")
+               print(object@pstim)
+               cat("\n")
+               cat("Estimated model's parameters: ", "\n")
+               print(object@parameters)
+               cat("\n")
+          }
 )
 
-#######################################
-################ Plots ################
-#######################################
+
+###########################################
+################ Plots ####################
+###########################################
 
 #' The generic function of the plot.dose
 #'
@@ -115,16 +157,31 @@ setMethod(f = "show",
 #' @param ... Other parameters to be passed through to plotting functions. They are ignored in this function.
 #' @description 
 #' A graphical representation of dose escalation for each patient in the trial.
+#' 
+#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' 
+#' @references Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+#' 
+#' @seealso \code{\link{plotConc}}
+#' 
 #' @import graphics
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 setGeneric(name="plotDose",def = function(x,...){standardGeneric("plotDose")}
 )
 
+
 #' The graphical representation of dose escalation for each patient in the trial. 
 #' 
 #' @param x A "dosefinding" object.
 #' @param ... Other parameters to be passed through to plotting functions. They are ignored in this function.
+#'
+#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' 
+#' @references Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+#' 
+#' @seealso \code{\link{plotConc}}
+#'
 #' @import methods
 #' @import stats
 #' @import graphics
@@ -148,16 +205,31 @@ setMethod(f ="plotDose",
 #' @param ... Other parameters to be passed through to plotting functions. They are ignored in this function.
 #' @description 
 #' A graphical representation of drug's concentration in the plasma at time t.
+#'
+#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' 
+#' @references Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+#' 
+#' @seealso \code{\link{plotDose}}
+#'
 #' @import graphics
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 setGeneric(name="plotConc",def = function(x,...){standardGeneric("plotConc")}
 )
 
+
 #' The graphical representation of the drug's concentration in the plasma at time t after the drug administration.
 #' 
 #' @param x A "scen" object.
 #' @param ... Other parameters to be passed through to plotting functions. They are ignored in this function.
+#'
+#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' 
+#' @references Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+#' 
+#' @seealso \code{\link{plotDose}}
+#'
 #' @import methods
 #' @import stats
 #' @import graphics
@@ -167,9 +239,10 @@ setGeneric(name="plotConc",def = function(x,...){standardGeneric("plotConc")}
 setMethod(f ="plotConc" ,signature ="scen", 
      definition = function(x,...){
           colors <- rainbow(length(x@doses))
-          plot(x@time, x@conc[,1], type="l", col=colors[1], xlab="Time (hours)", ylab="Concentration (mg)", main="Pharmacokinetics: Concentration vs Time", ylim=c(0,max(x@conc)),...)
+          plot(x@time, x@conc[,1], type="l", col=colors[1], xlab="Time (hours)", ylab="Concentration (mg/L)", main="Pharmacokinetics: Concentration vs Time", ylim=c(0,max(x@conc)),...)
      	    for(i in 2:length(x@doses)){
         	      lines(x@time, x@conc[,i], col=colors[i], lty=i,...)
     	          }
 	}
 )
+

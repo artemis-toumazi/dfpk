@@ -1,15 +1,15 @@
 \name{sim}
 \alias{sim}
 \title{
-One simulation using PK measure in the dose finding design.
+A single-trial simulation using pharmacokinetic's (PK) measure in the dose finding design.
 }
 
 \description{
-sim function can be used to generate simulation of ONE phase I trial using the PK data and then link them to toxicity under a specified dose-toxicity configuration. The objective is to determine the maximum tolerated dose (MTD). 
+The sim function can be used to simulate a single phase I clinical trial using the PK data and then link them to toxicity under a specified dose-toxicity configuration. It can be used to determine the maximum tolerated dose (MTD). 
 }
 
 \usage{
-sim(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors, options)
+sim(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options)
 }
 
 \arguments{
@@ -17,10 +17,10 @@ sim(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors, options)
 A vector of dose levels assigned to patients.
 }
   \item{N}{
-The number of enrolled patients. 
+The total number of enrolled patients. 
 }
   \item{cohort}{
-The number of cohorts.
+The number of cohorts in the trial.
 }
   \item{icon}{
 The index of real blood sampling.
@@ -29,22 +29,22 @@ The index of real blood sampling.
 The toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM.
+The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model) 
 }
   \item{L}{
-A threshold set before starting the trial. 
+A threshold set before starting the trial; defaults to NULL. (must be defined only in the PKCRM model)
 }
   \item{model}{
-A character string to specify the working model used in the method.
+A character string to specify the working model which will be used in the simulation.
 }
   \item{scenarios}{
-A scenarios with the PK data.
+A generated scenario including the PK data.
 }
   \item{betapriors}{
-A vector of the regression parameters for a specific model.
+A vector of the regression parameters in the selected model. 
 }
   \item{options}{
-A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options <- list(nchains = 4, niter = 4000, nadapt = 0.8).
+A list of three integers specifying the stan model's options: the number of chains, the number of iterations for each chain and the number of warmup iterations.
 }
 }
 
@@ -72,7 +72,7 @@ preal <- c(0.001,.05,0.1,.2,0.35,0.45)
 time_sampling <- seq(0, 24, length.out=48)      
 sigma2 <- c(rep(0.2, length(time_sampling)), rep(0.2, length(time_sampling)))          
 
-# Generate scenarios
+# Generate data from a scenario
 gen.scen <- scenarios(param_pk,omega2,omega_a,sigma2,preal,limit_tox,time_sampling, N) 
 
 cohort = 1
@@ -83,15 +83,15 @@ theta <- 0.2
 p_0 = 0                                  
 L = 0
 
-######################################
-############### Models ###############
-######################################
+##############################################
+############### Selected Model ###############
+##############################################
 
-model = pktox   # Use one of the models in the dfpk package 
+model = pktox   
 betapriors = 0
 
 ################################################
-#### Set the stan model's options as a list ####
+#### Set the Stan model's options as a list ####
 ################################################
 
 options <- list(nchains = 4,

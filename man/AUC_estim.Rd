@@ -5,7 +5,7 @@ Estimation of the area under the curve, AUC.
 }
 
 \description{
-In the field of pharmacokinetics, the area under the curve (AUC) is the area under the curve (mathematically known as definite integral) in a plot of concentration of drug in blood plasma against time. AUC is computed as the doses over the second pk parameter, clearance(CL). 
+In the field of pharmacokinetics, the area under the curve (AUC) is the area under the curve (mathematically known as definite integral) in a plot of concentration of drug in blood plasma against time. AUC is computed as the doses over the second pharmacokinetic's parameter, the clearance (CL). 
 }
 
 \usage{

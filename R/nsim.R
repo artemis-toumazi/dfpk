@@ -2,7 +2,7 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 nsim <-
-function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,options,TR){ 
+function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options, TR){ 
     MTD = NULL
     dose_levels = NULL
     toxicity = NULL
@@ -23,8 +23,8 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors,options,
         nd <- rep(0,length(d))
         
         for (i in 1:length(x)){
-            eval(parse(text = paste("conc",i," <- as.vector(stab[((i-1)*ndos +x[i] +1), 2:(n_pk +1)])", sep="")))
-            eval(parse(text = paste("conc",i," <- conc",i,"[icon]", sep=""))) 
+            eval(parse(text = paste("conc",i," <- as.vector(stab[((i-1)*ndos +x[i] +1), 2:(n_pk +1)])", sep= "")))
+            eval(parse(text = paste("conc",i," <- conc",i,"[icon]", sep = ""))) 
             nd[x[i]] <- nd[x[i]] + 1
         }
         

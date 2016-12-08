@@ -22,7 +22,7 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{conc}}{Concentration of the drug.}
 
-\item{\code{p_0}}{Skeleton of CRM.}
+\item{\code{p_0}}{The skeleton of CRM.}
 
 \item{\code{L}}{A threshold set before starting the trial.}
 

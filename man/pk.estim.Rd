@@ -1,24 +1,26 @@
 \name{pk.estim}
 \alias{pk.estim}
 \title{
-PK measure of exposure
+The pharmacokinetic's (PK) measure of exposure
 }
+
 \description{
-Estimation of the PK measure of exposure. 
+Estimation of the pharmacokinetic's (PK) measure of exposure. 
 }
+
 \usage{
 pk.estim(par, t, dose, conc)
 }
 
 \arguments{
   \item{par}{
-The PK parameters.
+The pharmacokinetic's parameters.
 }
   \item{t}{
 The time sampling.
 }
   \item{dose}{
-The doses' levels of the drug.
+The doses levels of the drug.
 }
   \item{conc}{
 The concentration of the drug in blood plasma.

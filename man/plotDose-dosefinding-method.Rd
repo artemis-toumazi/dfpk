@@ -15,4 +15,13 @@
 \description{
 The graphical representation of dose escalation for each patient in the trial.
 }
+\author{
+Artemis Toumazi \email{artemis.toumazi@inserm.fr}, Moreno Ursino \email{moreno.ursino@inserm.fr}, Sarah Zohar \email{sarah.zohar@inserm.fr}
+}
+\references{
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+}
+\seealso{
+\code{\link{plotConc}}
+}
 

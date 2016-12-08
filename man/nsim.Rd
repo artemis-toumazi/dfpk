@@ -3,21 +3,24 @@
 \title{
 More than one simulation using PK measure in the dose finding design
 }
+
 \description{
 nsim is used to generate simulations of phase I trial using the PK data and then link them to toxicity under a specified dose-toxicity configuration. The objective is to determine the maximum tolerated dose (MTD). 
 }
+
 \usage{
-nsim(d, N, cohort, icon, theta, p_0, L, model, scenarios,betapriors, options, TR)
+nsim(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options, TR)
 }
+
 \arguments{
   \item{d}{
 A vector of dose levels assigned to patients.
 }
   \item{N}{
-The number of enrolled patients. 
+The total number of enrolled patients. 
 }
   \item{cohort}{
-The number of cohorts.
+The number of cohorts in the trial.
 }
   \item{icon}{
 The index of real blood sampling.
@@ -26,31 +29,32 @@ The index of real blood sampling.
 The toxicity (probability) target.
 }
   \item{p_0}{
-Skeleton of CRM.
+The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model) 
 }
   \item{L}{
-A threshold set before starting the trial. 
+A threshold set before starting the trial; defaults to NULL. (must be defined only in the PKCRM model)
 }
   \item{model}{
-A character string to specify the working model used in the method.
+A character string to specify the working model which will be used in the simulation.
 }
   \item{scenarios}{
-A scenarios with the PK data.
+A generated scenario including the PK data.
 }
   \item{betapriors}{
-A vector of the regression parameters for a specific model.
+A vector of the regression parameters in the selected model. 
 }
   \item{options}{
-A list of three integers specifying the stan model's number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options <- list(nchains = 4, niter = 4000, nadapt = 0.8).
+A list of three integers specifying the stan model's options: the number of chains, the number of iterations for each chain and the number of warmup iterations.
 }
   \item{TR}{
-The number of simulations.
+The number of replicates clinical trials.
 }
 }
 
 \references{
 Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 }
+
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
         Moreno Ursino \email{moreno.ursino@inserm.fr},
         Sarah Zohar \email{sarah.zohar@inserm.fr}
