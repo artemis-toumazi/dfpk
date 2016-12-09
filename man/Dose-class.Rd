@@ -10,7 +10,7 @@ An S4 class to present the next recommended dose level in an ongoing trial.
 \section{Slots}{
 
 \describe{
-\item{\code{N}}{A total number of enrolled patients.}
+\item{\code{N}}{The total number of enrolled patients.}
 
 \item{\code{y}}{The toxicity outcome of each patient.}
 
@@ -30,4 +30,3 @@ An S4 class to present the next recommended dose level in an ongoing trial.
 
 \item{\code{parameters}}{The Stan model's estimated parameters.}
 }}
-

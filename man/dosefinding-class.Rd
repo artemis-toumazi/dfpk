@@ -18,7 +18,7 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{time}}{The time sampling.}
 
-\item{\code{dose}}{The doses levels of the drug.}
+\item{\code{dose}}{The dose levels of the drug.}
 
 \item{\code{conc}}{Concentration of the drug.}
 
@@ -42,4 +42,3 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{AUCs}}{The AUCs.}
 }}
-

@@ -23,7 +23,7 @@ A vector of patient's toxicity outcomes; TRUE indicates a toxicity, FALSE otherw
 The AUC values of each patient.
 }
   \item{doses}{
-The doses levels of the drug.
+The dose levels of the drug.
 }
   \item{lev}{
 A vector of dose levels assigned to the patients.
@@ -32,13 +32,13 @@ A vector of dose levels assigned to the patients.
 The toxicity (probability) target.
 }
   \item{p_0}{
-The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model) 
+The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model)
 }
   \item{L}{
 A threshold set before starting the trial; defaults to NULL. (must be defined only in the PKCRM model)
 }
   \item{betapriors}{
-A vector of the regression parameters in the model. 
+A vector of the regression parameters in the model.
 }
   \item{D_AUC}{
 A vector specifying the difference between the AUCs and AUC_pop; defaults to NULL.
@@ -57,7 +57,7 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
 
 }
 
-\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr},
         Moreno Ursino \email{moreno.ursino@inserm.fr},
         Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
@@ -67,15 +67,15 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
 }
 
 \examples{
-p_0 = NULL                  
-L = NULL 
+p_0 = NULL
+L = NULL
 d <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2      
+theta <- 0.2
 options <- list(nchains = 2,
         niter = 4000,
-        nadapt = 0.8)  
+        nadapt = 0.8)
 AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
-x <- c(1,2,3,4,5,6)              
+x <- c(1,2,3,4,5,6)
 y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
 D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
 

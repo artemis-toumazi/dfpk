@@ -10,13 +10,13 @@ nextDose(model, N, y, AUCs, doses, x, theta, p_0, L, betapriors, D_AUC = NULL,
 \arguments{
 \item{model}{A character string to specify the working model used in the method.}
 
-\item{N}{A total number of enrolled patients.}
+\item{N}{The total number of enrolled patients.}
 
 \item{y}{The toxicity outcome of each patient.}
 
 \item{AUCs}{The AUCs values of each patient.}
 
-\item{doses}{The doses levels of the drug.}
+\item{doses}{The dose levels of the drug.}
 
 \item{x}{A vector of dose levels assigned to patients in the trial.}
 
@@ -38,15 +38,15 @@ nextDose is used to determine the next or recommended dose level in a phase I cl
 \examples{
 model <- pktox
 N <- 15
-p_0 = 0                  
-L = 0 
+p_0 = 0
+L = 0
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2     
-options <- list(nchains = 4,niter = 4000,nadapt = 0.9)  
-AUCs <- c(1.2303254, 3.3839503,4.3638522, 5.9376084,8.1720269, 9.8009405, 
+theta <- 0.2
+options <- list(nchains = 4,niter = 4000,nadapt = 0.9)
+AUCs <- c(1.2303254, 3.3839503,4.3638522, 5.9376084,8.1720269, 9.8009405,
 1.5330900, 4.2166896, 5.4377306,7.3987646,10.1830398,12.2128046, 2.1126844,
 5.8108359 ,  7.4934992)
-x <- c(1,1,1,2,2,2,2,2,3,3,3,3,2,3,4)              
+x <- c(1,1,1,2,2,2,2,2,3,3,3,3,2,3,4)
 y <- c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
 FALSE, FALSE, FALSE, FALSE ,FALSE, TRUE,FALSE, FALSE, FALSE)
 D_AUC <- NULL
@@ -63,4 +63,3 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
 \seealso{
 \code{\link{sim}}, \code{\link{nsim}}
 }
-

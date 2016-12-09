@@ -10,11 +10,11 @@ Includes methods involving PK measures in the dose allocation process during a P
 }
 
 \details{
-The three main functions of the dfpk package are \code{\link{scenarios}}, \code{\link{nsim}} and \code{\link{nextDose}} which the first one generates new PK data based on the scenario, the second one simulates "n" clinical trials in order to find the next maximum tolerated dose (MTD) of the drug and the third one determines the next recommended dose for an ongoing phase I clinical trial based on a currently data. 
-Subsequently, six dose-finding methods can be applied:  \code{\link{dtox}}, \code{\link{pktox}}, \code{\link{pkcrm}}, \code{\link{pkcov}}, \code{\link{pkpop}}, and \code{\link{pklogit}} which each one creates a Bayesian model and fits it using \pkg{Stan}.      
+The three main functions of the dfpk package are \code{\link{scenarios}}, \code{\link{nsim}} and \code{\link{nextDose}}, the first one generates new PK data based on the scenario, the second one simulates "n" clinical trials in order to find the next maximum tolerated dose (MTD) of the drug and the third one determines the next recommended dose for an ongoing phase I clinical trial based on a currently data. 
+Subsequently, six dose-finding methods can be applied:  \code{\link{dtox}}, \code{\link{pktox}}, \code{\link{pkcrm}}, \code{\link{pkcov}}, \code{\link{pkpop}}, and \code{\link{pklogit}} which each one creates a Bayesian model and fits it using \pkg{Stan}.
 
-Because \pkg{dfpk} is based on \pkg{Stan}, a C++ compiler is required. 
-The program Rtools (available on https://cran.r-project.org/bin/windows/Rtools/) comes with a C++ compiler for Windows. On Mac, you should use Xcode. 
+Because \pkg{dfpk} is based on \pkg{Stan}, a C++ compiler is required.
+The program Rtools (available on https://cran.r-project.org/bin/windows/Rtools/) comes with a C++ compiler for Windows. On Mac, you should use Xcode.
 For further instructions on how to get the compilers running,
 see the prerequisites section on https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started.
 }
