@@ -30,3 +30,4 @@ An S4 class to present the next recommended dose level in an ongoing trial.
 
 \item{\code{parameters}}{The Stan model's estimated parameters.}
 }}
+

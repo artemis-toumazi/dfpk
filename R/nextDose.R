@@ -1,10 +1,10 @@
 #' Next dose determination of a phase I clinical trial.
 #'
 #' @param model A character string to specify the working model used in the method.
-#' @param N A total number of enrolled patients.
+#' @param N The total number of enrolled patients.
 #' @param y The toxicity outcome of each patient.
 #' @param AUCs The AUCs values of each patient.
-#' @param doses The doses levels of the drug.
+#' @param doses The dose levels of the drug.
 #' @param x A vector of dose levels assigned to patients in the trial.
 #' @param theta The toxicity (probability) target.
 #' @param p_0 The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model)
@@ -23,21 +23,21 @@
 #' @examples
 #' model <- pktox
 #' N <- 15
-#' p_0 = 0                  
-#' L = 0 
+#' p_0 = 0
+#' L = 0
 #' doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-#' theta <- 0.2     
-#' options <- list(nchains = 4,niter = 4000,nadapt = 0.9)  
-#' AUCs <- c(1.2303254, 3.3839503,4.3638522, 5.9376084,8.1720269, 9.8009405, 
+#' theta <- 0.2
+#' options <- list(nchains = 4,niter = 4000,nadapt = 0.9)
+#' AUCs <- c(1.2303254, 3.3839503,4.3638522, 5.9376084,8.1720269, 9.8009405,
 #' 1.5330900, 4.2166896, 5.4377306,7.3987646,10.1830398,12.2128046, 2.1126844,
 #' 5.8108359 ,  7.4934992)
-#' x <- c(1,1,1,2,2,2,2,2,3,3,3,3,2,3,4)              
+#' x <- c(1,1,1,2,2,2,2,2,3,3,3,3,2,3,4)
 #' y <- c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
 #' FALSE, FALSE, FALSE, FALSE ,FALSE, TRUE,FALSE, FALSE, FALSE)
 #' D_AUC <- NULL
 #' betapriors = NULL
 #' nextDose(model, N, y, AUCs, doses, x, theta, p_0, L, betapriors, D_AUC, options)
-#' 
+#'
 #' @seealso \code{\link{sim}}, \code{\link{nsim}}
 #' 
 #' @import ggplot2

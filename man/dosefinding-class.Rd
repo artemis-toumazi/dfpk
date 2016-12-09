@@ -42,3 +42,4 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{AUCs}}{The AUCs.}
 }}
+

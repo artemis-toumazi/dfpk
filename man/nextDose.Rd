@@ -63,3 +63,4 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
 \seealso{
 \code{\link{sim}}, \code{\link{nsim}}
 }
+

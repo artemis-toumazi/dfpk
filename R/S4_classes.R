@@ -4,7 +4,7 @@
 #' @slot pid Patient ID provided in the study.
 #' @slot N  The total number of patients.
 #' @slot time The time sampling.
-#' @slot dose The doses levels of the drug.
+#' @slot dose The dose levels of the drug.
 #' @slot conc Concentration of the drug.
 #' @slot p_0  The skeleton of CRM. 
 #' @slot L  A threshold set before starting the trial.
@@ -51,8 +51,8 @@ setClass("scen", representation(param_pk="numeric", n_pk="numeric", time="numeri
 
 
 #' An S4 class to present the next recommended dose level in an ongoing trial.
-#' 
-#' @slot N A total number of enrolled patients.
+#'
+#' @slot N The total number of enrolled patients.
 #' @slot y The toxicity outcome of each patient.
 #' @slot AUCs The AUCs values of each patient.
 #' @slot doses The doses levels of the drug.
