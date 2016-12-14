@@ -2,7 +2,7 @@
 % Please edit documentation in R/S4_classes.R
 \name{plotDose}
 \alias{plotDose}
-\title{The generic function of the plot.dose}
+\title{The generic function of the plot.dose.}
 \usage{
 plotDose(x, ...)
 }

@@ -1,7 +1,7 @@
 \name{pkcov}
 \alias{pkcov}
 \title{
-Dose finding method PKCOV
+Dose finding method PKCOV.
 }
 
 \description{
@@ -60,7 +60,7 @@ Piantadosi, S. and Liu, G. (1996) Improved designs for dose escalation studies u
         }
 
 \seealso{
-\code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{scenarios}}, \code{\link{nsim}}, \code{\link{nextDose}}
 }
 
 \examples{

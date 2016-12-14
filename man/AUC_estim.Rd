@@ -1,5 +1,6 @@
 \name{AUC_estim}
 \alias{AUC_estim}
+
 \title{
 Estimation of the area under the curve, AUC.
 }
@@ -34,7 +35,7 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
         }
 
 \seealso{
-\code{\link{pk.estim}}, \code{\link{sim}}
+\code{\link{pk.estim}}, \code{\link{nsim}}
 }
 
 \examples{

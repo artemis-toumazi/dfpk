@@ -2,7 +2,7 @@
 \alias{pkcrm}
 
 \title{
-Dose finding method PKCRM
+Dose finding method PKCRM.
 }
 
 \description{
@@ -62,7 +62,7 @@ Whitehead, J., Patterson, S., Webber, D., Francis, S., and Zhou, Y. (2001) Easy-
         }
 
 \seealso{
-\code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{scenarios}}, \code{\link{nsim}}, \code{\link{nextDose}}
 }
 
 \examples{

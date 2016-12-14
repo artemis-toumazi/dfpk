@@ -1,8 +1,10 @@
 \name{pktox}
 \alias{pktox}
+
 \title{
-Dose finding method PKTOX
+Dose finding method PKTOX.
 }
+
 \description{
 The PKTOX model introduced to test the behaviour of one possible way to estimating probabilities of toxicity. This way consists of estimating probabilities of toxicity of doses passing through the AUC or another PK measure of exposure. This model is essentially the PKLOGIT model with the difference that uses \eqn{\Phi} function instead of logit in the posterior probability of toxicity.
 }
@@ -60,7 +62,7 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
         }
 
 \seealso{
-\code{\link{pklogit}}, \code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{pklogit}}, \code{\link{scenarios}}, \code{\link{nsim}}, \code{\link{nextDose}}
 }
 
 \examples{

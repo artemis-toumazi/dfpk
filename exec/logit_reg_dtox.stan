@@ -21,6 +21,6 @@ model {
   p[n] = normal_cdf(z[n],0,1);  
   }
   y ~ bernoulli(p);
-  bet[1] ~ uniform(fmax(0,beta0mean-10), beta0mean+10);
-  bet[2] ~ uniform(fmax(0,beta1mean-5), beta1mean+5);
+  bet[1] ~ uniform(fmax(0.0,beta0mean-10), beta0mean+10);
+  bet[2] ~ uniform(fmax(0.0,beta1mean-5), beta1mean+5);
 }

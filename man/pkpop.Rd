@@ -1,7 +1,8 @@
 \name{pkpop}
 \alias{pkpop}
+
 \title{
-Dose finding method PKPOP
+Dose finding method PKPOP.
 }
 
 \description{
@@ -11,7 +12,6 @@ The PKPOP model is a variation of the PKLOGIT model which consists of replacing 
 \usage{
 pkpop(y, auc, doses, lev, theta, p_0, L, betapriors, D_AUC, options)
 }
-
 
 \arguments{
   \item{y}{
@@ -64,7 +64,7 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
         }
 
 \seealso{
-\code{\link{pklogit}}, \code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{pklogit}}, \code{\link{scenarios}}, \code{\link{nsim}}, \code{\link{nextDose}}
 }
 
 \examples{

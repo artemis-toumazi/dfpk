@@ -1,6 +1,7 @@
 \name{stan_f}
 \alias{stan_f}
 \docType{data}
+
 \title{
 The data stan_f includes all the Stan models that dfpk package uses.
 }

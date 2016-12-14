@@ -1,7 +1,7 @@
 \name{pk.estim}
 \alias{pk.estim}
 \title{
-The pharmacokinetic's (PK) measure of exposure
+The pharmacokinetic's (PK) measure of exposure.
 }
 
 \description{
@@ -37,7 +37,7 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
         }
 
 \seealso{
-\code{\link{AUC_estim}}, \code{\link{sim}}
+\code{\link{AUC_estim}}, \code{\link{nsim}}
 }
 
 \examples{

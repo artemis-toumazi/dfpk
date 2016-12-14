@@ -22,7 +22,7 @@ An S4 class to represent a simulated scenarios.
 
 \item{\code{limit_tox}}{Threshold in the toxicity.}
 
-\item{\code{omega2}}{A standard deviation of CL and V.}
+\item{\code{omega2}}{A standard deviation of clearance (CL) and volume (V).}
 
 \item{\code{omega_a}}{A standard deviation omega_a.}
 

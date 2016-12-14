@@ -1,13 +1,13 @@
 #' @import rstan
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-nsim <-
+nsim <- 
 function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options, TR){ 
     MTD = NULL
     dose_levels = NULL
     toxicity = NULL
     AUC_s = NULL
-    AUCd = NULL
+    AUCd = NULL 
 
     for (tr in 1:TR){
         
@@ -20,9 +20,9 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
         x <- rep(1,cohort)
         y <- tox[cbind(1:length(x),x)]  
         M = N/cohort
-        nd <- rep(0,length(d))
+        nd <- rep(0,length(d)) 
         
-        for (i in 1:length(x)){
+        for (i in 1:length(x)){ 
             eval(parse(text = paste("conc",i," <- as.vector(stab[((i-1)*ndos +x[i] +1), 2:(n_pk +1)])", sep= "")))
             eval(parse(text = paste("conc",i," <- conc",i,"[icon]", sep = ""))) 
             nd[x[i]] <- nd[x[i]] + 1
@@ -32,9 +32,9 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
         time1 <- as.vector(stab[1, 2:(n_pk +1)])
         time1 <- time1[icon]
         
-        AUCs <- NULL
+        AUCs <- NULL 
         for (i in 1:length(x)){
-            eval(parse(text = paste("AUCs <- c(AUCs,AUC_estim(conc=conc",i,", t=time1, dose=d[x[",i,"]]))", sep="")))
+            eval(parse(text = paste("AUCs <- c(AUCs, AUC_estim(conc=conc",i,", t=time1, dose=d[x[",i,"]]))", sep="")))
         }
         
         pstim_auctox = matrix(0, length(doses)*cohort)
@@ -42,11 +42,11 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
         AUCpop <- rep(0, length(d))
         for(s in which(nd!=0)){
             AUCpop[s] = mean(AUCs[which(x==s)])
-        }
+        } 
         
         D_AUC <- (log(AUCs) - log(AUCpop[x]))
         
-        stage1 = TRUE
+        stage1 = TRUE 
         for (i in 2:M) {
             j= (cohort*(i-1) + 1) : (cohort*i)   # position
             ### starting dose until toxicity
@@ -58,7 +58,7 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
                     conci <- conci[icon]
                     AUCs <- c(AUCs, AUC_estim(conc=conci, t=time1, dose=d[x[k]]))
                     pstim_auctox = cbind(pstim_auctox, rep(0,length(doses)))
-                    nd[x[k]] <- nd[x[k]] + 1
+                    nd[x[k]] <- nd[x[k]] + 1 
                 }
                 
                 for(s in which(nd!=0)){
@@ -67,7 +67,7 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
                 D_AUC <- (log(AUCs) - log(AUCpop[x]))
                 
                 if (any(y==TRUE)) {stage1 <- FALSE}
-            } else {
+            } else { 
                 
                 results <- model(y,AUCs,d,x,theta,p_0,L,betapriors,D_AUC,options)
                 newdose <- min(results$new_dose, max(x) + 1)        
@@ -80,18 +80,17 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
                     AUCs <- c(AUCs, AUC_estim(conc=conci, t=time1, dose=d[x[k]]))
                     nd[x[k]] <- nd[x[k]] + 1
                     pstim_auctox = cbind(pstim_auctox, results$pstim)
-                }
+                }  
                 
                 for(s in which(nd!=0)){
                     AUCpop[s] = mean(AUCs[which(x==s)]) 
                 }
-                
                 D_AUC <- (log(AUCs) - log(AUCpop[x]))
-            }   
-        } 
+            }  
+        }
         
         MtD = model(y,AUCs,d,x,theta,p_0,L,betapriors,D_AUC,options)$new_dose
-        MTD = c(MTD, MtD)
+        MTD = c(MTD, MtD) 
         dose_levels = rbind(dose_levels,x)
         toxicity = rbind(toxicity, y)
         AUC_s = rbind(AUC_s, AUCs)
@@ -114,7 +113,7 @@ function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, option
     # cat("NOTE: Print results to see more details about your outcomes")
     # list(new_dose = MtD, pstim = results$pstim, dose_levels = dose_levels,toxicity = toxicity, AUCs = AUC_s, AUCd = AUCd, parameters=results$parameters)
 
-    new("dosefinding", model=model, pid=pid, N=N, time = time, dose=d, conc=conci, p_0 = p_0 ,
+    new("dosefinding", pid=pid, N=N, time = time, dose=d, conc=conci, p_0 = p_0,
          L=L,  nchains=options$nchains, niter=options$niter, nadapt=options$nadapt, new_dose=MtD, 
-         theta=theta, dose_levels=dose_levels, toxicity=toxicity, AUCs=AUC_s)
+         theta=theta, dose_levels=dose_levels, toxicity=toxicity, AUCs=AUC_s, TR=TR)
 }

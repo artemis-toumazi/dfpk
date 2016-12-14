@@ -1,23 +1,24 @@
 \name{nsim}
 \alias{nsim}
+
 \title{
-More than one simulation using PK measure in the dose finding design
+Simulate one or more Phase I clinical trial(s) using the PK measure in the dose finding design.
 }
 
-\description{
-nsim is used to generate simulations of phase I trial using the PK data and then link them to toxicity under a specified dose-toxicity configuration. The objective is to determine the maximum tolerated dose (MTD). 
-}
+\description{ 
+nsim is used to generate "n" simulations of phase I trial using the PK data and then link them to toxicity under a specified dose-toxicity configuration. The objective is to determine the maximum tolerated dose (MTD). 
+} 
 
-\usage{
+\usage{  
 nsim(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options, TR)
-}
+} 
 
 \arguments{
   \item{d}{
 A vector of dose levels assigned to patients.
 }
   \item{N}{
-The total number of enrolled patients. 
+The total number of enrolled patients.
 }
   \item{cohort}{
 The number of cohorts in the trial.
@@ -29,7 +30,7 @@ The index of real blood sampling.
 The toxicity (probability) target.
 }
   \item{p_0}{
-The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model) 
+The skeleton of CRM; defaults to NULL. (must be defined only in the PKCRM model)
 }
   \item{L}{
 A threshold set before starting the trial; defaults to NULL. (must be defined only in the PKCRM model)
@@ -39,11 +40,11 @@ A character string to specify the working model which will be used in the simula
 }
   \item{scenarios}{
 A generated scenario including the PK data.
-}
+} 
   \item{betapriors}{
-A vector of the regression parameters in the selected model. 
+A vector of the regression parameters in the selected model.  
 }
-  \item{options}{
+  \item{options}{ 
 A list of three integers specifying the stan model's options: the number of chains, the number of iterations for each chain and the number of warmup iterations.
 }
   \item{TR}{
@@ -52,63 +53,58 @@ The number of replicates clinical trials.
 }
 
 \references{
-Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review). 
 }
 
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
         Moreno Ursino \email{moreno.ursino@inserm.fr},
-        Sarah Zohar \email{sarah.zohar@inserm.fr}
+        Sarah Zohar \email{sarah.zohar@inserm.fr} 
         }
 
 \seealso{
-\code{\link{scenarios}},
-\code{\link{sim}}.
+\code{\link{scenarios}} 
 }
 
 \examples{
   \dontrun{
-##############################################
-############ Generate scenarios ##############
-##############################################
-
-TR = 100
+TR = 1000                             # Total number of simulations
 limit_tox <- 10.96                  
-N <- 42                         
-param_pk <- c(2,10,100)             # PK parameters ka,CL,V
-omega2 <- 0.7                       
-omega_a <- 0                      
-preal <- c(0.001,.05,0.1,.2,0.35,0.45)         
-time_sampling <- seq(0,24,length.out=48)      
-sigma2 <- c(rep(0.2,length(time_sampling)), rep(0.2,length(time_sampling)))          
-# sigma2: Additive or proportional error
+N = 42                         
+param_pk <- c(2, 10, 100)             # PK parameters ka,CL,V
+omega2 <- 0.7                        
+omega_a <- 0                     
+preal <- c(0.001, 0.05, 0.1, 0.2, 0.35, 0.45)         
+time_sampling <- seq(0, 24, length.out=48)     
+sigma2 <- c(rep(0.2, length(time_sampling)), rep(0.2,length(time_sampling)))          
+# sigma2: Additive or proportional error.  
 
 gen.scen <- scenarios(param_pk,omega2,omega_a,sigma2,preal,limit_tox,time_sampling, N)
 
-cohort = 1
-scenarios <- gen.scen
-d <- scenarios@doses
-icon <- c(2:6,round(seq(9,48,((48-9)/4))))      
-theta <- 0.2                                    
-p_0 = NULL                                  
-L = NULL
+cohort = 1 
+scenarios <- gen.scen   
+d <- scenarios@doses 
+icon <- c(2:6, round(seq(9, 48, ((48-9)/4))))      
+theta <- 0.2                                      
+p_0 = 0                              
+L = 0 
 
-######################################
-############### Models ###############
-######################################
+##############################################
+############### Select a model ###############
+##############################################
 
-model = pktox  # Use one of the models in the dfpk package 
-betapriors = NULL
+model = pktox        
+betapriors = NULL 
 
 ################################################
-#### Set the stan model's options as a list ####
+#### Set the Stan model's options as a list ####
 ################################################
 
-options <- list(nchains = 4,
-                niter = 4000,
-                nadapt = 0.9)   
+options <- list(nchains = 4, 
+                niter = 4000, 
+                nadapt = 0.9) 
 
 ############################################
-############ Run the simulation ############
+############ Run the simulation(s) ############
 ############################################
 
 results_sim <- nsim(d, N, cohort, icon, theta, p_0, L, model, gen.scen, betapriors, options, TR)

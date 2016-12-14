@@ -2,7 +2,7 @@
 % Please edit documentation in R/S4_classes.R
 \name{plotConc}
 \alias{plotConc}
-\title{The generic function of plot.conc}
+\title{The generic function of plot.conc.}
 \usage{
 plotConc(x, ...)
 }

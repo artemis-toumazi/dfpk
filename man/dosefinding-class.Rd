@@ -10,9 +10,7 @@ An S4 class to represent a dosefinding results.
 \section{Slots}{
 
 \describe{
-\item{\code{model}}{A character string to specify the working model used in the method.}
-
-\item{\code{pid}}{Patient ID provided in the study.}
+\item{\code{pid}}{Patient's ID provided in the study.}
 
 \item{\code{N}}{The total number of patients.}
 
@@ -41,5 +39,7 @@ An S4 class to represent a dosefinding results.
 \item{\code{toxicity}}{The toxicity outcome.}
 
 \item{\code{AUCs}}{The AUCs.}
+
+\item{\code{TR}}{The total number of simulations.}
 }}
 

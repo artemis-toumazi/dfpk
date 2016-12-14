@@ -1,7 +1,8 @@
 \name{pklogit}
 \alias{pklogit}
+
 \title{
-Dose finding method PKLOGIT
+Dose finding method PKLOGIT.
 }
 
 \description{
@@ -63,7 +64,7 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
         }
 
 \seealso{
-\code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{scenarios}}, \code{\link{nsim}}, \code{\link{nextDose}}
 }
 
 \examples{
@@ -83,6 +84,6 @@ D_AUC <- c(0, 1.3, -0.34, -2.7,0.39, -2.45)
 betapriors = NULL
 
 pklogit(y, AUCs, d, x, theta, p_0, L, betapriors,D_AUC,options)
-}
+} 
 
 \keyword{models}

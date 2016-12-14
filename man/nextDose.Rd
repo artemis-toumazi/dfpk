@@ -33,15 +33,16 @@ nextDose(model, N, y, AUCs, doses, x, theta, p_0, L, betapriors, D_AUC = NULL,
 \item{options}{The Stan model's options.}
 }
 \description{
-nextDose is used to determine the next or recommended dose level in a phase I clinical trial using Pharmacokinetics (PK)
+nextDose is used to determine the next or recommended dose level in a phase I clinical trial using Pharmacokinetics (PK).
 }
 \examples{
-model <- pktox
-N <- 15
-p_0 = 0
+  \dontrun{
+model <- pktox 
+N <- 15  
+p_0 = 0 
 L = 0
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2
+theta <- 0.2 
 options <- list(nchains = 4,niter = 4000,nadapt = 0.9)
 AUCs <- c(1.2303254, 3.3839503,4.3638522, 5.9376084,8.1720269, 9.8009405,
 1.5330900, 4.2166896, 5.4377306,7.3987646,10.1830398,12.2128046, 2.1126844,
@@ -52,6 +53,7 @@ FALSE, FALSE, FALSE, FALSE ,FALSE, TRUE,FALSE, FALSE, FALSE)
 D_AUC <- NULL
 betapriors = NULL
 nextDose(model, N, y, AUCs, doses, x, theta, p_0, L, betapriors, D_AUC, options)
+}
 
 }
 \author{
@@ -61,6 +63,6 @@ Artemis Toumazi \email{artemis.toumazi@inserm.fr}, Moreno Ursino \email{moreno.u
 Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
 }
 \seealso{
-\code{\link{sim}}, \code{\link{nsim}}
+\code{\link{nsim}}
 }
 

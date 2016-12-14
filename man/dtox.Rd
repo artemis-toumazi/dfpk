@@ -1,11 +1,11 @@
 \name{dtox}
 \alias{dtox}
 \title{
-Dose finding method DTOX
+Dose finding method DTOX.
 }
 
 \description{
-The DTOX model is constructed to test the behaviours of a way of estimating probabilities of toxicity. This enables us to estimate posterior probability of toxicity \eqn{p_T} versus dose directly. Therefore it represents a statistical model to link \eqn{p_T} and dose.
+The DTOX model is constructed to test the behaviours of a way of estimating probabilities of toxicity. This enables us to estimate posterior probability of toxicity \eqn{p_T} versus dose directly. It presents a statistical model to link \eqn{p_T} and dose.
 }
 
 \usage{
@@ -58,7 +58,7 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
         }
 
 \seealso{
-\code{\link{scenarios}}, \code{\link{sim}}
+\code{\link{scenarios}}, \code{\link{nsim}}, \code{\link{nextDose}}
 }
 
 \examples{

@@ -26,6 +26,6 @@ model {
   }
   y ~ bernoulli(p);
   bet[1] ~ uniform(0,25);
-  bet[2] ~ uniform(fmax(0,beta1mean-5), beta1mean+5);
+  bet[2] ~ uniform(fmax(0.0,beta1mean-5), beta1mean+5);
   b2 ~ uniform(0,5);
 }

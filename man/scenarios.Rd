@@ -1,11 +1,12 @@
 \name{scenarios}
 \alias{scenarios}
+
 \title{
-Generate New Data from a scenarios
+Generate new data from a scenarios.
 }
 
 \description{
-This function can be used to generate new data from several scenarios.
+This function can be used to generate/simulate new data from several scenarios.
 }
 
 \usage{
@@ -45,15 +46,12 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
         Moreno Ursino \email{moreno.ursino@inserm.fr},
         Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
+        
 \seealso{
-\code{\link{sim}}
+\code{\link{nsim}}
 }
 
 \examples{
-#####################################
-######### Scenario Inputs  ##########
-#####################################
-
 limit_tox <- 10.96                  
 N <- 42                               
 param_pk <- c(2,10,100)       # PK parameters ka,CL,V

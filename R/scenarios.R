@@ -16,7 +16,7 @@ function(param_pk,omega2,omega_a,sigma2,preal,limit_tox,time_sampling, N){
     tab <- c(0,time_sampling,time_sampling)	 
     npar <- length(param_pk) - 1 	             
     
-    for(i in 1:N) {
+    for(i in 1:N) { 
         ipar <- (param_pk[2:3])*exp(rnorm(npar,sd=omega2))
         ipar <- c(param_pk[1],ipar)
         parameter <- rbind(parameter,ipar)

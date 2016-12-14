@@ -1,7 +1,6 @@
 #' An S4 class to represent a dosefinding results.
 #'
-#' @slot model A character string to specify the working model used in the method.
-#' @slot pid Patient ID provided in the study.
+#' @slot pid Patient's ID provided in the study.
 #' @slot N  The total number of patients.
 #' @slot time The time sampling.
 #' @slot dose The dose levels of the drug.
@@ -16,23 +15,23 @@
 #' @slot dose_levels A vector of dose levels assigned to patients in the trial.
 #' @slot toxicity The toxicity outcome.
 #' @slot AUCs The AUCs.
+#' @slot TR The total number of simulations.
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setClass("dosefinding", slots = list(model="character", pid="numeric", N ="numeric",time="numeric", dose = "numeric", conc="numeric", 
+setClass("dosefinding", slots = list(pid="numeric", N ="numeric",time="numeric", dose = "numeric", conc="numeric", 
           p_0 = "numeric", L = "numeric",  nchains = "numeric", niter = "numeric", nadapt = "numeric", new_dose = "numeric", 
-          theta = "numeric", dose_levels="matrix", toxicity= "matrix", AUCs="matrix"))
-
+          theta = "numeric", dose_levels="matrix", toxicity= "matrix", AUCs="matrix", TR="numeric"))
 
 #' An S4 class to represent a simulated scenarios.
-#'
+#' 
 #' @slot param_pk The subject's PK parameters.
 #' @slot n_pk The length of time sampling.
 #' @slot time The time sampling.
 #' @slot N  The total number of patients.
 #' @slot doses The doses levels of the drug. 
 #' @slot limit_tox  Threshold in the toxicity. 
-#' @slot omega2  A standard deviation of CL and V.
+#' @slot omega2  A standard deviation of clearance (CL) and volume (V).
 #' @slot omega_a A standard deviation omega_a.
 #' @slot conc The concentration of the drug (concentration without error).
 #' @slot conc_pred The predicted concentration of the drug (concentration with error). 
@@ -70,23 +69,24 @@ setClass("Dose", slots = list(N = "numeric", y = "logical", AUCs = "numeric", do
      ))
 
 
-#' @export
+#' @export 
 setMethod(f = "show",
           signature ="dosefinding",
           definition = function(object) {
                cat("Today: ", date(), "\n") 
-     		cat("\n","Data Summary", "\n")
+     		cat("\n","A. Data Summary", "\n")
+               cat("Number of simulations:", object@TR, "\n") 
      	     cat("Total number of patients in the trial:", object@N, "\n")
      	     cat("The time sampling:", object@time, "\n")
                cat("Levels of Doses:", object@dose, "\n")
                cat("Concentration of the drug:", object@conc, "\n")
                cat("Skeleton of CRM:", object@p_0, "\n")
-               cat("Threshold set before starting the trial:", object@L, "\n")
-               cat("\n","STAN Model's Options \n")
+               cat("Threshold set before starting the trial:", object@L, "\n") 
+               cat("\n","B. STAN Model's Options \n")
                cat("The Stan model runs with", object@nchains, "MCMC chains ")
                cat("which each chain has", object@niter, "iterations ")
                cat("and", object@nadapt, "warmup iterations \n")
-               cat("\n","Dose-Finding Results: \n")
+               cat("\n","C. Dose-Finding Results: \n") 
                cat("Next recommended dose level:", object@new_dose, "\n")
                cat("Recommendation is based on a target toxicity probability of:",object@theta, "\n")
                cat("Dose escalation in the trial:","\n", object@dose_levels,"\n")
@@ -94,11 +94,12 @@ setMethod(f = "show",
                print(object@toxicity)
                cat("AUCs: \n")
                print(object@AUCs)
-               cat("\n")
+               cat("\n") 
          }
 )
 
-#' @export
+
+#' @export 
 setMethod(f = "show",
           signature ="scen",
           definition = function(object) {
@@ -123,11 +124,12 @@ setMethod(f = "show",
                cat("\n")
                cat("The PK parameter's estimations for each patient are:", "\n")
                print(object@parameters)
-               cat("\n")
+               cat("\n") 
          }
 ) 
 
-#' @export
+
+#' @export 
 setMethod(f = "show",
           signature ="Dose",
           definition = function(object) {
@@ -138,7 +140,7 @@ setMethod(f = "show",
                print(object@new_dose)
                cat("\n")
                cat("Estimated probability of toxicity: ", "\n")
-               print(object@pstim)
+               print(object@pstim) 
                cat("\n")
                cat("Estimated model's parameters: ", "\n")
                print(object@parameters)
@@ -146,16 +148,15 @@ setMethod(f = "show",
           }
 )
 
-
 ###########################################
 ################ Plots ####################
 ###########################################
 
-#' The generic function of the plot.dose
+#' The generic function of the plot.dose.
 #'
 #' @param x A "dosefinding" object.
 #' @param ... Other parameters to be passed through to plotting functions. They are ignored in this function.
-#' @description 
+#' @description
 #' A graphical representation of dose escalation for each patient in the trial.
 #' 
 #' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
@@ -167,7 +168,7 @@ setMethod(f = "show",
 #' @import graphics
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setGeneric(name="plotDose",def = function(x,...){standardGeneric("plotDose")}
+setGeneric(name="plotDose", def = function(x,...){standardGeneric("plotDose")}
 )
 
 
@@ -199,7 +200,7 @@ setMethod(f ="plotDose",
           }
 )
 
-#' The generic function of plot.conc
+#' The generic function of plot.conc.
 #' 
 #' @param x A "scen" object.
 #' @param ... Other parameters to be passed through to plotting functions. They are ignored in this function.
@@ -214,8 +215,8 @@ setMethod(f ="plotDose",
 #'
 #' @import graphics
 #' @useDynLib dfpk, .registration = TRUE
-#' @export
-setGeneric(name="plotConc",def = function(x,...){standardGeneric("plotConc")}
+#' @export 
+setGeneric(name="plotConc", def = function(x,...){standardGeneric("plotConc")}
 )
 
 
@@ -245,4 +246,3 @@ setMethod(f ="plotConc" ,signature ="scen",
     	          }
 	}
 )
-
