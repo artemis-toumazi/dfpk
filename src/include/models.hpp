@@ -269,7 +269,7 @@ public:
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
                 lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0, 25));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0,(beta1mean - 5)), (beta1mean + 5)));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0.0,(beta1mean - 5)), (beta1mean + 5)));
                 lp_accum__.add(uniform_log<propto__>(b2, 0, 5));
             }
         } catch (const std::exception& e) {
@@ -685,8 +685,8 @@ public:
                     stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0, 20));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0, 10));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, 20));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, 10));
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
@@ -1089,8 +1089,8 @@ public:
                     stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), fmax(0,(beta0mean - 10)), (beta0mean + 10)));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0,(beta1mean - 5)), (beta1mean + 5)));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), fmax(0.0,(beta0mean - 10)), (beta0mean + 10)));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0.0,(beta1mean - 5)), (beta1mean + 5)));
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
@@ -1481,8 +1481,8 @@ public:
                     stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0, 10));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0, 5));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, 10));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, 5));
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
