@@ -8,7 +8,7 @@ data {
 }
 parameters {
   vector[2] bet;
-  real b2; 
+  real b2;
 }
 transformed parameters{
   vector[2] bet1;

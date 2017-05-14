@@ -28,7 +28,7 @@ The concentration of the drug in blood plasma.
 }
 
 \references{
-Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
 }
 
 \author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
@@ -37,7 +37,7 @@ Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small p
         }
 
 \seealso{
-\code{\link{AUC_estim}}, \code{\link{nsim}}
+\code{\link{AUC.estim}}, \code{\link{nsim}}
 }
 
 \examples{

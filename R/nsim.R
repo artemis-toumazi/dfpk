@@ -2,118 +2,159 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 nsim <- 
-function(d, N, cohort, icon, theta, p_0, L, model, scenarios, betapriors, options, TR){ 
+function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmethod = 2, options = list(nchains = 4, niter = 4000, 
+         nadapt = 0.8), betapriors = NULL, thetaL=NULL, p0 = 0, L = 0){
+
+    model1 = NULL
+    eval(parse(text = paste("model1 =", model, sep="")))
     MTD = NULL
-    dose_levels = NULL
+    doseLevels = NULL
     toxicity = NULL
     AUC_s = NULL
-    AUCd = NULL 
+    AUCd = NULL
+    pstim1 = list()
+    pstim3 = list()
+    pstim_mean = list()
+
+    if (model == "pktox" & is.null(betapriors)){
+    	betapriors = c(10000, 20, 10)
+    }else if(model == "pkcrm" & is.null(betapriors)){
+    	betapriors = 10000
+    }else if (model == "pkpop" & is.null(betapriors)){
+    	betapriors = c(10000, 10, 5)
+    }else if (model == "dtox" & is.null(betapriors)){
+    	betapriors = c(6.71, 1.43)
+    }else if(model == "pkcov" & is.null(betapriors)){
+    	betapriors = c(-14.76, 3.23)
+    }else if (model == "pklogit" & is.null(betapriors)){
+    	betapriors = c(10000, 20, 10)
+    }
+
 
     for (tr in 1:TR){
         
-        ndos <- length(d)
-        tox <- scenarios@tox          
-        stab <- scenarios@tab 
-        n_pk <- scenarios@n_pk        
-        doses <- scenarios@doses
-        d <- scenarios@doses
+        ndos <- length(doses)
+        tox <- simulatedData@tox         
+        stab <- simulatedData@tab 
+        n_pk <- simulatedData@nPK        
+        doses <- simulatedData@doses
+        preal <- simulatedData@preal
         x <- rep(1,cohort)
         y <- tox[cbind(1:length(x),x)]  
         M = N/cohort
-        nd <- rep(0,length(d)) 
+        nd <- rep(0,length(doses))
         
-        for (i in 1:length(x)){ 
+        for (i in 1:length(x)){
             eval(parse(text = paste("conc",i," <- as.vector(stab[((i-1)*ndos +x[i] +1), 2:(n_pk +1)])", sep= "")))
             eval(parse(text = paste("conc",i," <- conc",i,"[icon]", sep = ""))) 
             nd[x[i]] <- nd[x[i]] + 1
         }
         
-        time <- as.vector(stab[1, 2:(n_pk +1)])
         time1 <- as.vector(stab[1, 2:(n_pk +1)])
         time1 <- time1[icon]
         
-        AUCs <- NULL 
+        AUCs <- NULL
         for (i in 1:length(x)){
-            eval(parse(text = paste("AUCs <- c(AUCs, AUC_estim(conc=conc",i,", t=time1, dose=d[x[",i,"]]))", sep="")))
+            eval(parse(text = paste("AUCs <- c(AUCs, AUC.estim(conc=conc",i,", t=time1, dose=doses[x[",i,"]], method = AUCmethod))", sep="")))
         }
         
         pstim_auctox = matrix(0, length(doses)*cohort)
-        
-        AUCpop <- rep(0, length(d))
+        # pstim_post = matrix(0, length(doses)*cohort)
+        pstim_Q1 = matrix(0, length(doses)*cohort)
+        pstim_Q3 = matrix(0, length(doses)*cohort)
+
+        AUCpop <- rep(0, length(doses))
         for(s in which(nd!=0)){
             AUCpop[s] = mean(AUCs[which(x==s)])
-        } 
+        }
         
-        D_AUC <- (log(AUCs) - log(AUCpop[x]))
+        deltaAUC <- (log(AUCs) - log(AUCpop[x]))
         
-        stage1 = TRUE 
+        stage1 = TRUE
         for (i in 2:M) {
             j= (cohort*(i-1) + 1) : (cohort*i)   # position
             ### starting dose until toxicity
-            if (stage1) {
-                x <- c(x,rep(min((max(x)+1),length(d)), cohort))             
+            if (stage1){
+                x <- c(x,rep(min((max(x)+1),length(doses)), cohort))             
                 y <- c(y, tox[cbind(j,x[j])])
                 for (k in j) {
                     conci <- as.vector(stab[((k-1)*ndos + x[k] +1), 2:(n_pk +1)])
                     conci <- conci[icon]
-                    AUCs <- c(AUCs, AUC_estim(conc=conci, t=time1, dose=d[x[k]]))
-                    pstim_auctox = cbind(pstim_auctox, rep(0,length(doses)))
+                    AUCs <- c(AUCs, AUC.estim(conc=conci, t=time1, dose=doses[x[k]], method = AUCmethod))
                     nd[x[k]] <- nd[x[k]] + 1 
                 }
+                pstim_auctox = cbind(pstim_auctox, rep(0,length(doses)))
+                # pstim_post = cbind(pstim_post, rep(0,length(doses)))
+                pstim_Q1 = cbind(pstim_Q1, rep(0,length(doses)))
+                pstim_Q3 = cbind(pstim_Q3, rep(0,length(doses)))
                 
                 for(s in which(nd!=0)){
                     AUCpop[s] = mean(AUCs[which(x==s)])
                 }
-                D_AUC <- (log(AUCs) - log(AUCpop[x]))
+                deltaAUC <- (log(AUCs) - log(AUCpop[x]))
                 
-                if (any(y==TRUE)) {stage1 <- FALSE}
-            } else { 
+                if (any(y == "1")) {stage1 <- FALSE}
+            } else {
                 
-                results <- model(y,AUCs,d,x,theta,p_0,L,betapriors,D_AUC,options)
-                newdose <- min(results$new_dose, max(x) + 1)        
-                # Check on the skippimg dose
+                results <- model1(y=y, auc = AUCs, doses = doses, x=x, theta=theta, prob = prob, betapriors = betapriors, 
+                                 thetaL=thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)
+                
+                if (is.na(results$newDose) == "TRUE") break
+
+                newdose <- min(results$newDose, max(x) + 1)     
+                # Check on the skipping dose
                 x <- c(x,rep(newdose,cohort))
-                y <- c(y, tox[cbind(j,x[j])])       
+                y <- c(y, tox[cbind(j,x[j])])    
                 for (k in j) {
                     conci <- as.vector(stab[((k-1)*ndos +x[k] +1), 2:(n_pk +1)])
                     conci <- conci[icon]
-                    AUCs <- c(AUCs, AUC_estim(conc=conci, t=time1, dose=d[x[k]]))
+                    AUCs <- c(AUCs, AUC.estim(conc=conci, t=time1, dose=doses[x[k]], method = AUCmethod))
                     nd[x[k]] <- nd[x[k]] + 1
-                    pstim_auctox = cbind(pstim_auctox, results$pstim)
-                }  
-                
+                }
+                pstim_auctox = cbind(pstim_auctox, results$pstim)
+                # pstim_post = cbind(pstim_post, results$pstim_sum)
+                pstim_Q1 = cbind(pstim_Q1, results$p_sum[,2])
+                pstim_Q3 = cbind(pstim_Q3, results$p_sum[,5])
                 for(s in which(nd!=0)){
                     AUCpop[s] = mean(AUCs[which(x==s)]) 
                 }
-                D_AUC <- (log(AUCs) - log(AUCpop[x]))
-            }  
+                deltaAUC <- (log(AUCs) - log(AUCpop[x]))
+            }
         }
-        
-        MtD = model(y,AUCs,d,x,theta,p_0,L,betapriors,D_AUC,options)$new_dose
-        MTD = c(MTD, MtD) 
-        dose_levels = rbind(dose_levels,x)
-        toxicity = rbind(toxicity, y)
-        AUC_s = rbind(AUC_s, AUCs)
-        AUCd = rbind(AUCd, D_AUC)
-        eval(parse(text = paste("pstim"," <- pstim_auctox", sep="")))
-        nchains=options$nchains
-        niter = options$niter
-        nadapt = options$nadapt
-        pid = c(1:N)
+        trial <- paste('trial:',tr,sep='')
+        # check if we stopped before
+        if (length(x) < N){
+            nstop <- N-length(x)
+            MtD = results$newDose
+            MTD = c(MTD, results$newDose)
+            doseLevels = rbind(doseLevels,c(x,rep(NA,nstop)))
+            toxicity = rbind(toxicity,c(y,rep(NA,nstop)))
+            AUC_s = rbind(AUC_s, c(AUCs,rep(NA,nstop)))
+            AUCd = rbind(AUCd, c(deltaAUC,rep(NA,nstop)))
+            pstim1[[trial]] = pstim_Q1
+            pstim3[[trial]] = pstim_Q3
+            pstim_mean[[trial]] = pstim_auctox
+        }else{
+            MtD = model1(y = y, auc = AUCs, doses = doses, x = x, theta = theta, prob = prob, betapriors = betapriors, 
+                        thetaL = thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)$newDose
+            MTD = c(MTD, MtD)
+            doseLevels = rbind(doseLevels, x)
+            toxicity = rbind(toxicity, y)
+            AUC_s = rbind(AUC_s, AUCs)
+            AUCd = rbind(AUCd, deltaAUC)
+            pstim1[[trial]] <- pstim_Q1
+            pstim3[[trial]] <- pstim_Q3
+            pstim_mean[[trial]] <- pstim_auctox
+        }
+            # pstim <- eval(parse(text = paste("pstim"," <- pstim_auctox", sep="")))
+            nchains = options$nchains
+            niter = options$niter
+            nadapt = options$nadapt
+            pid = c(1:N)
     }
     
-    # cat("\n")
-    # cat("\n")
-    # cat("Dose-Finding results:", "\n")
-    # cat("\n")
-    # cat("Next recommended dose level:", MTD,"\n")
-    # cat("Recommendation is based on a target toxicity probability of",theta,"\n")
-    # cat("and dose levels:", d, "\n")
-    # cat("\n")
-    # cat("NOTE: Print results to see more details about your outcomes")
-    # list(new_dose = MtD, pstim = results$pstim, dose_levels = dose_levels,toxicity = toxicity, AUCs = AUC_s, AUCd = AUCd, parameters=results$parameters)
-
-    new("dosefinding", pid=pid, N=N, time = time, dose=d, conc=conci, p_0 = p_0,
-         L=L,  nchains=options$nchains, niter=options$niter, nadapt=options$nadapt, new_dose=MtD, 
-         theta=theta, dose_levels=dose_levels, toxicity=toxicity, AUCs=AUC_s, TR=TR)
+    new("dosefinding", pid = pid, N = N, time = time1, doses = doses, conc = conci, p0 = p0,
+         L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = MtD, 
+         theta = theta, doseLevels = doseLevels, toxicity = toxicity, AUCs = AUC_s, TR = TR, preal = preal, 
+         pstim  = pstim_mean, pstimQ1 = pstim1, pstimQ3 = pstim3, model = model)
 }

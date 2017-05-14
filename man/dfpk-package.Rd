@@ -7,15 +7,14 @@
 }
 
 \description{
-Statistical methods involving PK measures are provided, in the dose allocation process during a Phase I clinical trials. These methods enter pharmacokinetics (PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate data from several scenarios and functions to run simulations which their objectives are to determine the maximum tolerated dose (MTD) and to investigate the pharmacokinetics of a drug or a combination of drugs.
+Statistical methods involving PK measures are provided, in the dose allocation process during a Phase I clinical trials. These methods enter pharmacokinetics (PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate data from several scenarios and functions to run simulations which their objective is to determine the maximum tolerated dose (MTD).
 }
 
 \details{
-The three main functions of the dfpk package are \code{\link{scenarios}}, \code{\link{nsim}} and \code{\link{nextDose}}, the first one generates new PK data based on the scenario, the second one simulates "n" clinical trials in order to find the next maximum tolerated dose (MTD) of the drug and the third one determines the next recommended dose for an ongoing phase I clinical trial based on an enrolled patient's data. 
+The three main functions of the dfpk package are \code{\link{sim.data}}, \code{\link{nsim}} and \code{\link{nextDose}}, for generating PK data based on the input settings, simulating "n" clinical trials and determining the next recommended dose for an ongoing phase I clinical trial based on an enrolled patient's data, respectively.
 Subsequently, six dose-finding methods/models can be applied: \code{\link{dtox}}, \code{\link{pktox}}, \code{\link{pkcrm}}, \code{\link{pkcov}}, \code{\link{pkpop}}, and \code{\link{pklogit}} which each one creates a Bayesian model and fits it using \pkg{Stan}.
 
-Because \pkg{dfpk} is based on \pkg{Stan} models, a C++ compiler is required. 
-The program Rtools (available on https://cran.r-project.org/bin/windows/Rtools/) comes with a C++ compiler for Windows. On Mac, you should use Xcode.
+Since \pkg{dfpk} is based on \pkg{Stan} models, a C++ compiler is required. The program Rtools (available on https://cran.r-project.org/bin/windows/Rtools/) comes with a C++ compiler for Windows while on Mac, you should use Xcode.
 For further instructions on how to get the compilers running,
 see the prerequisites section on https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started.
 }
@@ -27,7 +26,7 @@ Maintainer: Artemis Toumazi \email{artemis.toumazi@inserm.fr}
 }
 
 \references{
-Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
 }
 
 \keyword{package}

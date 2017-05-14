@@ -269,7 +269,7 @@ public:
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
                 lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0, 25));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0.0,(beta1mean - 5)), (beta1mean + 5)));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0,(beta1mean - 5)), (beta1mean + 5)));
                 lp_accum__.add(uniform_log<propto__>(b2, 0, 5));
             }
         } catch (const std::exception& e) {
@@ -498,6 +498,8 @@ private:
     int N;
     vector<int> y;
     matrix_d dose;
+    double beta2mean;
+    double beta3mean;
 public:
     model_logit_reg(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -554,6 +556,16 @@ public:
                 dose(m_mat__,n_mat__) = vals_r__[pos__++];
             }
         }
+        context__.validate_dims("data initialization", "beta2mean", "double", context__.to_vec());
+        beta2mean = double(0);
+        vals_r__ = context__.vals_r("beta2mean");
+        pos__ = 0;
+        beta2mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta3mean", "double", context__.to_vec());
+        beta3mean = double(0);
+        vals_r__ = context__.vals_r("beta3mean");
+        pos__ = 0;
+        beta3mean = vals_r__[pos__++];
 
         // validate data
         check_greater_or_equal(function__,"N",N,0);
@@ -685,8 +697,8 @@ public:
                     stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, 20));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, 10));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, beta2mean));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, beta3mean));
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
@@ -1294,6 +1306,8 @@ private:
     int N;
     vector<int> y;
     matrix_d dose;
+    double beta3mean;
+    double beta4mean;
 public:
     model_logit_reg_pkpop(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -1350,6 +1364,16 @@ public:
                 dose(m_mat__,n_mat__) = vals_r__[pos__++];
             }
         }
+        context__.validate_dims("data initialization", "beta3mean", "double", context__.to_vec());
+        beta3mean = double(0);
+        vals_r__ = context__.vals_r("beta3mean");
+        pos__ = 0;
+        beta3mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta4mean", "double", context__.to_vec());
+        beta4mean = double(0);
+        vals_r__ = context__.vals_r("beta4mean");
+        pos__ = 0;
+        beta4mean = vals_r__[pos__++];
 
         // validate data
         check_greater_or_equal(function__,"N",N,0);
@@ -1481,8 +1505,8 @@ public:
                     stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, 10));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, 5));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, beta3mean));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, beta4mean));
             }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
@@ -1686,6 +1710,7 @@ private:
     int N;
     vector_d auc;
     matrix_d dose;
+    double beta0;
 public:
     model_reg_auc2(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -1742,6 +1767,11 @@ public:
                 dose(m_mat__,n_mat__) = vals_r__[pos__++];
             }
         }
+        context__.validate_dims("data initialization", "beta0", "double", context__.to_vec());
+        beta0 = double(0);
+        vals_r__ = context__.vals_r("beta0");
+        pos__ = 0;
+        beta0 = vals_r__[pos__++];
 
         // validate data
         check_greater_or_equal(function__,"N",N,0);
@@ -1873,7 +1903,7 @@ public:
         try {
             lp_accum__.add(normal_log<propto__>(auc, multiply(dose,b), sigma));
             lp_accum__.add(beta_log<propto__>(sigma, 1, 1));
-            lp_accum__.add(normal_log<propto__>(b, 0, 10000));
+            lp_accum__.add(normal_log<propto__>(b, 0, beta0));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return

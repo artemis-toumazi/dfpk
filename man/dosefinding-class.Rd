@@ -16,11 +16,11 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{time}}{The time sampling.}
 
-\item{\code{dose}}{The dose levels of the drug.}
+\item{\code{doses}}{The dose levels of the drug.}
 
 \item{\code{conc}}{Concentration of the drug.}
 
-\item{\code{p_0}}{The skeleton of CRM.}
+\item{\code{p0}}{The skeleton of CRM.}
 
 \item{\code{L}}{A threshold set before starting the trial.}
 
@@ -30,16 +30,26 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{nadapt}}{Number of warmup iterations for the stan model.}
 
-\item{\code{new_dose}}{The next maximum tolerated dose (MTD).}
+\item{\code{newDose}}{The next maximum tolerated dose (MTD).}
 
 \item{\code{theta}}{The toxicity (probability) target.}
 
-\item{\code{dose_levels}}{A vector of dose levels assigned to patients in the trial.}
+\item{\code{doseLevels}}{A vector of dose levels assigned to patients in the trial.}
 
 \item{\code{toxicity}}{The toxicity outcome.}
 
-\item{\code{AUCs}}{The AUCs.}
+\item{\code{AUCs}}{A vector with the computed AUC values of each patient.}
 
-\item{\code{TR}}{The total number of simulations.}
+\item{\code{TR}}{The number of replicates clinical trials.}
+
+\item{\code{preal}}{The real probability of toxicity.}
+
+\item{\code{pstim}}{The estimated mean probabilities of toxicity.}
+
+\item{\code{pstimQ1}}{The 1st quartile of estimated probability of toxicity.}
+
+\item{\code{pstimQ3}}{The 3rd quartile of estimated probability of toxicity.}
+
+\item{\code{model}}{A character string to specify the working model used in the method.}
 }}
 

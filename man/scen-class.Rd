@@ -10,9 +10,9 @@ An S4 class to represent a simulated scenarios.
 \section{Slots}{
 
 \describe{
-\item{\code{param_pk}}{The subject's PK parameters.}
+\item{\code{PKparameters}}{The subject's PK parameters.}
 
-\item{\code{n_pk}}{The length of time sampling.}
+\item{\code{nPK}}{The length of time sampling.}
 
 \item{\code{time}}{The time sampling.}
 
@@ -20,15 +20,17 @@ An S4 class to represent a simulated scenarios.
 
 \item{\code{doses}}{The doses levels of the drug.}
 
-\item{\code{limit_tox}}{Threshold in the toxicity.}
+\item{\code{preal}}{The real probability of toxicity.}
 
-\item{\code{omega2}}{A standard deviation of clearance (CL) and volume (V).}
+\item{\code{limitTox}}{Threshold in the toxicity.}
 
-\item{\code{omega_a}}{A standard deviation omega_a.}
+\item{\code{omegaIIV}}{A standard deviation of clearance (CL) and volume (V).}
+
+\item{\code{omegaAlpha}}{A standard deviation omegaAlpha.}
 
 \item{\code{conc}}{The concentration of the drug (concentration without error).}
 
-\item{\code{conc_pred}}{The predicted concentration of the drug (concentration with error).}
+\item{\code{concPred}}{The predicted concentration of the drug (concentration with error).}
 
 \item{\code{tox}}{The toxicity outcomes.}
 
@@ -36,6 +38,6 @@ An S4 class to represent a simulated scenarios.
 
 \item{\code{parameters}}{The PK parameter's estimations of each patient.}
 
-\item{\code{alfa_AUC}}{AUC with sensitivity parameter.}
+\item{\code{alphaAUC}}{AUC with sensitivity parameter.}
 }}
 

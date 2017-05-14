@@ -2,15 +2,15 @@ Package: dfpk
 Type: Package
 Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for
         Phase I Clinical Trials
-Version: 2.1.0
-Date: 2017-03-11
+Version: 3.0.1
+Date: 2017-05-12
 Author: Artemis Toumazi <artemis.toumazi@inserm.fr> , Moreno Ursino <moreno.ursino@inserm.fr> and Sarah Zohar <sarah.zohar@inserm.fr>
 Maintainer: Artemis Toumazi <artemis.toumazi@inserm.fr>
-Description: Statistical methods involving PK measures are provided, in the dose allocation process during a Phase I clinical trials. These methods enter pharmacokinetics (PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate data from several scenarios and functions to run simulations which their objectives are to determine the maximum tolerated dose (MTD) and to investigate the pharmacokinetics of a drug or a combination of drugs.
+Description: Statistical methods involving PK measures are provided, in the dose allocation process during a Phase I clinical trials. These methods enter pharmacokinetics (PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate data from several scenarios and functions to run simulations which their objective is to determine the maximum tolerated dose (MTD).
 License: GPL (>= 3) | file LICENSE
 Depends: R (>= 3.0.2), Rcpp (>= 0.12.0)
 Imports: rstan (>= 2.12.1), ggplot2 (>= 2.0.0), dfcrm, methods, stats,
-        graphics, grDevices
+        graphics, grDevices, PK
 LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60),
         Rcpp (>= 0.12.0), RcppEigen
 RcppModules: stan_fit4logit_cov2_mod, stan_fit4logit_reg_dtox_mod,

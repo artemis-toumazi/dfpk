@@ -3,7 +3,7 @@
 \docType{data}
 
 \title{
-The data stan_f includes all the Stan models that dfpk package uses.
+The data stan_f includes all the Stan models that dfpk package uses. 
 }
 
 \description{
@@ -13,7 +13,7 @@ The data stan_f includes all the Stan models that dfpk package uses.
 \usage{data("stan_f")}
 
 \references{
-Ursino, M., et al, (2016) Dose-finding methods using pharmacokinetics in small populations (under review).
+Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
 }
 
 \examples{

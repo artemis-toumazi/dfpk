@@ -2,9 +2,11 @@ data {
   int<lower=0> N;         // number of previous patients
   int y[N];               // binary response
   matrix[N,2] dose;       // log dose + intercept
+  real beta3mean;
+  real beta4mean;
 }
 parameters {
-  vector[2] bet; 
+  vector[2] bet;
 }
 transformed parameters {
   vector[2] bet1;
@@ -19,6 +21,6 @@ model {
   p[n] = normal_cdf(z[n],0,1);  
   }
   y ~ bernoulli(p);
-  bet[1] ~ uniform(0.0, 10);
-  bet[2] ~ uniform(0.0, 5);
+  bet[1] ~ uniform(0.0, beta3mean);
+  bet[2] ~ uniform(0.0, beta4mean);
 }

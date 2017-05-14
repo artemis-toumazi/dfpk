@@ -1,7 +1,8 @@
 data {
   int<lower=0> N; 			// number of patient
   vector[N] auc; 			// log auc
-  matrix[N,2] dose; 		// log dose
+  matrix[N,2] dose; 		// log dose + intercept
+  real beta0;
 }
 parameters {
   vector[2] b;
@@ -10,5 +11,5 @@ parameters {
 model {
   auc ~ normal(dose*b, sigma);
   sigma ~ beta(1, 1);
-  b ~ normal(0, 10000);
+  b ~ normal(0.0, beta0);
 }

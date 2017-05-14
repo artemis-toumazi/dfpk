@@ -14,7 +14,7 @@ An S4 class to present the next recommended dose level in an ongoing trial.
 
 \item{\code{y}}{The toxicity outcome of each patient.}
 
-\item{\code{AUCs}}{The AUCs values of each patient.}
+\item{\code{AUCs}}{A vector with the computed AUC values of each patient.}
 
 \item{\code{doses}}{The doses levels of the drug.}
 
@@ -24,10 +24,16 @@ An S4 class to present the next recommended dose level in an ongoing trial.
 
 \item{\code{options}}{The Stan model's options.}
 
-\item{\code{new_dose}}{The next recommended dose level.}
+\item{\code{newDose}}{The next recommended dose level.}
 
-\item{\code{pstim}}{The estimated probability of toxicity.}
+\item{\code{pstim}}{The estimated mean probabilities of toxicity.}
+
+\item{\code{pstimQ1}}{The 1st quartile of estimated probability of toxicity.}
+
+\item{\code{pstimQ3}}{The 3rd quartile of estimated probability of toxicity.}
 
 \item{\code{parameters}}{The Stan model's estimated parameters.}
+
+\item{\code{model}}{A character string to specify the working model used in the method.}
 }}
 
