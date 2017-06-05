@@ -1,3 +1,10 @@
+#' @import ggplot2
+#' @import rstan
+#' @import Rcpp
+#' @import methods
+#' @import stats
+#' @useDynLib dfpk, .registration = TRUE
+#' @export
 dtox <-
 function(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = c(6.71, 1.43), thetaL=NULL, auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL){
         

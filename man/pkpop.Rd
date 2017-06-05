@@ -30,7 +30,7 @@ then, no dose are suggested and the trial is stopped.
 
 \usage{
 pkpop(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4000, 
-      nadapt = 0.8), betapriors = c(10000, 10, 5), thetaL = NULL, p0=NULL, 
+      nadapt = 0.8), betapriors = c(10, 10000, 10, 5), thetaL = NULL, p0=NULL, 
       L=NULL, deltaAUC=NULL)
 }
 

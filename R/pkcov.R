@@ -1,3 +1,10 @@
+#' @import ggplot2
+#' @import rstan
+#' @import Rcpp
+#' @import methods
+#' @import stats
+#' @useDynLib dfpk, .registration = TRUE
+#' @export
 pkcov <-
 function(y, auc, doses, x, theta, deltaAUC, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), 
              betapriors = c(-14.76, 3.23), thetaL=NULL, p0 = NULL, L = NULL){

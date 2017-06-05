@@ -1,3 +1,11 @@
+#' @import ggplot2
+#' @import rstan
+#' @import Rcpp
+#' @import dfcrm
+#' @import methods
+#' @import stats
+#' @useDynLib dfpk, .registration = TRUE
+#' @export
 pkcrm <-
 function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = c(10, 10000), thetaL=NULL, deltaAUC = NULL){
         

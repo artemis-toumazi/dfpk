@@ -32,7 +32,8 @@ then, no dose are suggested and the trial is stopped.
 
 \usage{
 pkcrm(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4, 
-      niter = 4000, nadapt = 0.8), betapriors = 10000, thetaL=NULL, deltaAUC = NULL)
+      niter = 4000, nadapt = 0.8), betapriors = c(10, 10000), thetaL=NULL, 
+      deltaAUC = NULL)
 }
 
 \arguments{
