@@ -227,7 +227,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         par(las=1)
         n <- x@N                    
         nontox <- which(x@toxicity[TR,] == "0")
-        notNa <- which(is.na(x@doseLevels) == "FALSE")
+        notNa <- which(is.na(x@doseLevels[TR,]) == "FALSE")
         if (is.na(x@newDose) == "TRUE") warning("Plot not completed! The trial has stopped according to the stopping rules! \n \n", call. = FALSE)
         plot(x@pid[nontox], x@doseLevels[TR,nontox], pch="O", ylim=c(1,max(x@doseLevels[TR,notNa])), xlim=c(1,n), 
         	 xlab="Patient number", ylab="Dose level", ...)
@@ -243,7 +243,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         #    PropTox[i,] <-  rbind(summary(x@pstim_post[i,]))
         # }
         if (is.na(x@newDose) == "TRUE") stop("unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
-        plot(1:ndoses, x@pstim[[TR]][1:ndoses,n],type="l",xlab="Dose level",ylab="Probability of toxicity",ylim=c(0,1))
+        plot(1:ndoses, x@pstim[[TR]][1:ndoses,n],type="l",xlab="Dose level",ylab="Probability of toxicity", ylim=c(0,max(x@pstim[[TR]][1:ndoses,n]) + 0.15))
         points(1:ndoses,x@pstim[[TR]][1:ndoses,n], pch="X")
         lines(1:ndoses,x@preal, lty=2)
         points(1:ndoses,x@preal, pch="O")
@@ -264,7 +264,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
             PropTox[i,] <- rbind(summary(unlist(lapply(x@pstim, `[`,i,))))
         }
         d <- c(1:ndoses)
-        boxplot(PropTox~d, xlab="Dose level", ylab="Probability of toxicity", ylim=c(0,1))
+        boxplot(PropTox~d, xlab="Dose level", ylab="Probability of toxicity", ylim=c(0,max(PropTox) + 0.15))
         abline(h=x@theta, lwd=2, lty=4, col = "red")
         mtext("Boxplot dose response", line=1)
         # if (x@newDose == "NA") mtext("(Note: The trial stopped based on the stopping rules)", line=0)
@@ -344,7 +344,7 @@ setMethod(f = "plot", signature =c("Dose", "missing"), definition = function(x, 
         par(las=1)
         n <- x@N
         ndoses <- length(x@doses)
-        plot(1:ndoses, x@pstim, type="l", xlab="Dose level", ylab="Probability of toxicity", ylim=c(0,1))
+        plot(1:ndoses, x@pstim, type="l", xlab="Dose level", ylab="Probability of toxicity", ylim=c(0,max(x@pstim) + 0.15))
         points(1:ndoses,x@pstim, pch="X")
         abline(h=x@theta, lwd=2, lty=4, col = "red")
         lines(1:ndoses,x@pstimQ1, lty=3, col = "blue")

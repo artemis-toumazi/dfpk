@@ -7,7 +7,7 @@
 
 #include <stan/model/model_header.hpp>
 
-namespace model_logit_cov2_namespace {
+namespace model_cdf_reg_dtox_namespace {
 
 using std::istream;
 using std::string;
@@ -24,880 +24,7 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 static int current_statement_begin__;
 
-class model_logit_cov2 : public prob_grad {
-private:
-    int N;
-    vector<int> y;
-    matrix_d dose;
-    vector_d dauc;
-    double beta0mean;
-    double beta1mean;
-public:
-    model_logit_cov2(stan::io::var_context& context__,
-        std::ostream* pstream__ = 0)
-        : prob_grad(0) {
-        typedef boost::ecuyer1988 rng_t;
-        rng_t base_rng(0);  // 0 seed default
-        ctor_body(context__, base_rng, pstream__);
-    }
-
-    template <class RNG>
-    model_logit_cov2(stan::io::var_context& context__,
-        RNG& base_rng__,
-        std::ostream* pstream__ = 0)
-        : prob_grad(0) {
-        ctor_body(context__, base_rng__, pstream__);
-    }
-
-    template <class RNG>
-    void ctor_body(stan::io::var_context& context__,
-                   RNG& base_rng__,
-                   std::ostream* pstream__) {
-        current_statement_begin__ = -1;
-
-        static const char* function__ = "model_logit_cov2_namespace::model_logit_cov2";
-        (void) function__; // dummy call to supress warning
-        size_t pos__;
-        (void) pos__; // dummy call to supress warning
-        std::vector<int> vals_i__;
-        std::vector<double> vals_r__;
-        context__.validate_dims("data initialization", "N", "int", context__.to_vec());
-        N = int(0);
-        vals_i__ = context__.vals_i("N");
-        pos__ = 0;
-        N = vals_i__[pos__++];
-        context__.validate_dims("data initialization", "y", "int", context__.to_vec(N));
-        validate_non_negative_index("y", "N", N);
-        y = std::vector<int>(N,int(0));
-        vals_i__ = context__.vals_i("y");
-        pos__ = 0;
-        size_t y_limit_0__ = N;
-        for (size_t i_0__ = 0; i_0__ < y_limit_0__; ++i_0__) {
-            y[i_0__] = vals_i__[pos__++];
-        }
-        context__.validate_dims("data initialization", "dose", "matrix_d", context__.to_vec(N,2));
-        validate_non_negative_index("dose", "N", N);
-        validate_non_negative_index("dose", "2", 2);
-        dose = matrix_d(static_cast<Eigen::VectorXd::Index>(N),static_cast<Eigen::VectorXd::Index>(2));
-        vals_r__ = context__.vals_r("dose");
-        pos__ = 0;
-        size_t dose_m_mat_lim__ = N;
-        size_t dose_n_mat_lim__ = 2;
-        for (size_t n_mat__ = 0; n_mat__ < dose_n_mat_lim__; ++n_mat__) {
-            for (size_t m_mat__ = 0; m_mat__ < dose_m_mat_lim__; ++m_mat__) {
-                dose(m_mat__,n_mat__) = vals_r__[pos__++];
-            }
-        }
-        validate_non_negative_index("dauc", "N", N);
-        dauc = vector_d(static_cast<Eigen::VectorXd::Index>(N));
-        context__.validate_dims("data initialization", "dauc", "vector_d", context__.to_vec(N));
-        vals_r__ = context__.vals_r("dauc");
-        pos__ = 0;
-        size_t dauc_i_vec_lim__ = N;
-        for (size_t i_vec__ = 0; i_vec__ < dauc_i_vec_lim__; ++i_vec__) {
-            dauc[i_vec__] = vals_r__[pos__++];
-        }
-        context__.validate_dims("data initialization", "beta0mean", "double", context__.to_vec());
-        beta0mean = double(0);
-        vals_r__ = context__.vals_r("beta0mean");
-        pos__ = 0;
-        beta0mean = vals_r__[pos__++];
-        context__.validate_dims("data initialization", "beta1mean", "double", context__.to_vec());
-        beta1mean = double(0);
-        vals_r__ = context__.vals_r("beta1mean");
-        pos__ = 0;
-        beta1mean = vals_r__[pos__++];
-
-        // validate data
-        check_greater_or_equal(function__,"N",N,0);
-
-        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
-        (void) DUMMY_VAR__;  // suppress unused var warning
-
-
-        // initialize transformed variables to avoid seg fault on val access
-
-        try {
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate transformed data
-
-        // set parameter ranges
-        num_params_r__ = 0U;
-        param_ranges_i__.clear();
-        num_params_r__ += 2;
-        ++num_params_r__;
-    }
-
-    ~model_logit_cov2() { }
-
-
-    void transform_inits(const stan::io::var_context& context__,
-                         std::vector<int>& params_i__,
-                         std::vector<double>& params_r__,
-                         std::ostream* pstream__) const {
-        stan::io::writer<double> writer__(params_r__,params_i__);
-        size_t pos__;
-        (void) pos__; // dummy call to supress warning
-        std::vector<double> vals_r__;
-        std::vector<int> vals_i__;
-
-        if (!(context__.contains_r("bet")))
-            throw std::runtime_error("variable bet missing");
-        vals_r__ = context__.vals_r("bet");
-        pos__ = 0U;
-        context__.validate_dims("initialization", "bet", "vector_d", context__.to_vec(2));
-        vector_d bet(static_cast<Eigen::VectorXd::Index>(2));
-        for (int j1__ = 0U; j1__ < 2; ++j1__)
-            bet(j1__) = vals_r__[pos__++];
-        try {
-            writer__.vector_unconstrain(bet);
-        } catch (const std::exception& e) { 
-            throw std::runtime_error(std::string("Error transforming variable bet: ") + e.what());
-        }
-
-        if (!(context__.contains_r("b2")))
-            throw std::runtime_error("variable b2 missing");
-        vals_r__ = context__.vals_r("b2");
-        pos__ = 0U;
-        context__.validate_dims("initialization", "b2", "double", context__.to_vec());
-        double b2(0);
-        b2 = vals_r__[pos__++];
-        try {
-            writer__.scalar_unconstrain(b2);
-        } catch (const std::exception& e) { 
-            throw std::runtime_error(std::string("Error transforming variable b2: ") + e.what());
-        }
-
-        params_r__ = writer__.data_r();
-        params_i__ = writer__.data_i();
-    }
-
-    void transform_inits(const stan::io::var_context& context,
-                         Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
-                         std::ostream* pstream__) const {
-      std::vector<double> params_r_vec;
-      std::vector<int> params_i_vec;
-      transform_inits(context, params_i_vec, params_r_vec, pstream__);
-      params_r.resize(params_r_vec.size());
-      for (int i = 0; i < params_r.size(); ++i)
-        params_r(i) = params_r_vec[i];
-    }
-
-
-    template <bool propto__, bool jacobian__, typename T__>
-    T__ log_prob(vector<T__>& params_r__,
-                 vector<int>& params_i__,
-                 std::ostream* pstream__ = 0) const {
-
-        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
-        (void) DUMMY_VAR__;  // suppress unused var warning
-
-        T__ lp__(0.0);
-        stan::math::accumulator<T__> lp_accum__;
-
-        // model parameters
-        stan::io::reader<T__> in__(params_r__,params_i__);
-
-        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet;
-        (void) bet;  // dummy to suppress unused var warning
-        if (jacobian__)
-            bet = in__.vector_constrain(2,lp__);
-        else
-            bet = in__.vector_constrain(2);
-
-        T__ b2;
-        (void) b2;  // dummy to suppress unused var warning
-        if (jacobian__)
-            b2 = in__.scalar_constrain(lp__);
-        else
-            b2 = in__.scalar_constrain();
-
-
-        // transformed parameters
-        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet1(static_cast<Eigen::VectorXd::Index>(2));
-        (void) bet1;  // dummy to suppress unused var warning
-        T__ bet2;
-        (void) bet2;  // dummy to suppress unused var warning
-
-        // initialize transformed variables to avoid seg fault on val access
-        stan::math::fill(bet1,DUMMY_VAR__);
-        stan::math::fill(bet2,DUMMY_VAR__);
-
-        try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
-            stan::math::assign(bet2, -(b2));
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate transformed parameters
-        for (int i0__ = 0; i0__ < 2; ++i0__) {
-            if (stan::math::is_uninitialized(bet1(i0__))) {
-                std::stringstream msg__;
-                msg__ << "Undefined transformed parameter: bet1" << '[' << i0__ << ']';
-                throw std::runtime_error(msg__.str());
-            }
-        }
-        if (stan::math::is_uninitialized(bet2)) {
-            std::stringstream msg__;
-            msg__ << "Undefined transformed parameter: bet2";
-            throw std::runtime_error(msg__.str());
-        }
-
-        const char* function__ = "validate transformed params";
-        (void) function__;  // dummy to suppress unused var warning
-
-        // model body
-        try {
-            {
-                vector<T__> p(N);
-                Eigen::Matrix<T__,Eigen::Dynamic,1>  z(static_cast<Eigen::VectorXd::Index>(N));
-                (void) z;  // dummy to suppress unused var warning
-                stan::math::initialize(p, DUMMY_VAR__);
-                stan::math::initialize(z, DUMMY_VAR__);
-                stan::math::assign(z, add(multiply(dose,bet1),multiply(bet2,dauc)));
-                for (int n = 1; n <= N; ++n) {
-                    stan::math::assign(get_base1_lhs(p,n,"p",1), (1 / (1 + exp(get_base1(z,n,"z",1)))));
-                }
-                lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0, 25));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0,(beta1mean - 5)), (beta1mean + 5)));
-                lp_accum__.add(uniform_log<propto__>(b2, 0, 5));
-            }
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        lp_accum__.add(lp__);
-        return lp_accum__.sum();
-
-    } // log_prob()
-
-    template <bool propto, bool jacobian, typename T_>
-    T_ log_prob(Eigen::Matrix<T_,Eigen::Dynamic,1>& params_r,
-               std::ostream* pstream = 0) const {
-      std::vector<T_> vec_params_r;
-      vec_params_r.reserve(params_r.size());
-      for (int i = 0; i < params_r.size(); ++i)
-        vec_params_r.push_back(params_r(i));
-      std::vector<int> vec_params_i;
-      return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
-    }
-
-
-    void get_param_names(std::vector<std::string>& names__) const {
-        names__.resize(0);
-        names__.push_back("bet");
-        names__.push_back("b2");
-        names__.push_back("bet1");
-        names__.push_back("bet2");
-    }
-
-
-    void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
-        dimss__.resize(0);
-        std::vector<size_t> dims__;
-        dims__.resize(0);
-        dims__.push_back(2);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
-        dims__.push_back(2);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
-        dimss__.push_back(dims__);
-    }
-
-    template <typename RNG>
-    void write_array(RNG& base_rng__,
-                     std::vector<double>& params_r__,
-                     std::vector<int>& params_i__,
-                     std::vector<double>& vars__,
-                     bool include_tparams__ = true,
-                     bool include_gqs__ = true,
-                     std::ostream* pstream__ = 0) const {
-        vars__.resize(0);
-        stan::io::reader<double> in__(params_r__,params_i__);
-        static const char* function__ = "model_logit_cov2_namespace::write_array";
-        (void) function__; // dummy call to supress warning
-        // read-transform, write parameters
-        vector_d bet = in__.vector_constrain(2);
-        double b2 = in__.scalar_constrain();
-        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
-            vars__.push_back(bet[k_0__]);
-        }
-        vars__.push_back(b2);
-
-        if (!include_tparams__) return;
-        // declare and define transformed parameters
-        double lp__ = 0.0;
-        (void) lp__; // dummy call to supress warning
-        stan::math::accumulator<double> lp_accum__;
-
-        vector_d bet1(static_cast<Eigen::VectorXd::Index>(2));
-        (void) bet1;  // dummy to suppress unused var warning
-        double bet2(0.0);
-        (void) bet2;  // dummy to suppress unused var warning
-
-        try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
-            stan::math::assign(bet2, -(b2));
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate transformed parameters
-
-        // write transformed parameters
-        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
-            vars__.push_back(bet1[k_0__]);
-        }
-        vars__.push_back(bet2);
-
-        if (!include_gqs__) return;
-        // declare and define generated quantities
-
-        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
-        (void) DUMMY_VAR__;  // suppress unused var warning
-
-
-        // initialize transformed variables to avoid seg fault on val access
-
-        try {
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate generated quantities
-
-        // write generated quantities
-    }
-
-    template <typename RNG>
-    void write_array(RNG& base_rng,
-                     Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
-                     Eigen::Matrix<double,Eigen::Dynamic,1>& vars,
-                     bool include_tparams = true,
-                     bool include_gqs = true,
-                     std::ostream* pstream = 0) const {
-      std::vector<double> params_r_vec(params_r.size());
-      for (int i = 0; i < params_r.size(); ++i)
-        params_r_vec[i] = params_r(i);
-      std::vector<double> vars_vec;
-      std::vector<int> params_i_vec;
-      write_array(base_rng,params_r_vec,params_i_vec,vars_vec,include_tparams,include_gqs,pstream);
-      vars.resize(vars_vec.size());
-      for (int i = 0; i < vars.size(); ++i)
-        vars(i) = vars_vec[i];
-    }
-
-    static std::string model_name() {
-        return "model_logit_cov2";
-    }
-
-
-    void constrained_param_names(std::vector<std::string>& param_names__,
-                                 bool include_tparams__ = true,
-                                 bool include_gqs__ = true) const {
-        std::stringstream param_name_stream__;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "b2";
-        param_names__.push_back(param_name_stream__.str());
-
-        if (!include_gqs__ && !include_tparams__) return;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet1" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "bet2";
-        param_names__.push_back(param_name_stream__.str());
-
-        if (!include_gqs__) return;
-    }
-
-
-    void unconstrained_param_names(std::vector<std::string>& param_names__,
-                                   bool include_tparams__ = true,
-                                   bool include_gqs__ = true) const {
-        std::stringstream param_name_stream__;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "b2";
-        param_names__.push_back(param_name_stream__.str());
-
-        if (!include_gqs__ && !include_tparams__) return;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet1" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-        param_name_stream__.str(std::string());
-        param_name_stream__ << "bet2";
-        param_names__.push_back(param_name_stream__.str());
-
-        if (!include_gqs__) return;
-    }
-
-}; // model
-
-} // namespace
-
-
-
-
-// Code generated by Stan version 2.12
-
-#include <stan/model/model_header.hpp>
-
-namespace model_logit_reg_namespace {
-
-using std::istream;
-using std::string;
-using std::stringstream;
-using std::vector;
-using stan::io::dump;
-using stan::math::lgamma;
-using stan::model::prob_grad;
-using namespace stan::math;
-
-typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
-typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
-typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
-
-static int current_statement_begin__;
-
-class model_logit_reg : public prob_grad {
-private:
-    int N;
-    vector<int> y;
-    matrix_d dose;
-    double beta2mean;
-    double beta3mean;
-public:
-    model_logit_reg(stan::io::var_context& context__,
-        std::ostream* pstream__ = 0)
-        : prob_grad(0) {
-        typedef boost::ecuyer1988 rng_t;
-        rng_t base_rng(0);  // 0 seed default
-        ctor_body(context__, base_rng, pstream__);
-    }
-
-    template <class RNG>
-    model_logit_reg(stan::io::var_context& context__,
-        RNG& base_rng__,
-        std::ostream* pstream__ = 0)
-        : prob_grad(0) {
-        ctor_body(context__, base_rng__, pstream__);
-    }
-
-    template <class RNG>
-    void ctor_body(stan::io::var_context& context__,
-                   RNG& base_rng__,
-                   std::ostream* pstream__) {
-        current_statement_begin__ = -1;
-
-        static const char* function__ = "model_logit_reg_namespace::model_logit_reg";
-        (void) function__; // dummy call to supress warning
-        size_t pos__;
-        (void) pos__; // dummy call to supress warning
-        std::vector<int> vals_i__;
-        std::vector<double> vals_r__;
-        context__.validate_dims("data initialization", "N", "int", context__.to_vec());
-        N = int(0);
-        vals_i__ = context__.vals_i("N");
-        pos__ = 0;
-        N = vals_i__[pos__++];
-        context__.validate_dims("data initialization", "y", "int", context__.to_vec(N));
-        validate_non_negative_index("y", "N", N);
-        y = std::vector<int>(N,int(0));
-        vals_i__ = context__.vals_i("y");
-        pos__ = 0;
-        size_t y_limit_0__ = N;
-        for (size_t i_0__ = 0; i_0__ < y_limit_0__; ++i_0__) {
-            y[i_0__] = vals_i__[pos__++];
-        }
-        context__.validate_dims("data initialization", "dose", "matrix_d", context__.to_vec(N,2));
-        validate_non_negative_index("dose", "N", N);
-        validate_non_negative_index("dose", "2", 2);
-        dose = matrix_d(static_cast<Eigen::VectorXd::Index>(N),static_cast<Eigen::VectorXd::Index>(2));
-        vals_r__ = context__.vals_r("dose");
-        pos__ = 0;
-        size_t dose_m_mat_lim__ = N;
-        size_t dose_n_mat_lim__ = 2;
-        for (size_t n_mat__ = 0; n_mat__ < dose_n_mat_lim__; ++n_mat__) {
-            for (size_t m_mat__ = 0; m_mat__ < dose_m_mat_lim__; ++m_mat__) {
-                dose(m_mat__,n_mat__) = vals_r__[pos__++];
-            }
-        }
-        context__.validate_dims("data initialization", "beta2mean", "double", context__.to_vec());
-        beta2mean = double(0);
-        vals_r__ = context__.vals_r("beta2mean");
-        pos__ = 0;
-        beta2mean = vals_r__[pos__++];
-        context__.validate_dims("data initialization", "beta3mean", "double", context__.to_vec());
-        beta3mean = double(0);
-        vals_r__ = context__.vals_r("beta3mean");
-        pos__ = 0;
-        beta3mean = vals_r__[pos__++];
-
-        // validate data
-        check_greater_or_equal(function__,"N",N,0);
-
-        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
-        (void) DUMMY_VAR__;  // suppress unused var warning
-
-
-        // initialize transformed variables to avoid seg fault on val access
-
-        try {
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate transformed data
-
-        // set parameter ranges
-        num_params_r__ = 0U;
-        param_ranges_i__.clear();
-        num_params_r__ += 2;
-    }
-
-    ~model_logit_reg() { }
-
-
-    void transform_inits(const stan::io::var_context& context__,
-                         std::vector<int>& params_i__,
-                         std::vector<double>& params_r__,
-                         std::ostream* pstream__) const {
-        stan::io::writer<double> writer__(params_r__,params_i__);
-        size_t pos__;
-        (void) pos__; // dummy call to supress warning
-        std::vector<double> vals_r__;
-        std::vector<int> vals_i__;
-
-        if (!(context__.contains_r("bet")))
-            throw std::runtime_error("variable bet missing");
-        vals_r__ = context__.vals_r("bet");
-        pos__ = 0U;
-        context__.validate_dims("initialization", "bet", "vector_d", context__.to_vec(2));
-        vector_d bet(static_cast<Eigen::VectorXd::Index>(2));
-        for (int j1__ = 0U; j1__ < 2; ++j1__)
-            bet(j1__) = vals_r__[pos__++];
-        try {
-            writer__.vector_unconstrain(bet);
-        } catch (const std::exception& e) { 
-            throw std::runtime_error(std::string("Error transforming variable bet: ") + e.what());
-        }
-
-        params_r__ = writer__.data_r();
-        params_i__ = writer__.data_i();
-    }
-
-    void transform_inits(const stan::io::var_context& context,
-                         Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
-                         std::ostream* pstream__) const {
-      std::vector<double> params_r_vec;
-      std::vector<int> params_i_vec;
-      transform_inits(context, params_i_vec, params_r_vec, pstream__);
-      params_r.resize(params_r_vec.size());
-      for (int i = 0; i < params_r.size(); ++i)
-        params_r(i) = params_r_vec[i];
-    }
-
-
-    template <bool propto__, bool jacobian__, typename T__>
-    T__ log_prob(vector<T__>& params_r__,
-                 vector<int>& params_i__,
-                 std::ostream* pstream__ = 0) const {
-
-        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
-        (void) DUMMY_VAR__;  // suppress unused var warning
-
-        T__ lp__(0.0);
-        stan::math::accumulator<T__> lp_accum__;
-
-        // model parameters
-        stan::io::reader<T__> in__(params_r__,params_i__);
-
-        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet;
-        (void) bet;  // dummy to suppress unused var warning
-        if (jacobian__)
-            bet = in__.vector_constrain(2,lp__);
-        else
-            bet = in__.vector_constrain(2);
-
-
-        // transformed parameters
-        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet1(static_cast<Eigen::VectorXd::Index>(2));
-        (void) bet1;  // dummy to suppress unused var warning
-
-        // initialize transformed variables to avoid seg fault on val access
-        stan::math::fill(bet1,DUMMY_VAR__);
-
-        try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate transformed parameters
-        for (int i0__ = 0; i0__ < 2; ++i0__) {
-            if (stan::math::is_uninitialized(bet1(i0__))) {
-                std::stringstream msg__;
-                msg__ << "Undefined transformed parameter: bet1" << '[' << i0__ << ']';
-                throw std::runtime_error(msg__.str());
-            }
-        }
-
-        const char* function__ = "validate transformed params";
-        (void) function__;  // dummy to suppress unused var warning
-
-        // model body
-        try {
-            {
-                vector<T__> p(N);
-                Eigen::Matrix<T__,Eigen::Dynamic,1>  z(static_cast<Eigen::VectorXd::Index>(N));
-                (void) z;  // dummy to suppress unused var warning
-                stan::math::initialize(p, DUMMY_VAR__);
-                stan::math::initialize(z, DUMMY_VAR__);
-                stan::math::assign(z, multiply(dose,bet1));
-                for (int n = 1; n <= N; ++n) {
-                    stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
-                }
-                lp_accum__.add(bernoulli_log<propto__>(y, p));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, beta2mean));
-                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, beta3mean));
-            }
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        lp_accum__.add(lp__);
-        return lp_accum__.sum();
-
-    } // log_prob()
-
-    template <bool propto, bool jacobian, typename T_>
-    T_ log_prob(Eigen::Matrix<T_,Eigen::Dynamic,1>& params_r,
-               std::ostream* pstream = 0) const {
-      std::vector<T_> vec_params_r;
-      vec_params_r.reserve(params_r.size());
-      for (int i = 0; i < params_r.size(); ++i)
-        vec_params_r.push_back(params_r(i));
-      std::vector<int> vec_params_i;
-      return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
-    }
-
-
-    void get_param_names(std::vector<std::string>& names__) const {
-        names__.resize(0);
-        names__.push_back("bet");
-        names__.push_back("bet1");
-    }
-
-
-    void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
-        dimss__.resize(0);
-        std::vector<size_t> dims__;
-        dims__.resize(0);
-        dims__.push_back(2);
-        dimss__.push_back(dims__);
-        dims__.resize(0);
-        dims__.push_back(2);
-        dimss__.push_back(dims__);
-    }
-
-    template <typename RNG>
-    void write_array(RNG& base_rng__,
-                     std::vector<double>& params_r__,
-                     std::vector<int>& params_i__,
-                     std::vector<double>& vars__,
-                     bool include_tparams__ = true,
-                     bool include_gqs__ = true,
-                     std::ostream* pstream__ = 0) const {
-        vars__.resize(0);
-        stan::io::reader<double> in__(params_r__,params_i__);
-        static const char* function__ = "model_logit_reg_namespace::write_array";
-        (void) function__; // dummy call to supress warning
-        // read-transform, write parameters
-        vector_d bet = in__.vector_constrain(2);
-        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
-            vars__.push_back(bet[k_0__]);
-        }
-
-        if (!include_tparams__) return;
-        // declare and define transformed parameters
-        double lp__ = 0.0;
-        (void) lp__; // dummy call to supress warning
-        stan::math::accumulator<double> lp_accum__;
-
-        vector_d bet1(static_cast<Eigen::VectorXd::Index>(2));
-        (void) bet1;  // dummy to suppress unused var warning
-
-        try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate transformed parameters
-
-        // write transformed parameters
-        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
-            vars__.push_back(bet1[k_0__]);
-        }
-
-        if (!include_gqs__) return;
-        // declare and define generated quantities
-
-        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
-        (void) DUMMY_VAR__;  // suppress unused var warning
-
-
-        // initialize transformed variables to avoid seg fault on val access
-
-        try {
-        } catch (const std::exception& e) {
-            stan::lang::rethrow_located(e,current_statement_begin__);
-            // Next line prevents compiler griping about no return
-            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
-        }
-
-        // validate generated quantities
-
-        // write generated quantities
-    }
-
-    template <typename RNG>
-    void write_array(RNG& base_rng,
-                     Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
-                     Eigen::Matrix<double,Eigen::Dynamic,1>& vars,
-                     bool include_tparams = true,
-                     bool include_gqs = true,
-                     std::ostream* pstream = 0) const {
-      std::vector<double> params_r_vec(params_r.size());
-      for (int i = 0; i < params_r.size(); ++i)
-        params_r_vec[i] = params_r(i);
-      std::vector<double> vars_vec;
-      std::vector<int> params_i_vec;
-      write_array(base_rng,params_r_vec,params_i_vec,vars_vec,include_tparams,include_gqs,pstream);
-      vars.resize(vars_vec.size());
-      for (int i = 0; i < vars.size(); ++i)
-        vars(i) = vars_vec[i];
-    }
-
-    static std::string model_name() {
-        return "model_logit_reg";
-    }
-
-
-    void constrained_param_names(std::vector<std::string>& param_names__,
-                                 bool include_tparams__ = true,
-                                 bool include_gqs__ = true) const {
-        std::stringstream param_name_stream__;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-
-        if (!include_gqs__ && !include_tparams__) return;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet1" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-
-        if (!include_gqs__) return;
-    }
-
-
-    void unconstrained_param_names(std::vector<std::string>& param_names__,
-                                   bool include_tparams__ = true,
-                                   bool include_gqs__ = true) const {
-        std::stringstream param_name_stream__;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-
-        if (!include_gqs__ && !include_tparams__) return;
-        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
-            param_name_stream__.str(std::string());
-            param_name_stream__ << "bet1" << '.' << k_0__;
-            param_names__.push_back(param_name_stream__.str());
-        }
-
-        if (!include_gqs__) return;
-    }
-
-}; // model
-
-} // namespace
-
-
-
-
-// Code generated by Stan version 2.12
-
-#include <stan/model/model_header.hpp>
-
-namespace model_logit_reg_dtox_namespace {
-
-using std::istream;
-using std::string;
-using std::stringstream;
-using std::vector;
-using stan::io::dump;
-using stan::math::lgamma;
-using stan::model::prob_grad;
-using namespace stan::math;
-
-typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
-typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
-typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
-
-static int current_statement_begin__;
-
-class model_logit_reg_dtox : public prob_grad {
+class model_cdf_reg_dtox : public prob_grad {
 private:
     int N;
     vector<int> y;
@@ -905,7 +32,7 @@ private:
     double beta0mean;
     double beta1mean;
 public:
-    model_logit_reg_dtox(stan::io::var_context& context__,
+    model_cdf_reg_dtox(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
         : prob_grad(0) {
         typedef boost::ecuyer1988 rng_t;
@@ -914,7 +41,7 @@ public:
     }
 
     template <class RNG>
-    model_logit_reg_dtox(stan::io::var_context& context__,
+    model_cdf_reg_dtox(stan::io::var_context& context__,
         RNG& base_rng__,
         std::ostream* pstream__ = 0)
         : prob_grad(0) {
@@ -927,7 +54,7 @@ public:
                    std::ostream* pstream__) {
         current_statement_begin__ = -1;
 
-        static const char* function__ = "model_logit_reg_dtox_namespace::model_logit_reg_dtox";
+        static const char* function__ = "model_cdf_reg_dtox_namespace::model_cdf_reg_dtox";
         (void) function__; // dummy call to supress warning
         size_t pos__;
         (void) pos__; // dummy call to supress warning
@@ -995,7 +122,7 @@ public:
         num_params_r__ += 2;
     }
 
-    ~model_logit_reg_dtox() { }
+    ~model_cdf_reg_dtox() { }
 
 
     void transform_inits(const stan::io::var_context& context__,
@@ -1155,7 +282,7 @@ public:
                      std::ostream* pstream__ = 0) const {
         vars__.resize(0);
         stan::io::reader<double> in__(params_r__,params_i__);
-        static const char* function__ = "model_logit_reg_dtox_namespace::write_array";
+        static const char* function__ = "model_cdf_reg_dtox_namespace::write_array";
         (void) function__; // dummy call to supress warning
         // read-transform, write parameters
         vector_d bet = in__.vector_constrain(2);
@@ -1228,7 +355,1284 @@ public:
     }
 
     static std::string model_name() {
-        return "model_logit_reg_dtox";
+        return "model_cdf_reg_dtox";
+    }
+
+
+    void constrained_param_names(std::vector<std::string>& param_names__,
+                                 bool include_tparams__ = true,
+                                 bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet1" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__) return;
+    }
+
+
+    void unconstrained_param_names(std::vector<std::string>& param_names__,
+                                   bool include_tparams__ = true,
+                                   bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet1" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__) return;
+    }
+
+}; // model
+
+} // namespace
+
+
+
+
+// Code generated by Stan version 2.12
+
+#include <stan/model/model_header.hpp>
+
+namespace model_cdf_reg_pktox_namespace {
+
+using std::istream;
+using std::string;
+using std::stringstream;
+using std::vector;
+using stan::io::dump;
+using stan::math::lgamma;
+using stan::model::prob_grad;
+using namespace stan::math;
+
+typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
+typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
+typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
+
+static int current_statement_begin__;
+
+class model_cdf_reg_pktox : public prob_grad {
+private:
+    int N;
+    vector<int> y;
+    matrix_d dose;
+    double beta2mean;
+    double beta3mean;
+public:
+    model_cdf_reg_pktox(stan::io::var_context& context__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        typedef boost::ecuyer1988 rng_t;
+        rng_t base_rng(0);  // 0 seed default
+        ctor_body(context__, base_rng, pstream__);
+    }
+
+    template <class RNG>
+    model_cdf_reg_pktox(stan::io::var_context& context__,
+        RNG& base_rng__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        ctor_body(context__, base_rng__, pstream__);
+    }
+
+    template <class RNG>
+    void ctor_body(stan::io::var_context& context__,
+                   RNG& base_rng__,
+                   std::ostream* pstream__) {
+        current_statement_begin__ = -1;
+
+        static const char* function__ = "model_cdf_reg_pktox_namespace::model_cdf_reg_pktox";
+        (void) function__; // dummy call to supress warning
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<int> vals_i__;
+        std::vector<double> vals_r__;
+        context__.validate_dims("data initialization", "N", "int", context__.to_vec());
+        N = int(0);
+        vals_i__ = context__.vals_i("N");
+        pos__ = 0;
+        N = vals_i__[pos__++];
+        context__.validate_dims("data initialization", "y", "int", context__.to_vec(N));
+        validate_non_negative_index("y", "N", N);
+        y = std::vector<int>(N,int(0));
+        vals_i__ = context__.vals_i("y");
+        pos__ = 0;
+        size_t y_limit_0__ = N;
+        for (size_t i_0__ = 0; i_0__ < y_limit_0__; ++i_0__) {
+            y[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "dose", "matrix_d", context__.to_vec(N,2));
+        validate_non_negative_index("dose", "N", N);
+        validate_non_negative_index("dose", "2", 2);
+        dose = matrix_d(static_cast<Eigen::VectorXd::Index>(N),static_cast<Eigen::VectorXd::Index>(2));
+        vals_r__ = context__.vals_r("dose");
+        pos__ = 0;
+        size_t dose_m_mat_lim__ = N;
+        size_t dose_n_mat_lim__ = 2;
+        for (size_t n_mat__ = 0; n_mat__ < dose_n_mat_lim__; ++n_mat__) {
+            for (size_t m_mat__ = 0; m_mat__ < dose_m_mat_lim__; ++m_mat__) {
+                dose(m_mat__,n_mat__) = vals_r__[pos__++];
+            }
+        }
+        context__.validate_dims("data initialization", "beta2mean", "double", context__.to_vec());
+        beta2mean = double(0);
+        vals_r__ = context__.vals_r("beta2mean");
+        pos__ = 0;
+        beta2mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta3mean", "double", context__.to_vec());
+        beta3mean = double(0);
+        vals_r__ = context__.vals_r("beta3mean");
+        pos__ = 0;
+        beta3mean = vals_r__[pos__++];
+
+        // validate data
+        check_greater_or_equal(function__,"N",N,0);
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed data
+
+        // set parameter ranges
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        num_params_r__ += 2;
+    }
+
+    ~model_cdf_reg_pktox() { }
+
+
+    void transform_inits(const stan::io::var_context& context__,
+                         std::vector<int>& params_i__,
+                         std::vector<double>& params_r__,
+                         std::ostream* pstream__) const {
+        stan::io::writer<double> writer__(params_r__,params_i__);
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<double> vals_r__;
+        std::vector<int> vals_i__;
+
+        if (!(context__.contains_r("bet")))
+            throw std::runtime_error("variable bet missing");
+        vals_r__ = context__.vals_r("bet");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "bet", "vector_d", context__.to_vec(2));
+        vector_d bet(static_cast<Eigen::VectorXd::Index>(2));
+        for (int j1__ = 0U; j1__ < 2; ++j1__)
+            bet(j1__) = vals_r__[pos__++];
+        try {
+            writer__.vector_unconstrain(bet);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable bet: ") + e.what());
+        }
+
+        params_r__ = writer__.data_r();
+        params_i__ = writer__.data_i();
+    }
+
+    void transform_inits(const stan::io::var_context& context,
+                         Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                         std::ostream* pstream__) const {
+      std::vector<double> params_r_vec;
+      std::vector<int> params_i_vec;
+      transform_inits(context, params_i_vec, params_r_vec, pstream__);
+      params_r.resize(params_r_vec.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r(i) = params_r_vec[i];
+    }
+
+
+    template <bool propto__, bool jacobian__, typename T__>
+    T__ log_prob(vector<T__>& params_r__,
+                 vector<int>& params_i__,
+                 std::ostream* pstream__ = 0) const {
+
+        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+        T__ lp__(0.0);
+        stan::math::accumulator<T__> lp_accum__;
+
+        // model parameters
+        stan::io::reader<T__> in__(params_r__,params_i__);
+
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet;
+        (void) bet;  // dummy to suppress unused var warning
+        if (jacobian__)
+            bet = in__.vector_constrain(2,lp__);
+        else
+            bet = in__.vector_constrain(2);
+
+
+        // transformed parameters
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet1(static_cast<Eigen::VectorXd::Index>(2));
+        (void) bet1;  // dummy to suppress unused var warning
+
+        // initialize transformed variables to avoid seg fault on val access
+        stan::math::fill(bet1,DUMMY_VAR__);
+
+        try {
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+        for (int i0__ = 0; i0__ < 2; ++i0__) {
+            if (stan::math::is_uninitialized(bet1(i0__))) {
+                std::stringstream msg__;
+                msg__ << "Undefined transformed parameter: bet1" << '[' << i0__ << ']';
+                throw std::runtime_error(msg__.str());
+            }
+        }
+
+        const char* function__ = "validate transformed params";
+        (void) function__;  // dummy to suppress unused var warning
+
+        // model body
+        try {
+            {
+                vector<T__> p(N);
+                Eigen::Matrix<T__,Eigen::Dynamic,1>  z(static_cast<Eigen::VectorXd::Index>(N));
+                (void) z;  // dummy to suppress unused var warning
+                stan::math::initialize(p, DUMMY_VAR__);
+                stan::math::initialize(z, DUMMY_VAR__);
+                stan::math::assign(z, multiply(dose,bet1));
+                for (int n = 1; n <= N; ++n) {
+                    stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
+                }
+                lp_accum__.add(bernoulli_log<propto__>(y, p));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, beta2mean));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, beta3mean));
+            }
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        lp_accum__.add(lp__);
+        return lp_accum__.sum();
+
+    } // log_prob()
+
+    template <bool propto, bool jacobian, typename T_>
+    T_ log_prob(Eigen::Matrix<T_,Eigen::Dynamic,1>& params_r,
+               std::ostream* pstream = 0) const {
+      std::vector<T_> vec_params_r;
+      vec_params_r.reserve(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        vec_params_r.push_back(params_r(i));
+      std::vector<int> vec_params_i;
+      return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
+    }
+
+
+    void get_param_names(std::vector<std::string>& names__) const {
+        names__.resize(0);
+        names__.push_back("bet");
+        names__.push_back("bet1");
+    }
+
+
+    void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
+        dimss__.resize(0);
+        std::vector<size_t> dims__;
+        dims__.resize(0);
+        dims__.push_back(2);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dims__.push_back(2);
+        dimss__.push_back(dims__);
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng__,
+                     std::vector<double>& params_r__,
+                     std::vector<int>& params_i__,
+                     std::vector<double>& vars__,
+                     bool include_tparams__ = true,
+                     bool include_gqs__ = true,
+                     std::ostream* pstream__ = 0) const {
+        vars__.resize(0);
+        stan::io::reader<double> in__(params_r__,params_i__);
+        static const char* function__ = "model_cdf_reg_pktox_namespace::write_array";
+        (void) function__; // dummy call to supress warning
+        // read-transform, write parameters
+        vector_d bet = in__.vector_constrain(2);
+        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
+            vars__.push_back(bet[k_0__]);
+        }
+
+        if (!include_tparams__) return;
+        // declare and define transformed parameters
+        double lp__ = 0.0;
+        (void) lp__; // dummy call to supress warning
+        stan::math::accumulator<double> lp_accum__;
+
+        vector_d bet1(static_cast<Eigen::VectorXd::Index>(2));
+        (void) bet1;  // dummy to suppress unused var warning
+
+        try {
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+
+        // write transformed parameters
+        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
+            vars__.push_back(bet1[k_0__]);
+        }
+
+        if (!include_gqs__) return;
+        // declare and define generated quantities
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate generated quantities
+
+        // write generated quantities
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& vars,
+                     bool include_tparams = true,
+                     bool include_gqs = true,
+                     std::ostream* pstream = 0) const {
+      std::vector<double> params_r_vec(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r_vec[i] = params_r(i);
+      std::vector<double> vars_vec;
+      std::vector<int> params_i_vec;
+      write_array(base_rng,params_r_vec,params_i_vec,vars_vec,include_tparams,include_gqs,pstream);
+      vars.resize(vars_vec.size());
+      for (int i = 0; i < vars.size(); ++i)
+        vars(i) = vars_vec[i];
+    }
+
+    static std::string model_name() {
+        return "model_cdf_reg_pktox";
+    }
+
+
+    void constrained_param_names(std::vector<std::string>& param_names__,
+                                 bool include_tparams__ = true,
+                                 bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet1" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__) return;
+    }
+
+
+    void unconstrained_param_names(std::vector<std::string>& param_names__,
+                                   bool include_tparams__ = true,
+                                   bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet1" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+
+        if (!include_gqs__) return;
+    }
+
+}; // model
+
+} // namespace
+
+
+
+
+// Code generated by Stan version 2.12
+
+#include <stan/model/model_header.hpp>
+
+namespace model_logit_reg_pkcov_namespace {
+
+using std::istream;
+using std::string;
+using std::stringstream;
+using std::vector;
+using stan::io::dump;
+using stan::math::lgamma;
+using stan::model::prob_grad;
+using namespace stan::math;
+
+typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
+typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
+typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
+
+static int current_statement_begin__;
+
+class model_logit_reg_pkcov : public prob_grad {
+private:
+    int N;
+    vector<int> y;
+    matrix_d dose;
+    vector_d dauc;
+    double beta0mean;
+    double beta1mean;
+public:
+    model_logit_reg_pkcov(stan::io::var_context& context__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        typedef boost::ecuyer1988 rng_t;
+        rng_t base_rng(0);  // 0 seed default
+        ctor_body(context__, base_rng, pstream__);
+    }
+
+    template <class RNG>
+    model_logit_reg_pkcov(stan::io::var_context& context__,
+        RNG& base_rng__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        ctor_body(context__, base_rng__, pstream__);
+    }
+
+    template <class RNG>
+    void ctor_body(stan::io::var_context& context__,
+                   RNG& base_rng__,
+                   std::ostream* pstream__) {
+        current_statement_begin__ = -1;
+
+        static const char* function__ = "model_logit_reg_pkcov_namespace::model_logit_reg_pkcov";
+        (void) function__; // dummy call to supress warning
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<int> vals_i__;
+        std::vector<double> vals_r__;
+        context__.validate_dims("data initialization", "N", "int", context__.to_vec());
+        N = int(0);
+        vals_i__ = context__.vals_i("N");
+        pos__ = 0;
+        N = vals_i__[pos__++];
+        context__.validate_dims("data initialization", "y", "int", context__.to_vec(N));
+        validate_non_negative_index("y", "N", N);
+        y = std::vector<int>(N,int(0));
+        vals_i__ = context__.vals_i("y");
+        pos__ = 0;
+        size_t y_limit_0__ = N;
+        for (size_t i_0__ = 0; i_0__ < y_limit_0__; ++i_0__) {
+            y[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "dose", "matrix_d", context__.to_vec(N,2));
+        validate_non_negative_index("dose", "N", N);
+        validate_non_negative_index("dose", "2", 2);
+        dose = matrix_d(static_cast<Eigen::VectorXd::Index>(N),static_cast<Eigen::VectorXd::Index>(2));
+        vals_r__ = context__.vals_r("dose");
+        pos__ = 0;
+        size_t dose_m_mat_lim__ = N;
+        size_t dose_n_mat_lim__ = 2;
+        for (size_t n_mat__ = 0; n_mat__ < dose_n_mat_lim__; ++n_mat__) {
+            for (size_t m_mat__ = 0; m_mat__ < dose_m_mat_lim__; ++m_mat__) {
+                dose(m_mat__,n_mat__) = vals_r__[pos__++];
+            }
+        }
+        validate_non_negative_index("dauc", "N", N);
+        dauc = vector_d(static_cast<Eigen::VectorXd::Index>(N));
+        context__.validate_dims("data initialization", "dauc", "vector_d", context__.to_vec(N));
+        vals_r__ = context__.vals_r("dauc");
+        pos__ = 0;
+        size_t dauc_i_vec_lim__ = N;
+        for (size_t i_vec__ = 0; i_vec__ < dauc_i_vec_lim__; ++i_vec__) {
+            dauc[i_vec__] = vals_r__[pos__++];
+        }
+        context__.validate_dims("data initialization", "beta0mean", "double", context__.to_vec());
+        beta0mean = double(0);
+        vals_r__ = context__.vals_r("beta0mean");
+        pos__ = 0;
+        beta0mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta1mean", "double", context__.to_vec());
+        beta1mean = double(0);
+        vals_r__ = context__.vals_r("beta1mean");
+        pos__ = 0;
+        beta1mean = vals_r__[pos__++];
+
+        // validate data
+        check_greater_or_equal(function__,"N",N,0);
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed data
+
+        // set parameter ranges
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        num_params_r__ += 2;
+        ++num_params_r__;
+    }
+
+    ~model_logit_reg_pkcov() { }
+
+
+    void transform_inits(const stan::io::var_context& context__,
+                         std::vector<int>& params_i__,
+                         std::vector<double>& params_r__,
+                         std::ostream* pstream__) const {
+        stan::io::writer<double> writer__(params_r__,params_i__);
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<double> vals_r__;
+        std::vector<int> vals_i__;
+
+        if (!(context__.contains_r("bet")))
+            throw std::runtime_error("variable bet missing");
+        vals_r__ = context__.vals_r("bet");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "bet", "vector_d", context__.to_vec(2));
+        vector_d bet(static_cast<Eigen::VectorXd::Index>(2));
+        for (int j1__ = 0U; j1__ < 2; ++j1__)
+            bet(j1__) = vals_r__[pos__++];
+        try {
+            writer__.vector_unconstrain(bet);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable bet: ") + e.what());
+        }
+
+        if (!(context__.contains_r("b2")))
+            throw std::runtime_error("variable b2 missing");
+        vals_r__ = context__.vals_r("b2");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "b2", "double", context__.to_vec());
+        double b2(0);
+        b2 = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(b2);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable b2: ") + e.what());
+        }
+
+        params_r__ = writer__.data_r();
+        params_i__ = writer__.data_i();
+    }
+
+    void transform_inits(const stan::io::var_context& context,
+                         Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                         std::ostream* pstream__) const {
+      std::vector<double> params_r_vec;
+      std::vector<int> params_i_vec;
+      transform_inits(context, params_i_vec, params_r_vec, pstream__);
+      params_r.resize(params_r_vec.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r(i) = params_r_vec[i];
+    }
+
+
+    template <bool propto__, bool jacobian__, typename T__>
+    T__ log_prob(vector<T__>& params_r__,
+                 vector<int>& params_i__,
+                 std::ostream* pstream__ = 0) const {
+
+        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+        T__ lp__(0.0);
+        stan::math::accumulator<T__> lp_accum__;
+
+        // model parameters
+        stan::io::reader<T__> in__(params_r__,params_i__);
+
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet;
+        (void) bet;  // dummy to suppress unused var warning
+        if (jacobian__)
+            bet = in__.vector_constrain(2,lp__);
+        else
+            bet = in__.vector_constrain(2);
+
+        T__ b2;
+        (void) b2;  // dummy to suppress unused var warning
+        if (jacobian__)
+            b2 = in__.scalar_constrain(lp__);
+        else
+            b2 = in__.scalar_constrain();
+
+
+        // transformed parameters
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet1(static_cast<Eigen::VectorXd::Index>(2));
+        (void) bet1;  // dummy to suppress unused var warning
+        T__ bet2;
+        (void) bet2;  // dummy to suppress unused var warning
+
+        // initialize transformed variables to avoid seg fault on val access
+        stan::math::fill(bet1,DUMMY_VAR__);
+        stan::math::fill(bet2,DUMMY_VAR__);
+
+        try {
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
+            stan::math::assign(bet2, -(b2));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+        for (int i0__ = 0; i0__ < 2; ++i0__) {
+            if (stan::math::is_uninitialized(bet1(i0__))) {
+                std::stringstream msg__;
+                msg__ << "Undefined transformed parameter: bet1" << '[' << i0__ << ']';
+                throw std::runtime_error(msg__.str());
+            }
+        }
+        if (stan::math::is_uninitialized(bet2)) {
+            std::stringstream msg__;
+            msg__ << "Undefined transformed parameter: bet2";
+            throw std::runtime_error(msg__.str());
+        }
+
+        const char* function__ = "validate transformed params";
+        (void) function__;  // dummy to suppress unused var warning
+
+        // model body
+        try {
+            {
+                vector<T__> p(N);
+                Eigen::Matrix<T__,Eigen::Dynamic,1>  z(static_cast<Eigen::VectorXd::Index>(N));
+                (void) z;  // dummy to suppress unused var warning
+                stan::math::initialize(p, DUMMY_VAR__);
+                stan::math::initialize(z, DUMMY_VAR__);
+                stan::math::assign(z, add(multiply(dose,bet1),multiply(bet2,dauc)));
+                for (int n = 1; n <= N; ++n) {
+                    stan::math::assign(get_base1_lhs(p,n,"p",1), (1 / (1 + exp(get_base1(z,n,"z",1)))));
+                }
+                lp_accum__.add(bernoulli_log<propto__>(y, p));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, 25));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), fmax(0.0,(beta1mean - 5)), (beta1mean + 5)));
+                lp_accum__.add(uniform_log<propto__>(b2, 0.0, 5));
+            }
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        lp_accum__.add(lp__);
+        return lp_accum__.sum();
+
+    } // log_prob()
+
+    template <bool propto, bool jacobian, typename T_>
+    T_ log_prob(Eigen::Matrix<T_,Eigen::Dynamic,1>& params_r,
+               std::ostream* pstream = 0) const {
+      std::vector<T_> vec_params_r;
+      vec_params_r.reserve(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        vec_params_r.push_back(params_r(i));
+      std::vector<int> vec_params_i;
+      return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
+    }
+
+
+    void get_param_names(std::vector<std::string>& names__) const {
+        names__.resize(0);
+        names__.push_back("bet");
+        names__.push_back("b2");
+        names__.push_back("bet1");
+        names__.push_back("bet2");
+    }
+
+
+    void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
+        dimss__.resize(0);
+        std::vector<size_t> dims__;
+        dims__.resize(0);
+        dims__.push_back(2);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dims__.push_back(2);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng__,
+                     std::vector<double>& params_r__,
+                     std::vector<int>& params_i__,
+                     std::vector<double>& vars__,
+                     bool include_tparams__ = true,
+                     bool include_gqs__ = true,
+                     std::ostream* pstream__ = 0) const {
+        vars__.resize(0);
+        stan::io::reader<double> in__(params_r__,params_i__);
+        static const char* function__ = "model_logit_reg_pkcov_namespace::write_array";
+        (void) function__; // dummy call to supress warning
+        // read-transform, write parameters
+        vector_d bet = in__.vector_constrain(2);
+        double b2 = in__.scalar_constrain();
+        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
+            vars__.push_back(bet[k_0__]);
+        }
+        vars__.push_back(b2);
+
+        if (!include_tparams__) return;
+        // declare and define transformed parameters
+        double lp__ = 0.0;
+        (void) lp__; // dummy call to supress warning
+        stan::math::accumulator<double> lp_accum__;
+
+        vector_d bet1(static_cast<Eigen::VectorXd::Index>(2));
+        (void) bet1;  // dummy to suppress unused var warning
+        double bet2(0.0);
+        (void) bet2;  // dummy to suppress unused var warning
+
+        try {
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
+            stan::math::assign(bet2, -(b2));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+
+        // write transformed parameters
+        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
+            vars__.push_back(bet1[k_0__]);
+        }
+        vars__.push_back(bet2);
+
+        if (!include_gqs__) return;
+        // declare and define generated quantities
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate generated quantities
+
+        // write generated quantities
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& vars,
+                     bool include_tparams = true,
+                     bool include_gqs = true,
+                     std::ostream* pstream = 0) const {
+      std::vector<double> params_r_vec(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r_vec[i] = params_r(i);
+      std::vector<double> vars_vec;
+      std::vector<int> params_i_vec;
+      write_array(base_rng,params_r_vec,params_i_vec,vars_vec,include_tparams,include_gqs,pstream);
+      vars.resize(vars_vec.size());
+      for (int i = 0; i < vars.size(); ++i)
+        vars(i) = vars_vec[i];
+    }
+
+    static std::string model_name() {
+        return "model_logit_reg_pkcov";
+    }
+
+
+    void constrained_param_names(std::vector<std::string>& param_names__,
+                                 bool include_tparams__ = true,
+                                 bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "b2";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet1" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "bet2";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__) return;
+    }
+
+
+    void unconstrained_param_names(std::vector<std::string>& param_names__,
+                                   bool include_tparams__ = true,
+                                   bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "b2";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 2; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "bet1" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "bet2";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__) return;
+    }
+
+}; // model
+
+} // namespace
+
+
+
+
+// Code generated by Stan version 2.12
+
+#include <stan/model/model_header.hpp>
+
+namespace model_logit_reg_pklogit_namespace {
+
+using std::istream;
+using std::string;
+using std::stringstream;
+using std::vector;
+using stan::io::dump;
+using stan::math::lgamma;
+using stan::model::prob_grad;
+using namespace stan::math;
+
+typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
+typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
+typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
+
+static int current_statement_begin__;
+
+class model_logit_reg_pklogit : public prob_grad {
+private:
+    int N;
+    vector<int> y;
+    matrix_d dose;
+    double beta2mean;
+    double beta3mean;
+public:
+    model_logit_reg_pklogit(stan::io::var_context& context__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        typedef boost::ecuyer1988 rng_t;
+        rng_t base_rng(0);  // 0 seed default
+        ctor_body(context__, base_rng, pstream__);
+    }
+
+    template <class RNG>
+    model_logit_reg_pklogit(stan::io::var_context& context__,
+        RNG& base_rng__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        ctor_body(context__, base_rng__, pstream__);
+    }
+
+    template <class RNG>
+    void ctor_body(stan::io::var_context& context__,
+                   RNG& base_rng__,
+                   std::ostream* pstream__) {
+        current_statement_begin__ = -1;
+
+        static const char* function__ = "model_logit_reg_pklogit_namespace::model_logit_reg_pklogit";
+        (void) function__; // dummy call to supress warning
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<int> vals_i__;
+        std::vector<double> vals_r__;
+        context__.validate_dims("data initialization", "N", "int", context__.to_vec());
+        N = int(0);
+        vals_i__ = context__.vals_i("N");
+        pos__ = 0;
+        N = vals_i__[pos__++];
+        context__.validate_dims("data initialization", "y", "int", context__.to_vec(N));
+        validate_non_negative_index("y", "N", N);
+        y = std::vector<int>(N,int(0));
+        vals_i__ = context__.vals_i("y");
+        pos__ = 0;
+        size_t y_limit_0__ = N;
+        for (size_t i_0__ = 0; i_0__ < y_limit_0__; ++i_0__) {
+            y[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "dose", "matrix_d", context__.to_vec(N,2));
+        validate_non_negative_index("dose", "N", N);
+        validate_non_negative_index("dose", "2", 2);
+        dose = matrix_d(static_cast<Eigen::VectorXd::Index>(N),static_cast<Eigen::VectorXd::Index>(2));
+        vals_r__ = context__.vals_r("dose");
+        pos__ = 0;
+        size_t dose_m_mat_lim__ = N;
+        size_t dose_n_mat_lim__ = 2;
+        for (size_t n_mat__ = 0; n_mat__ < dose_n_mat_lim__; ++n_mat__) {
+            for (size_t m_mat__ = 0; m_mat__ < dose_m_mat_lim__; ++m_mat__) {
+                dose(m_mat__,n_mat__) = vals_r__[pos__++];
+            }
+        }
+        context__.validate_dims("data initialization", "beta2mean", "double", context__.to_vec());
+        beta2mean = double(0);
+        vals_r__ = context__.vals_r("beta2mean");
+        pos__ = 0;
+        beta2mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta3mean", "double", context__.to_vec());
+        beta3mean = double(0);
+        vals_r__ = context__.vals_r("beta3mean");
+        pos__ = 0;
+        beta3mean = vals_r__[pos__++];
+
+        // validate data
+        check_greater_or_equal(function__,"N",N,0);
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed data
+
+        // set parameter ranges
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        num_params_r__ += 2;
+    }
+
+    ~model_logit_reg_pklogit() { }
+
+
+    void transform_inits(const stan::io::var_context& context__,
+                         std::vector<int>& params_i__,
+                         std::vector<double>& params_r__,
+                         std::ostream* pstream__) const {
+        stan::io::writer<double> writer__(params_r__,params_i__);
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<double> vals_r__;
+        std::vector<int> vals_i__;
+
+        if (!(context__.contains_r("bet")))
+            throw std::runtime_error("variable bet missing");
+        vals_r__ = context__.vals_r("bet");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "bet", "vector_d", context__.to_vec(2));
+        vector_d bet(static_cast<Eigen::VectorXd::Index>(2));
+        for (int j1__ = 0U; j1__ < 2; ++j1__)
+            bet(j1__) = vals_r__[pos__++];
+        try {
+            writer__.vector_unconstrain(bet);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable bet: ") + e.what());
+        }
+
+        params_r__ = writer__.data_r();
+        params_i__ = writer__.data_i();
+    }
+
+    void transform_inits(const stan::io::var_context& context,
+                         Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                         std::ostream* pstream__) const {
+      std::vector<double> params_r_vec;
+      std::vector<int> params_i_vec;
+      transform_inits(context, params_i_vec, params_r_vec, pstream__);
+      params_r.resize(params_r_vec.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r(i) = params_r_vec[i];
+    }
+
+
+    template <bool propto__, bool jacobian__, typename T__>
+    T__ log_prob(vector<T__>& params_r__,
+                 vector<int>& params_i__,
+                 std::ostream* pstream__ = 0) const {
+
+        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+        T__ lp__(0.0);
+        stan::math::accumulator<T__> lp_accum__;
+
+        // model parameters
+        stan::io::reader<T__> in__(params_r__,params_i__);
+
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet;
+        (void) bet;  // dummy to suppress unused var warning
+        if (jacobian__)
+            bet = in__.vector_constrain(2,lp__);
+        else
+            bet = in__.vector_constrain(2);
+
+
+        // transformed parameters
+        Eigen::Matrix<T__,Eigen::Dynamic,1>  bet1(static_cast<Eigen::VectorXd::Index>(2));
+        (void) bet1;  // dummy to suppress unused var warning
+
+        // initialize transformed variables to avoid seg fault on val access
+        stan::math::fill(bet1,DUMMY_VAR__);
+
+        try {
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+        for (int i0__ = 0; i0__ < 2; ++i0__) {
+            if (stan::math::is_uninitialized(bet1(i0__))) {
+                std::stringstream msg__;
+                msg__ << "Undefined transformed parameter: bet1" << '[' << i0__ << ']';
+                throw std::runtime_error(msg__.str());
+            }
+        }
+
+        const char* function__ = "validate transformed params";
+        (void) function__;  // dummy to suppress unused var warning
+
+        // model body
+        try {
+            {
+                vector<T__> p(N);
+                Eigen::Matrix<T__,Eigen::Dynamic,1>  z(static_cast<Eigen::VectorXd::Index>(N));
+                (void) z;  // dummy to suppress unused var warning
+                stan::math::initialize(p, DUMMY_VAR__);
+                stan::math::initialize(z, DUMMY_VAR__);
+                stan::math::assign(z, multiply(dose,bet1));
+                for (int n = 1; n <= N; ++n) {
+                    stan::math::assign(get_base1_lhs(p,n,"p",1), (1 / (1 + exp(get_base1(z,n,"z",1)))));
+                }
+                lp_accum__.add(bernoulli_log<propto__>(y, p));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, beta2mean));
+                lp_accum__.add(uniform_log<propto__>(get_base1(bet,2,"bet",1), 0.0, beta3mean));
+            }
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        lp_accum__.add(lp__);
+        return lp_accum__.sum();
+
+    } // log_prob()
+
+    template <bool propto, bool jacobian, typename T_>
+    T_ log_prob(Eigen::Matrix<T_,Eigen::Dynamic,1>& params_r,
+               std::ostream* pstream = 0) const {
+      std::vector<T_> vec_params_r;
+      vec_params_r.reserve(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        vec_params_r.push_back(params_r(i));
+      std::vector<int> vec_params_i;
+      return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
+    }
+
+
+    void get_param_names(std::vector<std::string>& names__) const {
+        names__.resize(0);
+        names__.push_back("bet");
+        names__.push_back("bet1");
+    }
+
+
+    void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
+        dimss__.resize(0);
+        std::vector<size_t> dims__;
+        dims__.resize(0);
+        dims__.push_back(2);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dims__.push_back(2);
+        dimss__.push_back(dims__);
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng__,
+                     std::vector<double>& params_r__,
+                     std::vector<int>& params_i__,
+                     std::vector<double>& vars__,
+                     bool include_tparams__ = true,
+                     bool include_gqs__ = true,
+                     std::ostream* pstream__ = 0) const {
+        vars__.resize(0);
+        stan::io::reader<double> in__(params_r__,params_i__);
+        static const char* function__ = "model_logit_reg_pklogit_namespace::write_array";
+        (void) function__; // dummy call to supress warning
+        // read-transform, write parameters
+        vector_d bet = in__.vector_constrain(2);
+        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
+            vars__.push_back(bet[k_0__]);
+        }
+
+        if (!include_tparams__) return;
+        // declare and define transformed parameters
+        double lp__ = 0.0;
+        (void) lp__; // dummy call to supress warning
+        stan::math::accumulator<double> lp_accum__;
+
+        vector_d bet1(static_cast<Eigen::VectorXd::Index>(2));
+        (void) bet1;  // dummy to suppress unused var warning
+
+        try {
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+
+        // write transformed parameters
+        for (int k_0__ = 0; k_0__ < 2; ++k_0__) {
+            vars__.push_back(bet1[k_0__]);
+        }
+
+        if (!include_gqs__) return;
+        // declare and define generated quantities
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate generated quantities
+
+        // write generated quantities
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& vars,
+                     bool include_tparams = true,
+                     bool include_gqs = true,
+                     std::ostream* pstream = 0) const {
+      std::vector<double> params_r_vec(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r_vec[i] = params_r(i);
+      std::vector<double> vars_vec;
+      std::vector<int> params_i_vec;
+      write_array(base_rng,params_r_vec,params_i_vec,vars_vec,include_tparams,include_gqs,pstream);
+      vars.resize(vars_vec.size());
+      for (int i = 0; i < vars.size(); ++i)
+        vars(i) = vars_vec[i];
+    }
+
+    static std::string model_name() {
+        return "model_logit_reg_pklogit";
     }
 
 
@@ -1502,7 +1906,7 @@ public:
                 stan::math::initialize(z, DUMMY_VAR__);
                 stan::math::assign(z, multiply(dose,bet1));
                 for (int n = 1; n <= N; ++n) {
-                    stan::math::assign(get_base1_lhs(p,n,"p",1), normal_cdf(get_base1(z,n,"z",1),0,1));
+                    stan::math::assign(get_base1_lhs(p,n,"p",1), (1 / (1 + exp(get_base1(z,n,"z",1)))));
                 }
                 lp_accum__.add(bernoulli_log<propto__>(y, p));
                 lp_accum__.add(uniform_log<propto__>(get_base1(bet,1,"bet",1), 0.0, beta3mean));
@@ -1688,7 +2092,7 @@ public:
 
 #include <stan/model/model_header.hpp>
 
-namespace model_reg_auc2_namespace {
+namespace model_reg_auc_namespace {
 
 using std::istream;
 using std::string;
@@ -1705,14 +2109,15 @@ typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
 
 static int current_statement_begin__;
 
-class model_reg_auc2 : public prob_grad {
+class model_reg_auc : public prob_grad {
 private:
     int N;
     vector_d auc;
     matrix_d dose;
     double beta0;
+    double mu;
 public:
-    model_reg_auc2(stan::io::var_context& context__,
+    model_reg_auc(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
         : prob_grad(0) {
         typedef boost::ecuyer1988 rng_t;
@@ -1721,7 +2126,7 @@ public:
     }
 
     template <class RNG>
-    model_reg_auc2(stan::io::var_context& context__,
+    model_reg_auc(stan::io::var_context& context__,
         RNG& base_rng__,
         std::ostream* pstream__ = 0)
         : prob_grad(0) {
@@ -1734,7 +2139,7 @@ public:
                    std::ostream* pstream__) {
         current_statement_begin__ = -1;
 
-        static const char* function__ = "model_reg_auc2_namespace::model_reg_auc2";
+        static const char* function__ = "model_reg_auc_namespace::model_reg_auc";
         (void) function__; // dummy call to supress warning
         size_t pos__;
         (void) pos__; // dummy call to supress warning
@@ -1772,6 +2177,11 @@ public:
         vals_r__ = context__.vals_r("beta0");
         pos__ = 0;
         beta0 = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "mu", "double", context__.to_vec());
+        mu = double(0);
+        vals_r__ = context__.vals_r("mu");
+        pos__ = 0;
+        mu = vals_r__[pos__++];
 
         // validate data
         check_greater_or_equal(function__,"N",N,0);
@@ -1798,7 +2208,7 @@ public:
         ++num_params_r__;
     }
 
-    ~model_reg_auc2() { }
+    ~model_reg_auc() { }
 
 
     void transform_inits(const stan::io::var_context& context__,
@@ -1903,7 +2313,7 @@ public:
         try {
             lp_accum__.add(normal_log<propto__>(auc, multiply(dose,b), sigma));
             lp_accum__.add(beta_log<propto__>(sigma, 1, 1));
-            lp_accum__.add(normal_log<propto__>(b, 0, beta0));
+            lp_accum__.add(normal_log<propto__>(b, mu, beta0));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
@@ -1954,7 +2364,7 @@ public:
                      std::ostream* pstream__ = 0) const {
         vars__.resize(0);
         stan::io::reader<double> in__(params_r__,params_i__);
-        static const char* function__ = "model_reg_auc2_namespace::write_array";
+        static const char* function__ = "model_reg_auc_namespace::write_array";
         (void) function__; // dummy call to supress warning
         // read-transform, write parameters
         vector_d b = in__.vector_constrain(2);
@@ -2022,7 +2432,7 @@ public:
     }
 
     static std::string model_name() {
-        return "model_reg_auc2";
+        return "model_reg_auc";
     }
 
 

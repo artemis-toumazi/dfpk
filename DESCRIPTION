@@ -13,9 +13,10 @@ Imports: rstan (>= 2.12.1), ggplot2 (>= 2.0.0), dfcrm, methods, stats,
         graphics, grDevices, PK
 LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60),
         Rcpp (>= 0.12.0), RcppEigen
-RcppModules: stan_fit4logit_cov2_mod, stan_fit4logit_reg_dtox_mod,
-        stan_fit4logit_reg_pkpop_mod, stan_fit4logit_reg_mod,
-        stan_fit4reg_auc2_mod
+RcppModules: stan_fit4logit_reg_pkcov_mod, stan_fit4cdf_reg_dtox_mod,
+        stan_fit4logit_reg_pkpop_mod, stan_fit4cdf_reg_pktox_mod, stan_fit4logit_reg_pklogit_mod,
+        stan_fit4reg_auc_mod
+SystemRequirements: C++11
 LazyData: true
 NeedsCompilation: yes
 URL: http://github.com/artemis-toumazi/dfpk
