@@ -7,22 +7,21 @@ Dose finding method PKCRM.
 
 \description{
 The PKCRM model is a combination of PKLIM as given below: 
-\deqn{zi|\beta ~ N(\beta_0 + \beta_1 log(d_i), \nu^2)}
-where \eqn{\beta = (\beta_0,\beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation,
+\deqn{z_{i} \vert \boldsymbol{\beta}, \nu \sim N \left( \beta_0 + \beta_1 \log d_{i}, \nu^{2} \right)}
+where \eqn{\boldsymbol{\beta} = (\beta_0, \beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation,
 and the Continual Reassessment Method's (CRM) model:
 \deqn{p_T(d_k, \beta) = d^\beta_k(CRM)}
 
 The default choices of the priors are:
-\deqn{\beta \ \nu ~ N(m, \nu*beta0)}
-\deqn{\nu ~ Beta(1,1)}
-\deqn{m = (-log(CL_pop), 1)}  where Cl_pop=10 is the population clearance.
-So \eqn{m = (-1, 1)}.
+\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0)}
+\deqn{\nu \sim Beta(1,1)}
+\deqn{m = (-log(CL_{pop}), 1)} where \eqn{Cl_{pop}} is the population clearance.
+Default choices are \eqn{Cl_{pop} = 10} and beta0 = 10000.
 
 For the CRM model:
 
 Skeleton CRM = (0.01, 0.05, 0.1, 0.2, 0.35, 0.45) and
-\deqn{\beta ~ N(0, 1.34)}
-where default choice is beta0 = 10000.
+\deqn{\beta \sim N(0, 1.34)}
 
 Finally, the PKCRM model has the following stopping rule in toxicity:
 if
@@ -53,13 +52,11 @@ pkcrm(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4,
     The probability for the stopping rule.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to beta0 = 10000.
+    A vector with the value for the prior distribution of the regression parameters in the model; defaults to \eqn{Cl_{pop}} = 10 and beta0 = 10000.
 }
 \item{options}{
-    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations.
-    defaults to options <- list(nchains = 4,
-                                niter = 4000,
-                                nadapt = 0.8)}
+    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).
+}
 \item{auc}{
     A vector with the computed AUC values of each patient for pktox, pkcrm, pklogit and pkpop; defaults to NULL.
 }
@@ -109,9 +106,7 @@ p0 <- c(.01,.05,.1,.2,.35,0.45)         # Skeleton of CRM
 L <- log(15.09)                         # Threshold set
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
 theta <- 0.2
-options <- list(nchains = 2,
-                niter = 4000,
-                nadapt = 0.8)
+options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
 AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
 x <- c(1,2,3,4,5,6)
 y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)

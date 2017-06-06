@@ -7,14 +7,13 @@ Dose finding method DTOX.
 \description{
 The DTOX model enables us to estimate posterior probability of toxicity \eqn{p_T} versus dose directly. The dose-toxicity model is given by:
 
-\deqn{p_T(d_k,\beta) = \Phi(-\beta_0 + \beta1 log(d_k))}
+\deqn{p_T(d_k,\boldsymbol{\beta}) = \Phi(-\beta_0 + \beta_1 log(d_k))}
 
-where \eqn{\beta_q ~ U(l_q, u_q)   q = 0,1} 
-and
+where \eqn{\beta_q \sim U(l_q, u_q)} \eqn{\forall} \eqn{q = 0,1} and
 \deqn{l_0 = max(0,beta0mean - 10)}
 \deqn{u_0 = beta0mean + 10}
 \deqn{l_1 = max(0,beta1mean - 5)}
-\deqn{u_1 = beta1mean + 5)}
+\deqn{u_1 = beta1mean + 5}
 where default choices are beta0mean = 6.71 and beta1mean = 1.43.
 
 Finally, the DTOX model has the following stopping rule in toxicity:
@@ -25,8 +24,8 @@ then, no dose are suggested and the trial is stopped.
 
 \usage{
 dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, 
-    nadapt = 0.8), betapriors = c(6.71, 1.43), thetaL = NULL, 
-    auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL)
+     nadapt = 0.8), betapriors = c(6.71, 1.43), thetaL = NULL, 
+     auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL)
 }
 
 \arguments{
@@ -49,10 +48,8 @@ dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000,
     A vector with the value for the prior distribution of the regression parameters in the model; defaults to beta0mean = 6.71 and beta1mean = 1.43.
 }
 \item{options}{
-    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations.
-    defaults to options <- list(nchains = 4,
-                                niter = 4000,
-                                nadapt = 0.8)}
+    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).
+}
 \item{auc}{
     A vector with the computed AUC values of each patient for pktox, pkcrm, pklogit and pkpop; defaults to NULL.  
 }
@@ -93,13 +90,9 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
 }
 
 \examples{
-
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
 theta <- 0.2
-options <- list(nchains = 2,
-        niter = 4000,
-        nadapt = 0.8)
-
+options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
 x <- c(1,2,3,4,5,6)
 y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
 

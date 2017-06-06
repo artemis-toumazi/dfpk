@@ -7,20 +7,19 @@ Dose finding method PKPOP.
 
 \description{
 The PKPOP model is a variation of the PKLOGIT model which replaced AUCs (\eqn{z_j}) with AUC of the population (\eqn{z_{k,pop}}), where \eqn{z_{k,pop}} is the mean value of the logarithm of AUC at dose k, predicted by the hierarchical model:
-\deqn{zi|\beta ~ N(\beta_0 + \beta_1 log(d_i), \nu^2)}
-where \eqn{\beta = (\beta_0,\beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation.
+\deqn{z_{i} \vert \boldsymbol{\beta}, \nu \sim N \left( \beta_0 + \beta_1 \log d_{i}, \nu^{2} \right)}
+where \eqn{\boldsymbol{\beta} = (\beta_0,\beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation.
 and the logistic regression model:
-\deqn{logit(p_T(z, \beta)) = -\beta_2 + \beta_3z}
-with a bivariate Uniform distribution as prior distribution for the parameters \eqn{\beta = (\beta_2, \beta_3)}.
+\deqn{\mbox{logit}(p_T(z_{k,pop}, \boldsymbol{\beta})) = -\beta_3 + \beta_4 z_{k,pop}}
+with a bivariate Uniform distribution as prior distribution for the parameters \eqn{\boldsymbol{\beta} = (\beta_3, \beta_4)}.
 
 The default choices of the priors are:
-\deqn{\beta \ \nu ~ N(m, \nu*beta0)}
-\deqn{\nu ~ Beta(1,1)}
-\deqn{m = (-log(CL_pop), 1)}  where Cl_pop=10 is the population clearance.
-So \eqn{m = (-1, 1)}.
-\deqn{\beta_3 ~ U(0, beta3mean)}
-\deqn{\beta_4 ~ U(0, beta4mean)}
-where default choices are beta0 = 10000, beta3mean = 10 and beta4mean = 5.
+\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0)}
+\deqn{\nu \sim Beta(1,1)}
+\deqn{m = (-log(CL_{pop}), 1)} where \eqn{Cl_{pop}} is the population clearance.
+\deqn{\beta_3 \sim U(0, beta3mean)}
+\deqn{\beta_4 \sim U(0, beta4mean)}
+where default choices are \eqn{Cl_{pop} = 10}, beta0 = 10000, beta3mean = 10 and beta4mean = 5.
 
 Finally, the PKPOP model has the following stopping rule in toxicity:
 if
@@ -51,13 +50,11 @@ pkpop(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4
     The probability for the stopping rule.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to beta0 = 10000, beta3mean = 10 and beta4mean = 5.
+    A vector with the value for the prior distribution of the regression parameters in the model; defaults to \eqn{Cl_{pop} = 10}, beta0 = 10000, beta3mean = 10 and beta4mean = 5.
 }
 \item{options}{
-    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations.
-    defaults to options <- list(nchains = 4,
-                                niter = 4000,
-                                nadapt = 0.8)}
+    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).
+}
 \item{auc}{
     A vector with the computed AUC values of each patient for pktox, pkcrm, pklogit and pkpop; defaults to NULL.
 }
@@ -106,9 +103,7 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
 \examples{
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
 theta <- 0.2      # choice
-options <- list(nchains = 2,
-        niter = 4000,
-        nadapt = 0.8)
+options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
 AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
 x <- c(1,2,3,4,5,6)
 y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)

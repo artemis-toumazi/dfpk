@@ -16,7 +16,7 @@ invlogit(x)
 
 \details{
         The Inverse-logit function defined as: 
-        \eqn{logit^-1(x) = e^x/(1+e^x)} transforms continuous values to the range (0, 1),
+        \eqn{logit^{-1}(x) = e^x/(1+e^x)} transforms continuous values to the range (0, 1),
         which is necessary, since probabilities must be between 0 and 1 and maps 
         from the linear predictor to the probabilities. 
 }

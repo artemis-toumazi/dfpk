@@ -5,7 +5,7 @@ The **dfpk** R package provides an interface to fit Bayesian generalized (non-)l
 
 ### Description
 
-dfpk package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD) and to investigate PK of a drug or a combination of drugs. 
+dfpk package includes methods involving PK measures in the dose allocation process during a Phase I clinical trials. These methods enter PK in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate scenarios, and to run simulations which their objective is to determine the maximum tolerated dose (MTD). 
 
 #### Installation 
 

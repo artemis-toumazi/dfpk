@@ -67,7 +67,7 @@ AUCs <- c(1.208339,  5.506040,  6.879835,  3.307928,  3.642430,
 x <- c(1, 2, 3, 4, 5, 6, 4, 4, 4, 5, 5, 4, 4, 5, 5)
 y <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0)
 nextD <- nextDose(model = "pktox", y=y, AUCs=AUCs, doses=doses, 
-                   x=x, theta=theta, options=options)
+                  x=x, theta=theta, options=options)
 }
 
 }

@@ -49,7 +49,7 @@
 #' x <- c(1, 2, 3, 4, 5, 6, 4, 4, 4, 5, 5, 4, 4, 5, 5)
 #' y <- c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0)
 #' nextD <- nextDose(model = "pktox", y=y, AUCs=AUCs, doses=doses, 
-#'                    x=x, theta=theta, options=options)
+#'                   x=x, theta=theta, options=options)
 #' }
 #'
 #' @seealso \code{\link{nsim}}
@@ -58,16 +58,17 @@
 #' @import rstan
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-nextDose <- function(model, y, AUCs, doses, x, theta, options, prob = 0.9, betapriors = NULL, thetaL=NULL, p0 = NULL, L = NULL, deltaAUC = NULL){
+nextDose <- function(model, y, AUCs, doses, x, theta, options, prob = 0.9, betapriors = NULL, 
+					 thetaL=NULL, p0 = NULL, L = NULL, deltaAUC = NULL){
 	model1 = NULL
 	eval(parse(text = paste("model1 =", model, sep="")))
 	N <- length(x)
-	if (model == "pktox" & is.null(betapriors)){betapriors = c(10000, 20, 10)
-	}else if(model == "pkcrm" & is.null(betapriors)){betapriors = 10000
-	}else if (model == "pkpop" & is.null(betapriors)){betapriors = c(10000, 10, 5)
+	if (model == "pktox" & is.null(betapriors)){betapriors = c(10, 10000, 20, 10)
+	}else if(model == "pkcrm" & is.null(betapriors)){betapriors = c(10, 10000)
+	}else if (model == "pkpop" & is.null(betapriors)){betapriors = c(10, 10000, 10, 5)
 	}else if (model == "dtox" & is.null(betapriors)){betapriors = c(6.71, 1.43)
 	}else if(model == "pkcov" & is.null(betapriors)){betapriors = c(-14.76, 3.23)
-	}else if (model == "pklogit" & is.null(betapriors)){betapriors = c(10000, 20, 10)}
+	}else if (model == "pklogit" & is.null(betapriors)){betapriors = c(10, 10000, 20, 10)}
 	m <- model1(y, AUCs, d = doses, x, theta, prob = prob, betapriors = betapriors, thetaL=NULL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)
 	MTD <- m$newDose
 	pstim <- m$pstim

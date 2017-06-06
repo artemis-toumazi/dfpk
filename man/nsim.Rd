@@ -11,8 +11,8 @@ nsim is used to generate "n" simulations of phase I trial using the PK data and 
 
 \usage{ 
 nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmethod = 2, 
-    options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = NULL, 
-    thetaL=NULL, p0 = 0, L = 0)
+     options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = NULL,
+     thetaL=NULL, p0 = 0, L = 0)
 }
 
 \arguments{
@@ -47,10 +47,7 @@ nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmet
         A string number specifying the method for calculation of AUC. Possible values are "1" for a compartmental method and "2" for non-compartmental method (default=2).
     }
     \item{options}{ 
-        A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations.
-    defaults to options <- list(nchains = 4,
-                            niter = 4000,
-                            nadapt = 0.8)
+        A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8)
     }
     \item{betapriors}{
         A vector with the value for the prior distribution of the regression parameters in the model; defaults to NULL. 
@@ -134,7 +131,7 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
         ############################################
         ############ Run the simulation(s) #########
         ############################################
-
+        
         results_sim <- nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, AUCmethod = 1)
         results_sim
     }

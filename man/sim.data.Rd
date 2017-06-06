@@ -10,8 +10,8 @@ This function can be used to generate/simulate new data from several measurement
 }
 
 \usage{
-sim.data(PKparameters, omegaIIV, omegaAlpha, sigma, doses, 
-                 limitTox, timeSampling, N)
+sim.data(PKparameters, omegaIIV, omegaAlpha, sigma, doses, limitTox, 
+         timeSampling, N)
 }
 
 \arguments{
@@ -19,7 +19,7 @@ sim.data(PKparameters, omegaIIV, omegaAlpha, sigma, doses,
 Subject's pharmacokinetic's (PK) parameters. 
 }
 \item{omegaIIV}{
-The inter-individual variability for the clearance and the volume of distribution.; possible values may be 70\% or 30\% in different simulated data.
+The inter-individual variability for the clearance and the volume of distribution; possible values may be 70\% or 30\% in different simulated data.
 }
   \item{omegaAlpha}{
 The patient's sensitivity parameter. 
@@ -78,7 +78,7 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
 limitTox <- 10.96                  
 N <- 42                               
 PKparameters <- c(2,10,100)       # PK parameters ka,CL,V
-omegaIIV <- 0.7                 # Inter-individual
+omegaIIV <- 0.7                   # Inter-individual
 omegaAlpha <- 0                    
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
 timeSampling <- seq(0,24,length.out=48)    

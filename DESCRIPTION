@@ -1,21 +1,24 @@
 Package: dfpk
 Type: Package
-Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for
-        Phase I Clinical Trials
-Version: 3.0.1
-Date: 2017-06-05
-Author: Artemis Toumazi <artemis.toumazi@inserm.fr> , Moreno Ursino <moreno.ursino@inserm.fr> and Sarah Zohar <sarah.zohar@inserm.fr>
+Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for Phase I Clinical Trials
+Version: 3.2.0
+Date: 2017-06-06
+Author: Artemis Toumazi <artemis.toumazi@inserm.fr>, Moreno Ursino <moreno.ursino@inserm.fr> 
+		and Sarah Zohar <sarah.zohar@inserm.fr>
 Maintainer: Artemis Toumazi <artemis.toumazi@inserm.fr>
-Description: Statistical methods involving PK measures are provided, in the dose allocation process during a Phase I clinical trials. These methods enter pharmacokinetics (PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate data from several scenarios and functions to run simulations which their objective is to determine the maximum tolerated dose (MTD).
+Description: Statistical methods involving PK measures are provided, in the dose allocation 
+						process during a Phase I clinical trials. These methods enter pharmacokinetics 
+						(PK) in the dose finding designs in different ways, including covariates models,
+						dependent variable or hierarchical models. 
+						This package provides functions to generate data from several scenarios and functions 
+						to run simulations which their objective is to determine the maximum tolerated dose (MTD).
 License: GPL (>= 3) | file LICENSE
 Depends: R (>= 3.0.2), Rcpp (>= 0.12.0)
-Imports: rstan (>= 2.12.1), ggplot2 (>= 2.0.0), dfcrm, methods, stats,
-        graphics, grDevices, PK
-LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60),
-        Rcpp (>= 0.12.0), RcppEigen
+Imports: rstan (>= 2.12.1), ggplot2 (>= 2.0.0), dfcrm, methods, stats, graphics, grDevices, PK
+LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60), Rcpp (>= 0.12.0), RcppEigen
 RcppModules: stan_fit4logit_reg_pkcov_mod, stan_fit4cdf_reg_dtox_mod,
-        stan_fit4logit_reg_pkpop_mod, stan_fit4cdf_reg_pktox_mod, stan_fit4logit_reg_pklogit_mod,
-        stan_fit4reg_auc_mod
+						stan_fit4logit_reg_pkpop_mod, stan_fit4cdf_reg_pktox_mod, 
+						stan_fit4logit_reg_pklogit_mod, stan_fit4reg_auc_mod
 SystemRequirements: C++11
 LazyData: true
 NeedsCompilation: yes

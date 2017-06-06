@@ -6,20 +6,19 @@ Dose finding method PKLOGIT.
 }
 
 \description{
-The PKLOGIT model is inspired by Whitehead et al. (2007) uses \eqn{z_i} instead of dose \eqn{d_i} as a covariate in a logistic regression model for \eqn{p_T}. Therefore, we have that:
-\deqn{logit(p_T(z, \beta)) = -\beta_2 + \beta_3z}
-with a bivariate Uniform distribution as prior distribution for \eqn{\beta = (\beta_2, \beta_3)} and the hierarchical model of PK-toxicity for  \eqn{z_i} given as:
-\deqn{zi|\beta ~ N(\beta_0 + \beta_1 log(d_i), \nu^2)}
-where \eqn{\beta = (\beta_0,\beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation.
+The PKLOGIT model, inspired by Whitehead et al. (2007), uses \eqn{z_i} instead of dose \eqn{d_i} as a covariate in a logistic regression model for \eqn{p_T}. Therefore, we have that:
+\deqn{\mbox{logit}(p_T(z, \boldsymbol{\beta})) =   -\beta_2 + \beta_3 z}
+with a bivariate Uniform distribution as prior distribution for \eqn{\boldsymbol{\beta} = (\beta_2, \beta_3)} and the hierarchical model of PK-toxicity for \eqn{z_i} given as:
+\deqn{z_{i} \vert \boldsymbol{\beta}, \nu \sim N \left( \beta_0 + \beta_1 \log d_{i}, \nu^{2} \right)}
+where \eqn{\boldsymbol{\beta} = (\beta_0,\beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation.
 
 The default choices of the priors are:
-\deqn{\beta \ \nu ~ N(m, \nu*beta0)}
-\deqn{\nu ~ Beta(1,1)}
-\deqn{m = (-log(CL_pop), 1)}  where Cl_pop=10 is the population clearance.
-So \eqn{m = (-1, 1)}.
-\deqn{\beta_2 ~ U(0, beta2mean)}
-\deqn{\beta_3 ~ U(0, beta3mean)}
-where default choices are beta0 = 10000, beta2mean = 20 and beta3mean = 10.
+\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0)}
+\deqn{\nu \sim Beta(1,1)}
+\deqn{m = (-log(CL_{pop}), 1)}  where \eqn{Cl_{pop}} is the population clearance.
+\deqn{\beta_2 \sim U(0, beta2mean)}
+\deqn{\beta_3 \sim U(0, beta3mean)}
+where default choices are \eqn{Cl_{pop} = 10}, beta0 = 10000, beta2mean = 20 and beta3mean = 10.
 
 Finally, the PKLOGIT model has the following stopping rule in toxicity:
 if
@@ -50,13 +49,11 @@ pklogit(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter =
     The probability for the stopping rule.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to beta0 = 10000, beta2mean = 20 and beta3mean = 10.
+    A vector with the value for the prior distribution of the regression parameters in the model; defaults to \eqn{Cl_{pop} = 10}, beta0 = 10000, beta2mean = 20 and beta3mean = 10.
 }
 \item{options}{
-    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations.
-    defaults to options <- list(nchains = 4,
-                                niter = 4000,
-                                nadapt = 0.8)}
+    A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).
+}
 \item{auc}{
     A vector with the computed AUC values of each patient for pktox, pkcrm, pklogit and pkpop; defaults to NULL.
 }
@@ -102,9 +99,7 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
 \dontrun{
     doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
     theta <- 0.2
-    options <- list(nchains = 2,
-            niter = 4000,
-            nadapt = 0.8)
+    options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
     AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
     x <- c(1,2,3,4,5,6)
     y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
