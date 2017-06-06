@@ -43,7 +43,7 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         Beta <- a2[3:4,options$nchains+1]
         
         # Computation probability
-        pstim = invlogit(Beta[1] + Beta[2]*mu)
+        pstim = invlogit(-Beta[1] - Beta[2]*mu)
         
         b1 <- sampl1$b[,1]
         b2 <- sampl1$b[,2]
@@ -57,7 +57,7 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         for(o in 1:length(doses)){
             m <- sampl1$b[,1] + sampl1$b[,2]*log(doses[o])
             for(i in 1:ncol(pstim_sum)){
-                pstim_sum[o,i] <- invlogit(Beta1[i] + Beta2[i]*m[i])
+                pstim_sum[o,i] <- invlogit(-Beta1[i] - Beta2[i]*m[i])
             }
             p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
         }

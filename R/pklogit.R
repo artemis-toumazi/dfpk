@@ -14,11 +14,11 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         }
         
         f_logit <- function(v,lambda,parmt){
-            invlogit(lambda[1]+lambda[2]*v)*dnorm(v,parmt[1],sqrt(parmt[2]))
+            invlogit(-lambda[1]-lambda[2]*v)*dnorm(v,parmt[1],sqrt(parmt[2]))
         }
         
         f2_logit <- function(v, lambda1, lambda2, parmt1, parmt2){
-            invlogit(lambda1+lambda2*v)*dnorm(v,parmt1,sqrt(parmt2))
+            invlogit(-lambda1-lambda2*v)*dnorm(v,parmt1,sqrt(parmt2))
         }
         
         num <- length(x)                        # how many patients
@@ -77,7 +77,7 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
             newDose = NA 
             message("The trial stopped based on the stopping rule \n \n")
         }else{                                          # if we not stop
-            newDose <- order(abs(pstim-theta))[1]
+            newDose <- order((abs(pstim-theta)))[1]
         }
         
         # MTD = order(abs(pstim-theta))[1]

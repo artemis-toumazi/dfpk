@@ -1472,8 +1472,8 @@ public:
         stan::math::fill(bet1,DUMMY_VAR__);
 
         try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
@@ -1577,8 +1577,8 @@ public:
         (void) bet1;  // dummy to suppress unused var warning
 
         try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
@@ -1876,8 +1876,8 @@ public:
         stan::math::fill(bet1,DUMMY_VAR__);
 
         try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
@@ -1981,8 +1981,8 @@ public:
         (void) bet1;  // dummy to suppress unused var warning
 
         try {
-            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), -(get_base1(bet,1,"bet",1)));
-            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), get_base1(bet,2,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,1,"bet1",1), get_base1(bet,1,"bet",1));
+            stan::math::assign(get_base1_lhs(bet1,2,"bet1",1), -(get_base1(bet,2,"bet",1)));
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
