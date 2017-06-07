@@ -17,10 +17,9 @@
 \description{
 The graphical representation of the drug's concentration in the plasma at time t after the drug administration.
 }
-\author{
-Artemis Toumazi \email{artemis.toumazi@inserm.fr}, Moreno Ursino \email{moreno.ursino@inserm.fr}, Sarah Zohar \email{sarah.zohar@inserm.fr}
-}
 \references{
 Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
 }
-
+\author{
+Artemis Toumazi \email{artemis.toumazi@inserm.fr}, Moreno Ursino \email{moreno.ursino@inserm.fr}, Sarah Zohar \email{sarah.zohar@inserm.fr}
+}

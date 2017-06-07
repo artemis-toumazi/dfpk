@@ -2,7 +2,7 @@ Package: dfpk
 Type: Package
 Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for Phase I Clinical Trials
 Version: 3.2.0
-Date: 2017-06-06
+Date: 2017-06-07
 Author: Artemis Toumazi <artemis.toumazi@inserm.fr>, Moreno Ursino <moreno.ursino@inserm.fr> 
 		and Sarah Zohar <sarah.zohar@inserm.fr>
 Maintainer: Artemis Toumazi <artemis.toumazi@inserm.fr>
@@ -24,7 +24,7 @@ LazyData: true
 NeedsCompilation: yes
 URL: http://github.com/artemis-toumazi/dfpk
 BugReports: http://github.com/artemis-toumazi/dfpk/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Packaged: 2016-12-14 13:07:29 UTC; User
 Repository: CRAN
 Date/Publication: 2016-08-10 10:06:56
