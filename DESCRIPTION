@@ -1,8 +1,9 @@
 Package: dfpk
 Type: Package
-Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for Phase I Clinical Trials
+Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for
+        Phase I Clinical Trials
 Version: 3.2.0
-Date: 2017-06-07
+Date: 2017-06-27
 Author: Artemis Toumazi <artemis.toumazi@inserm.fr>, Moreno Ursino <moreno.ursino@inserm.fr> 
 		and Sarah Zohar <sarah.zohar@inserm.fr>
 Maintainer: Artemis Toumazi <artemis.toumazi@inserm.fr>
@@ -13,18 +14,20 @@ Description: Statistical methods involving PK measures are provided, in the dose
 						This package provides functions to generate data from several scenarios and functions 
 						to run simulations which their objective is to determine the maximum tolerated dose (MTD).
 License: GPL (>= 3) | file LICENSE
-Depends: R (>= 3.0.2), Rcpp (>= 0.12.0)
-Imports: rstan (>= 2.12.1), ggplot2 (>= 2.0.0), dfcrm, methods, stats, graphics, grDevices, PK
-LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60), Rcpp (>= 0.12.0), RcppEigen
+Depends: R (>= 3.0.2), Rcpp (>= 0.12.0), rstan (>= 2.12.1)
+Imports: ggplot2 (>= 2.0.0), dfcrm, methods, stats,
+        graphics, grDevices, PK
+LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60),
+        Rcpp (>= 0.12.0), RcppEigen
 RcppModules: stan_fit4logit_reg_pkcov_mod, stan_fit4cdf_reg_dtox_mod,
-						stan_fit4logit_reg_pkpop_mod, stan_fit4cdf_reg_pktox_mod, 
-						stan_fit4logit_reg_pklogit_mod, stan_fit4reg_auc_mod
+        stan_fit4logit_reg_pkpop_mod, stan_fit4cdf_reg_pktox_mod,
+        stan_fit4logit_reg_pklogit_mod, stan_fit4reg_auc_mod
 SystemRequirements: C++11
 LazyData: true
 NeedsCompilation: yes
 URL: http://github.com/artemis-toumazi/dfpk
 BugReports: http://github.com/artemis-toumazi/dfpk/issues
 RoxygenNote: 6.0.1
-Packaged: 2016-12-14 13:07:29 UTC; User
+Packaged: 2017-06-07 11:22:14 UTC; artemistoumazi
 Repository: CRAN
-Date/Publication: 2016-08-10 10:06:56
+Date/Publication: 2017-06-07 17:24:35 UTC

@@ -15,6 +15,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
     pstim1 = list()
     pstim3 = list()
     pstim_mean = list()
+    sel = rep(0,length(doses)+1)
 
     if (model == "pktox" & is.null(betapriors)){
     	betapriors = c(10, 10000, 20, 10)
@@ -30,7 +31,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
     	betapriors = c(10, 10000, 20, 10)
     }
 
-
     for (tr in 1:TR){
         
         ndos <- length(doses)
@@ -42,7 +42,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
         x <- rep(1,cohort)
         y <- tox[cbind(1:length(x),x)]  
         M = N/cohort
-        nd <- rep(0,length(doses))
+        nd = rep(0,length(doses))
         
         for (i in 1:length(x)){
             eval(parse(text = paste("conc",i," <- as.vector(stab[((i-1)*ndos +x[i] +1), 2:(n_pk +1)])", sep= "")))
@@ -125,9 +125,10 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
         # check if we stopped before
         if (length(x) < N){
             nstop <- N-length(x)
-            MtD = results$newDose
+            MtD = 0
             MTD = c(MTD, results$newDose)
-            doseLevels = rbind(doseLevels,c(x,rep(NA,nstop)))
+            sel[MtD+1] <- sel[MtD+1] + 1
+            doseLevels = rbind(doseLevels,c(x,rep(0,nstop)))
             toxicity = rbind(toxicity,c(y,rep(NA,nstop)))
             AUC_s = rbind(AUC_s, c(AUCs,rep(NA,nstop)))
             AUCd = rbind(AUCd, c(deltaAUC,rep(NA,nstop)))
@@ -137,6 +138,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
         }else{
             MtD = model1(y = y, auc = AUCs, doses = doses, x = x, theta = theta, prob = prob, betapriors = betapriors, 
                         thetaL = thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)$newDose
+            sel[MtD+1] <- sel[MtD+1] + 1
             MTD = c(MTD, MtD)
             doseLevels = rbind(doseLevels, x)
             toxicity = rbind(toxicity, y)
@@ -152,9 +154,16 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
             nadapt = options$nadapt
             pid = c(1:N)
     }
+
+    if(TR == 1){
+        newDose = MtD
+    }else{
+        newDose = sel/TR
+    }
+
     
     new("dosefinding", pid = pid, N = N, time = time1, doses = doses, conc = conci, p0 = p0,
-         L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = MtD, 
+         L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = newDose, MTD = MTD, 
          theta = theta, doseLevels = doseLevels, toxicity = toxicity, AUCs = AUC_s, TR = TR, preal = preal, 
          pstim  = pstim_mean, pstimQ1 = pstim1, pstimQ3 = pstim3, model = model)
 }

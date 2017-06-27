@@ -32,6 +32,8 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{newDose}}{The next maximum tolerated dose (MTD).}
 
+\item{\code{MTD}}{The vector containing all the maximum tolerated dose for each TR.}
+
 \item{\code{theta}}{The toxicity (probability) target.}
 
 \item{\code{doseLevels}}{A vector of dose levels assigned to patients in the trial.}

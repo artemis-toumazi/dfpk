@@ -74,7 +74,8 @@ nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmet
     \item{nchains}{The number of chains for the Stan model.}
     \item{niter}{The number of iterations for each chain in the Stan model.}
     \item{nadapt}{The number of warmup iterations.}
-    \item{newDose}{The next maximum tolerated dose (MTD); equals to "NA" if the trial has stopped before the end, according to the stopping rules.}
+    \item{newDose}{The next maximum tolerated dose (MTD); equals to 0 if the trial has stopped before the end, according to the stopping rules.}
+    \item{MTD}{A vector containing the next maximum tolerated doses (MTD) of each TR; equals to 0 if the trial has stopped before the end, according to the stopping rules.}
     \item{theta}{Tocixity target.}
     \item{doseLevels}{A vector of dose levels assigned to patients in the trial.}
     \item{toxicity}{The estimated toxicity outcome.}
