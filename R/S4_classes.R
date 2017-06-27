@@ -12,8 +12,9 @@ setClassUnion("ClassNewDose", c("numeric", "logical", "NULL"))
 #' @slot nchains Number of chains for the stan model.
 #' @slot niter Number of iterations for the stan model.
 #' @slot nadapt  Number of warmup iterations for the stan model.
-#' @slot newDose  The next maximum tolerated dose (MTD).
+#' @slot newDose  The next maximum tolerated dose (MTD) if TR=1 else the selected % of MTD.
 #' @slot MTD The vector containing all the maximum tolerated dose for each TR.
+#' @slot MtD The next maximum tolerated dose (MTD).
 #' @slot theta  The toxicity (probability) target.
 #' @slot doseLevels A vector of dose levels assigned to patients in the trial.
 #' @slot toxicity The toxicity outcome.
@@ -29,7 +30,7 @@ setClassUnion("ClassNewDose", c("numeric", "logical", "NULL"))
 #' @export
 setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric", doses = "numeric", conc="numeric", 
         p0 = "numeric", L = "numeric",  nchains = "numeric", niter = "numeric", nadapt = "numeric", newDose = "ClassNewDose", 
-        MTD = "ClassNewDose", theta = "numeric", doseLevels="matrix", toxicity= "matrix", AUCs="matrix", TR="numeric", 
+        MTD = "ClassNewDose", MtD = "numeric", theta = "numeric", doseLevels="matrix", toxicity= "matrix", AUCs="matrix", TR="numeric", 
         preal = "numeric", pstim = "list", pstimQ1 = "list", pstimQ3 = "list", model = "character"))
 
 
@@ -118,12 +119,11 @@ setMethod(f = "show", signature ="dosefinding", definition = function(object)
             t <- matrix(NA, nrow=4, ncol=length(object@doses)+1)
             rownames(t) <- c("Dose", "Truth Probabilities", "Dose-Allocation (%)", "Selected % MTD")
             colnames(t) <- rep("", length(object@doses)+1)
-            s <- seq(0, 6)
-            t[1, ] <- as.integer(s)
+            t[1, ] <- seq(0, 6)
             t[2, ] <- c(0, round(object@preal, digits=3))
             for(i in 1:length(object@doses)){
-                n_levels = length(which(doselevels == i))
-                t[3, i+1] <- round(n_levels/length(doselevels), digits=2)
+              n_levels = length(which(doselevels == i))
+              t[3, i+1] <- round(n_levels/length(doselevels), digits=2)
             }
             zeroDose <- length(which(doselevels == "NA"))
             t[3,1] <- zeroDose / length(doselevels)
@@ -233,7 +233,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         n <- x@N                    
         nontox <- which(x@toxicity[TR,] == "0")
         notNa <- which(is.na(x@doseLevels[TR,]) == "FALSE")
-        if (x@newDose == "0") warning("Plot not completed! The trial has stopped according to the stopping rules! \n \n", call. = FALSE)
+        if(x@MtD == 0) warning("Plot not completed! The trial has stopped according to the stopping rules! \n \n", call. = FALSE)
         plot(x@pid[nontox], x@doseLevels[TR,nontox], pch="O", ylim=c(1,max(x@doseLevels[TR,notNa])), xlim=c(1,n), 
         	 xlab="Patient number", ylab="Dose level", ...)
         points((1:length(x@toxicity[TR,]))[-nontox],x@doseLevels[TR,-nontox], pch="X")
@@ -247,7 +247,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         # for(i in 1: ndoses){
         #    PropTox[i,] <-  rbind(summary(x@pstim_post[i,]))
         # }
-        if (x@newDose == "0") stop("Unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
+        if (x@MtD == 0) stop("Unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
         plot(1:ndoses, x@pstim[[TR]][1:ndoses,n],type="l",xlab="Dose level",ylab="Probability of toxicity", ylim=c(0,max(x@pstim[[TR]][1:ndoses,n]) + 0.15))
         points(1:ndoses,x@pstim[[TR]][1:ndoses,n], pch="X")
         lines(1:ndoses,x@preal, lty=2)
@@ -262,7 +262,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
     } else {
         par(las=1)
         ndoses <- length(x@doses)
-        if (x@newDose == "0") stop("Unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
+        if (x@MtD == 0) stop("Unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
         PropTox <- matrix(NA, ncol = 6, nrow = ndoses)
         for(i in 1: ndoses){
             #PropTox[i,] <-  rbind(summary(x@pstim[i,]))

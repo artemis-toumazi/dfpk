@@ -163,7 +163,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
 
     
     new("dosefinding", pid = pid, N = N, time = time1, doses = doses, conc = conci, p0 = p0,
-         L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = newDose, MTD = MTD, 
+         L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = newDose, MTD = MTD, MtD=MtD,
          theta = theta, doseLevels = doseLevels, toxicity = toxicity, AUCs = AUC_s, TR = TR, preal = preal, 
          pstim  = pstim_mean, pstimQ1 = pstim1, pstimQ3 = pstim3, model = model)
 }
