@@ -16,6 +16,8 @@ An S4 class to represent a simulated scenarios.
 
 \item{\code{time}}{The time sampling.}
 
+\item{\code{TR}}{The number of simulated datasets.}
+
 \item{\code{N}}{The total number of patients.}
 
 \item{\code{doses}}{The doses levels of the drug.}

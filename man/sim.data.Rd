@@ -11,7 +11,7 @@ This function can be used to generate/simulate new data from several measurement
 
 \usage{
 sim.data(PKparameters, omegaIIV, omegaAlpha, sigma, doses, limitTox, 
-         timeSampling, N)
+         timeSampling, N, TR, seed=190591)
 }
 
 \arguments{
@@ -39,6 +39,12 @@ The time sampling.
   \item{N}{
 The total number of enrolled patients.  
 }
+  \item{TR}{
+The total number of simulated datasets.  
+}
+  \item{seed}{
+Seed of the random number generator. Default value is set at 190591.  
+}
 }
 
 \value{
@@ -47,6 +53,7 @@ An object of class "scen" is returned, consisting of simulated PK and toxicity d
 \item{PKparameters}{Subject's pharmacokinetic's (PK) parameters.}
 \item{nPK}{The length of the time points.}
 \item{time}{The time sampling.}
+\item{TR}{The number of simulated datasets.}
 \item{N}{The total number of enrolled patients.}
 \item{doses}{A vector with the doses panel.}
 \item{preal}{Prior toxicity probabilities.}
@@ -75,8 +82,9 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
 }
 
 \examples{
-limitTox <- 10.96                  
-N <- 42                               
+TR = 10
+N = 30
+limitTox <- 10.96                                                
 PKparameters <- c(2,10,100)       # PK parameters ka,CL,V
 omegaIIV <- 0.7                   # Inter-individual
 omegaAlpha <- 0                    
@@ -84,8 +92,12 @@ doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
 timeSampling <- seq(0,24,length.out=48)    
 sigma <- rep(0.2,length(timeSampling))  # sigma: Additive or proportional error
 
-gen.scen <- sim.data(PKparameters,omegaIIV,omegaAlpha,sigma,doses,limitTox,timeSampling, N) 
-gen.scen
+gen.scen <- sim.data(PKparameters,omegaIIV,omegaAlpha,sigma,doses,
+                     limitTox,timeSampling, N, TR, seed=190591) 
+gen.scen[[1]]     # returns the first simulated dataset. 
+
+#### Graphical representation of the first simulated data
+# plot(gen.scen[[1]])
 }
 
-\keyword{models}
+

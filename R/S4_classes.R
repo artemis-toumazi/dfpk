@@ -12,7 +12,7 @@ setClassUnion("ClassNewDose", c("numeric", "logical", "NULL"))
 #' @slot nchains Number of chains for the stan model.
 #' @slot niter Number of iterations for the stan model.
 #' @slot nadapt  Number of warmup iterations for the stan model.
-#' @slot newDose  The next maximum tolerated dose (MTD) if TR=1 else the selected % of MTD.
+#' @slot newDose  The next maximum tolerated dose (MTD) if TR=1 else the selected percentage of MTD.
 #' @slot MTD The vector containing all the maximum tolerated dose for each TR.
 #' @slot MtD The next maximum tolerated dose (MTD).
 #' @slot theta  The toxicity (probability) target.
@@ -39,6 +39,7 @@ setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric"
 #' @slot PKparameters The subject's PK parameters.
 #' @slot nPK The length of time sampling.
 #' @slot time The time sampling.
+#' @slot TR The number of simulated datasets.
 #' @slot N  The total number of patients.
 #' @slot doses The doses levels of the drug. 
 #' @slot preal The real probability of toxicity.
@@ -54,7 +55,7 @@ setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric"
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numeric", 
+setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numeric", TR="numeric",
         N = "numeric", doses="numeric", preal = "numeric", limitTox="numeric", omegaIIV="numeric", 
         omegaAlpha="numeric", conc="matrix", concPred="numeric",
         tox="matrix", tab="matrix", parameters = "matrix", alphaAUC="numeric"))
@@ -78,7 +79,7 @@ setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numer
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setClass("Dose", slots = list(N = "numeric", y = "numeric", AUCs = "numeric", doses ="numeric", x = "numeric", 
+setClass("dose", slots = list(N = "numeric", y = "numeric", AUCs = "numeric", doses ="numeric", x = "numeric", 
         theta = "numeric", options = "list", newDose="ClassNewDose", pstim="numeric", pstimQ1="numeric", pstimQ3="numeric", 
         parameters="numeric", model = "character"))
 
@@ -134,13 +135,14 @@ setMethod(f = "show", signature ="dosefinding", definition = function(object)
     }
 )
 
+
 setGeneric("show")
 #' @export
 setMethod(f = "show",
-          signature ="scen",
+          signature = "scen",
           definition = function(object){
                cat("Today: ", date(), "\n")
-               cat("\n","Scenarios Settings","\n","\n")
+               cat("\n","Scenarios Settings", "(TR:", object@TR, ")", "\n","\n")
                cat("Total number of patients in the trial:", "\t", object@N, "\n")
                cat("The subject's PK parameters (ka, CL, V):", object@PKparameters)
                cat(" with a standard deviation of CL and V equals to:", object@omegaIIV, "\n")
@@ -162,13 +164,14 @@ setMethod(f = "show",
                cat("The PK parameter's estimations for each patient are:", "\n")
                print(round(object@parameters, digits=3))
                cat("\n","NB. pid = Patient's ID number \n")
-         }
+        }
 )
+
 
 setGeneric("show")
 #' @export 
 setMethod(f = "show",
-          signature ="Dose",
+          signature ="dose",
           definition = function(object) {
                cat("Today: ", date(), "\n")
                cat("Model:", object@model, "\n")
@@ -280,6 +283,10 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
 #'  
 #' @param x a "scen" object.
 #' @param y the "y" argument is not used in the plot-method for "scen" object.
+#' @param col the color argument to the \code{\link[=graphics]{plot.default}} function.
+#' @param xlab the label of x-axis.
+#' @param ylab the label of y-axis.
+#' @param main the title of the graph.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
 #' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
@@ -292,14 +299,15 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
 #' @importFrom grDevices  rainbow
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, y=NA, ...){
-	colors <- rainbow(length(x@doses))
-	plot(x@time, x@conc[,1], type="l", col=colors[1], xlab="Time (hours)", ylab="Concentration (mg/L)", main="Pharmacokinetics: Concentration vs Time", ylim=c(0,max(x@conc)),...)
-	for(i in 2:length(x@doses)){
-		lines(x@time, x@conc[,i], col=colors[i], lty=i,...)
-	}
+setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, y=NA, col = rainbow(length(x@doses)), xlab="Time (hours)", 
+          ylab="Concentration (mg/L)", main="Pharmacokinetics: Concentration vs Time", ...){
+    plot(x@time, x@conc[,1], type="l", col=col[1], xlab=xlab, ylab=ylab, main=main, ylim=c(0,max(x@conc)),...)
+    for(i in 2:length(x@doses)){
+        lines(x@time, x@conc[,i], col=col[i], lty=i,...)
+    }
 }
 )
+
 
 #' The graphical representation of dose escalation for each patient in the trial. 
 #'
@@ -318,7 +326,7 @@ setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, 
 #' @importFrom grDevices  rainbow
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setMethod(f = "plot", signature =c("Dose", "missing"), definition = function(x, y=NA, ask=TRUE, ...){
+setMethod(f = "plot", signature =c("dose", "missing"), definition = function(x, y=NA, ask=TRUE, ...){
     choices <- c("1: Plot trial summary", "2: Plot posterior dose response with 95% CI\n")
     if (ask == "TRUE") {
         cat("Make a plot selection (or 0 to exit)\n\n")

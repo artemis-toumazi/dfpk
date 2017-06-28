@@ -2,8 +2,8 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 nsim <- 
-function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmethod = 2, options = list(nchains = 4, niter = 4000, 
-         nadapt = 0.8), betapriors = NULL, thetaL=NULL, p0 = 0, L = 0){
+function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulatedData), prob = 0.9, AUCmethod = 2, options = list(nchains = 4, niter = 4000, 
+         nadapt = 0.8), betapriors = NULL, thetaL=NULL, p0 = 0, L = 0, seed = 190591){
 
     model1 = NULL
     eval(parse(text = paste("model1 =", model, sep="")))
@@ -32,13 +32,13 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
     }
 
     for (tr in 1:TR){
-        
+
         ndos <- length(doses)
-        tox <- simulatedData@tox         
-        stab <- simulatedData@tab 
-        n_pk <- simulatedData@nPK        
-        doses <- simulatedData@doses
-        preal <- simulatedData@preal
+        tox <- simulatedData[[TR]]@tox         
+        stab <- simulatedData[[TR]]@tab 
+        n_pk <- simulatedData[[TR]]@nPK        
+        doses <- simulatedData[[TR]]@doses
+        preal <- simulatedData[[TR]]@preal
         x <- rep(1,cohort)
         y <- tox[cbind(1:length(x),x)]  
         M = N/cohort
@@ -160,7 +160,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AU
     }else{
         newDose = sel/TR
     }
-
     
     new("dosefinding", pid = pid, N = N, time = time1, doses = doses, conc = conci, p0 = p0,
          L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = newDose, MTD = MTD, MtD=MtD,

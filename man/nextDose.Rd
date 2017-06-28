@@ -36,7 +36,7 @@ nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
 \item{deltaAUC}{The difference between computed individual AUC and the AUC of the population at the same dose level (defined as an average); argument for pkcov; defaults to NULL.}
 }
 \value{
-An object of class "Dose" is returned, consisting of determination of the next recommended dose and estimations. Objects generated 
+An object of class "dose" is returned, consisting of determination of the next recommended dose and estimations. Objects generated 
 by nextDose contain at least the following components:
 
 \item{N}{The total number of enrolled patients.}

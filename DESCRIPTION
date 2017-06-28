@@ -1,9 +1,9 @@
 Package: dfpk
 Type: Package
-Title: A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for
+Title: Bayesian Dose-Finding Designs using Pharmacokinetics(PK) for
         Phase I Clinical Trials
 Version: 3.2.0
-Date: 2017-06-27
+Date: 2017-06-28
 Author: Artemis Toumazi <artemis.toumazi@inserm.fr>, Moreno Ursino <moreno.ursino@inserm.fr> 
 		and Sarah Zohar <sarah.zohar@inserm.fr>
 Maintainer: Artemis Toumazi <artemis.toumazi@inserm.fr>

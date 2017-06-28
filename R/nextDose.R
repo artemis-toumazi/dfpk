@@ -17,7 +17,7 @@
 #' @description
 #' nextDose is used to determine the next or recommended dose level in a phase I clinical trial using Pharmacokinetics (PK).
 #'
-#' @return  An object of class "Dose" is returned, consisting of determination of the next recommended dose and estimations. Objects generated 
+#' @return  An object of class "dose" is returned, consisting of determination of the next recommended dose and estimations. Objects generated 
 #' by nextDose contain at least the following components:
 #'
 #' \item{N}{The total number of enrolled patients.}
@@ -75,7 +75,7 @@ nextDose <- function(model, y, AUCs, doses, x, theta, options, prob = 0.9, betap
 	pstim_Q1 <- m$p_sum[,2]
     pstim_Q3 <- m$p_sum[,5]
 	parameters <- m$parameters
-	new("Dose", N = N, y = y, AUCs = AUCs, doses = doses, x = x, theta = theta, options = options, 
+	new("dose", N = N, y = y, AUCs = AUCs, doses = doses, x = x, theta = theta, options = options, 
 		newDose = MTD, pstim = pstim, pstimQ1 = pstim_Q1, pstimQ3 = pstim_Q3, parameters = parameters, 
 		model = model)
 }

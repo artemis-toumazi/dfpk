@@ -30,9 +30,11 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{nadapt}}{Number of warmup iterations for the stan model.}
 
-\item{\code{newDose}}{The next maximum tolerated dose (MTD).}
+\item{\code{newDose}}{The next maximum tolerated dose (MTD) if TR=1 else the selected percentage of MTD.}
 
 \item{\code{MTD}}{The vector containing all the maximum tolerated dose for each TR.}
+
+\item{\code{MtD}}{The next maximum tolerated dose (MTD).}
 
 \item{\code{theta}}{The toxicity (probability) target.}
 

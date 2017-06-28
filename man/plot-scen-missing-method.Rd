@@ -5,12 +5,22 @@
 \alias{plot,scen,missing-method}
 \title{The graphical representation of the drug's concentration in the plasma at time t after the drug administration.}
 \usage{
-\S4method{plot}{scen,missing}(x, y = NA, ...)
+\S4method{plot}{scen,missing}(x, y = NA, col = rainbow(length(x@doses)),
+  xlab = "Time (hours)", ylab = "Concentration (mg/L)",
+  main = "Pharmacokinetics: Concentration vs Time", ...)
 }
 \arguments{
 \item{x}{a "scen" object.}
 
 \item{y}{the "y" argument is not used in the plot-method for "scen" object.}
+
+\item{col}{the color argument to the \code{\link[=graphics]{plot.default}} function.}
+
+\item{xlab}{the label of x-axis.}
+
+\item{ylab}{the label of y-axis.}
+
+\item{main}{the title of the graph.}
 
 \item{\dots}{other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.}
 }

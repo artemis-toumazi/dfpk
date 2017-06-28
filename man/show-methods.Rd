@@ -3,7 +3,7 @@
 \alias{show-methods}
 \alias{show,dosefinding-method}
 \alias{show,scen-method}
-\alias{show,Dose-method}
+\alias{show,dose-method}
 \title{S4 Methods for Function \code{show}}
 \description{
 S4 Methods for function \code{show}.
@@ -20,7 +20,7 @@ S4 method of dosefinding.
 S4 method of simulated scenarios. 
 }
 
-\item{\code{signature(object = "Dose")}}{
+\item{\code{signature(object = "dose")}}{
 S4 method to present the next recommended dose level in an ongoing trial. 
 }
 }}
