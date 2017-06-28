@@ -311,7 +311,7 @@ setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, 
 
 #' The graphical representation of dose escalation for each patient in the trial. 
 #'
-#' @param x a "Dose" object.
+#' @param x a "dose" object.
 #' @param y the "y" argument is not used in the plot-method for "Dose" object.
 #' @param ask Choose plot or not.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.

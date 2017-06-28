@@ -10,7 +10,7 @@ function(PKparameters,omegaIIV,omegaAlpha,sigma,doses,limitTox,timeSampling, N, 
     resScen <- list()
 
     for (tr in 1:TR){
-        
+
         set.seed(seed + tr)
         nPK <- length(timeSampling)      		
         # doses <- exp(qnorm(preal)*sqrt(omegaIIV^2+omega_a^2) + log(limit_tox) + log(PKparameters[2]))  
@@ -65,7 +65,6 @@ function(PKparameters,omegaIIV,omegaAlpha,sigma,doses,limitTox,timeSampling, N, 
         rownames(tox) <- paste("pid", 1:N)
         colnames(tox) <- paste("dose", 1:length(doses))
 
-        # data <- list(nPK=nPK, conc=concPred[1:nPK], concPred=concPred, doses=doses, preal = preal, tab=tab, tox=tox, parameters=parameter, alphaAUC=sens_AUC)
         res <- new("scen", PKparameters=PKparameters, nPK= nPK, time=timeSampling, idtr=tr, N=N, doses=doses, preal = preal,
                     limitTox=limitTox, omegaIIV=omegaIIV, omegaAlpha=omegaAlpha, conc=concentration, 
                     concPred=concPred, tox=tox, tab=tab, parameters=parameter, alphaAUC=sens_AUC)

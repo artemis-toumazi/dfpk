@@ -8,7 +8,7 @@
 \S4method{plot}{dose,missing}(x, y = NA, ask = TRUE, ...)
 }
 \arguments{
-\item{x}{a "Dose" object.}
+\item{x}{a "dose" object.}
 
 \item{y}{the "y" argument is not used in the plot-method for "Dose" object.}
 

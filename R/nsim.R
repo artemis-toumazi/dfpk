@@ -34,11 +34,11 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
     for (tr in 1:TR){
         set.seed(seed + tr)
         ndos <- length(doses)
-        tox <- simulatedData[[TR]]@tox         
-        stab <- simulatedData[[TR]]@tab 
-        n_pk <- simulatedData[[TR]]@nPK        
-        doses <- simulatedData[[TR]]@doses
-        preal <- simulatedData[[TR]]@preal
+        tox <- simulatedData[[tr]]@tox         
+        stab <- simulatedData[[tr]]@tab 
+        n_pk <- simulatedData[[tr]]@nPK        
+        doses <- simulatedData[[tr]]@doses
+        preal <- simulatedData[[tr]]@preal
         x <- rep(1,cohort)
         y <- tox[cbind(1:length(x),x)]  
         M = N/cohort
@@ -59,7 +59,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
         }
         
         pstim_auctox = matrix(0, length(doses)*cohort)
-        # pstim_post = matrix(0, length(doses)*cohort)
         pstim_Q1 = matrix(0, length(doses)*cohort)
         pstim_Q3 = matrix(0, length(doses)*cohort)
 
@@ -84,7 +83,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
                     nd[x[k]] <- nd[x[k]] + 1 
                 }
                 pstim_auctox = cbind(pstim_auctox, rep(0,length(doses)))
-                # pstim_post = cbind(pstim_post, rep(0,length(doses)))
                 pstim_Q1 = cbind(pstim_Q1, rep(0,length(doses)))
                 pstim_Q3 = cbind(pstim_Q3, rep(0,length(doses)))
                 
@@ -112,7 +110,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
                     nd[x[k]] <- nd[x[k]] + 1
                 }
                 pstim_auctox = cbind(pstim_auctox, results$pstim)
-                # pstim_post = cbind(pstim_post, results$pstim_sum)
                 pstim_Q1 = cbind(pstim_Q1, results$p_sum[,2])
                 pstim_Q3 = cbind(pstim_Q3, results$p_sum[,5])
                 for(s in which(nd!=0)){
@@ -148,7 +145,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
             pstim3[[trial]] <- pstim_Q3
             pstim_mean[[trial]] <- pstim_auctox
         }
-            # pstim <- eval(parse(text = paste("pstim"," <- pstim_auctox", sep="")))
             nchains = options$nchains
             niter = options$niter
             nadapt = options$nadapt

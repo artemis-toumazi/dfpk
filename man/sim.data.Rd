@@ -53,7 +53,7 @@ An object of class "scen" is returned, consisting of simulated PK and toxicity d
 \item{PKparameters}{Subject's pharmacokinetic's (PK) parameters.}
 \item{nPK}{The length of the time points.}
 \item{time}{The time sampling.}
-\item{TR}{The number of simulated datasets.}
+\item{idtr}{The id number of the corresponding simulated dataset.}
 \item{N}{The total number of enrolled patients.}
 \item{doses}{A vector with the doses panel.}
 \item{preal}{Prior toxicity probabilities.}
@@ -96,8 +96,10 @@ gen.scen <- sim.data(PKparameters,omegaIIV,omegaAlpha,sigma,doses,
                      limitTox,timeSampling, N, TR, seed=190591) 
 gen.scen[[1]]     # returns the first simulated dataset. 
 
+
 #### Graphical representation of the first simulated data
 # plot(gen.scen[[1]])
+
 }
 
 

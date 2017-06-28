@@ -122,7 +122,6 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
 
         cohort = 1
         simulatedData <- gen.scen  
-        doses <- simulatedData[[1]]@doses
         icon <- c(2:6, round(seq(9, 48, ((48-9)/4))))      
         theta <- 0.2                             
 
@@ -136,7 +135,8 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
         ############ Run the simulation(s) #########
         ############################################
         
-        results_sim <- nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, AUCmethod = 1)
+        results_sim <- nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, 
+                            AUCmethod = 1)
         results_sim
     }
 }
