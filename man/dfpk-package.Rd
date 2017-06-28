@@ -3,7 +3,7 @@
 \alias{dfpk}
 
 \docType{package}
-\title{A Bayesian Dose-Finding Design using Pharmacokinetics(PK) for Phase I Clinical Trials.
+\title{Bayesian Dose-Finding Designs using Pharmacokinetics(PK) for Phase I Clinical Trials.
 }
 
 \description{

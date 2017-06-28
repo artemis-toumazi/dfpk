@@ -39,7 +39,7 @@ setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric"
 #' @slot PKparameters The subject's PK parameters.
 #' @slot nPK The length of time sampling.
 #' @slot time The time sampling.
-#' @slot TR The number of simulated datasets.
+#' @slot idtr The id number of the corresponding simulated dataset.
 #' @slot N  The total number of patients.
 #' @slot doses The doses levels of the drug. 
 #' @slot preal The real probability of toxicity.
@@ -55,7 +55,7 @@ setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric"
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numeric", TR="numeric",
+setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numeric", idtr="numeric",
         N = "numeric", doses="numeric", preal = "numeric", limitTox="numeric", omegaIIV="numeric", 
         omegaAlpha="numeric", conc="matrix", concPred="numeric",
         tox="matrix", tab="matrix", parameters = "matrix", alphaAUC="numeric"))
@@ -142,7 +142,7 @@ setMethod(f = "show",
           signature = "scen",
           definition = function(object){
                cat("Today: ", date(), "\n")
-               cat("\n","Scenarios Settings", "(TR:", object@TR, ")", "\n","\n")
+               cat("\n","Scenarios Settings", "(TR:", object@idtr, ")", "\n","\n")
                cat("Total number of patients in the trial:", "\t", object@N, "\n")
                cat("The subject's PK parameters (ka, CL, V):", object@PKparameters)
                cat(" with a standard deviation of CL and V equals to:", object@omegaIIV, "\n")

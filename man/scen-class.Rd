@@ -16,7 +16,7 @@ An S4 class to represent a simulated scenarios.
 
 \item{\code{time}}{The time sampling.}
 
-\item{\code{TR}}{The number of simulated datasets.}
+\item{\code{idtr}}{The id number of the corresponding simulated dataset.}
 
 \item{\code{N}}{The total number of patients.}
 

@@ -32,7 +32,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
     }
 
     for (tr in 1:TR){
-
+        set.seed(seed + tr)
         ndos <- length(doses)
         tox <- simulatedData[[TR]]@tox         
         stab <- simulatedData[[TR]]@tab 
