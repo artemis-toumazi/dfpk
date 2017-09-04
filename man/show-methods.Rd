@@ -13,15 +13,15 @@ S4 Methods for function \code{show}.
 \describe{
 
 \item{\code{signature(object = "dosefinding")}}{
-S4 method of dosefinding.
+S4 method to store and present the dose-finding results.
 }
 
 \item{\code{signature(object = "scen")}}{
-S4 method of simulated scenarios. 
+S4 method to store and present the simulated datasets. 
 }
 
 \item{\code{signature(object = "dose")}}{
-S4 method to present the next recommended dose level in an ongoing trial. 
+S4 method to store and present the next recommended dose level in an ongoing trial. 
 }
 }}
 \keyword{methods}

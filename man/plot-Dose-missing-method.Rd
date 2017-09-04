@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{a "dose" object.}
 
-\item{y}{the "y" argument is not used in the plot-method for "Dose" object.}
+\item{y}{the "y" argument is not used in the plot-method for "dose" object.}
 
 \item{ask}{Choose plot or not.}
 

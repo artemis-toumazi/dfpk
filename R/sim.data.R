@@ -20,7 +20,7 @@ function(PKparameters,omegaIIV,omegaAlpha,sigma,doses,limitTox,timeSampling, N, 
         alphatot <- NULL			 			
         tox <- NULL
 
-        tab <- c(0,timeSampling,timeSampling)	 
+        tab <- c(0,timeSampling)	 
         npar <- length(PKparameters) - 1             
 
         for(i in 1:N){
@@ -29,7 +29,7 @@ function(PKparameters,omegaIIV,omegaAlpha,sigma,doses,limitTox,timeSampling, N, 
             parameter <- rbind(parameter,ipar)
             for(j in doses){
                 concen <- pk.model(timeSampling, dose=j, ka = ipar[1], CL = ipar[2], V = ipar[3]) 
-                concPred <- concen*(1+rnorm(2*nPK, sd=sigma))   	# real concentrations + predictions of them
+                concPred <- concen*(1+rnorm(nPK, sd=sigma))   	# real concentrations + predictions of them
                 tab <- rbind(tab,c(i, concPred))     		
                 alfa <- exp(rnorm(1, sd=omegaAlpha))				
                 CL <- ipar[2]		   
@@ -50,7 +50,7 @@ function(PKparameters,omegaIIV,omegaAlpha,sigma,doses,limitTox,timeSampling, N, 
         
         concentration <- NULL
         for(k in 1:length(doses)){
-            conc <- pk.model(timeSampling, dose=doses[k], ka = ipar[1], CL = ipar[2], V = ipar[3])
+            conc <- pk.model(timeSampling, dose=doses[k], ka = PKparameters[1], CL = PKparameters[2], V = PKparameters[3])
             concentration <- cbind(concentration,conc)
         }
 

@@ -3,28 +3,28 @@
 \docType{class}
 \name{dose-class}
 \alias{dose-class}
-\title{An S4 class to present the next recommended dose level in an ongoing trial.}
+\title{An S4 class to perform parameter estimation at each step during a dose-finding trial.}
 \description{
-An S4 class to present the next recommended dose level in an ongoing trial.
+An S4 class to perform parameter estimation at each step during a dose-finding trial.
 }
 \section{Slots}{
 
 \describe{
 \item{\code{N}}{The total number of enrolled patients.}
 
-\item{\code{y}}{The toxicity outcome of each patient.}
+\item{\code{y}}{A binary vector of toxicity outcomes from previous patients; 1 indicates a toxicity, 0 otherwise.}
 
 \item{\code{AUCs}}{A vector with the computed AUC values of each patient.}
 
-\item{\code{doses}}{The doses levels of the drug.}
+\item{\code{doses}}{A vector with the doses panel.}
 
-\item{\code{x}}{A vector of dose levels assigned to patients in the trial.}
+\item{\code{x}}{A vector with the dose level assigned to the patients.}
 
-\item{\code{theta}}{The toxicity (probability) target.}
+\item{\code{theta}}{The toxicity threshold.}
 
-\item{\code{options}}{The Stan model's options.}
+\item{\code{options}}{a list of Stan model's options.}
 
-\item{\code{newDose}}{The next recommended dose level.}
+\item{\code{newDose}}{The next recommended dose (RD) level; equals to 0 if the trial has stopped, according to the stopping rules.}
 
 \item{\code{pstim}}{The estimated mean probabilities of toxicity.}
 
@@ -34,6 +34,6 @@ An S4 class to present the next recommended dose level in an ongoing trial.
 
 \item{\code{parameters}}{The Stan model's estimated parameters.}
 
-\item{\code{model}}{A character string to specify the working model used in the method.}
+\item{\code{model}}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 }}
 

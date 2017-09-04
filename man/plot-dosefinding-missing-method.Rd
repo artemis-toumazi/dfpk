@@ -3,23 +3,23 @@
 \docType{methods}
 \name{plot,dosefinding,missing-method}
 \alias{plot,dosefinding,missing-method}
-\title{The graphical representation of dose escalation for each patient in the trial.}
+\title{The graphical representation of dose-finding results.}
 \usage{
 \S4method{plot}{dosefinding,missing}(x, y = NA, TR = 1, ask = TRUE, ...)
 }
 \arguments{
 \item{x}{a "dosefinding" object.}
 
-\item{y}{the "y" argument is not used in the plot-method for "scen" object.}
+\item{y}{the "y" argument is not used in the plot-method for "dosefinding" object.}
 
-\item{TR}{The number of replicates clinical trials.}
+\item{TR}{The number of the selected trial that user wants to plot.}
 
 \item{ask}{Choose plot or not.}
 
 \item{\dots}{other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.}
 }
 \description{
-The graphical representation of dose escalation for each patient in the trial.
+A plot selection showing either the dose escalation allocation of the selected trial or the plot of the final posterior distributions of the probability of toxicity at each dose or the boxplot of the sampling distribution of the probability of toxicity at each dose in the end of the trial over the total number of trials.
 }
 \references{
 Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.

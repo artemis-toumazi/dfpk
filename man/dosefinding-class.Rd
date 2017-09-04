@@ -10,43 +10,43 @@ An S4 class to represent a dosefinding results.
 \section{Slots}{
 
 \describe{
-\item{\code{pid}}{Patient's ID provided in the study.}
+\item{\code{pid}}{The patient's ID provided in the study.}
 
-\item{\code{N}}{The total number of patients.}
+\item{\code{N}}{The total sample size per trial.}
 
-\item{\code{time}}{The time sampling.}
+\item{\code{time}}{The sampling time points.}
 
-\item{\code{doses}}{The dose levels of the drug.}
+\item{\code{doses}}{A vector with the doses panel.}
 
-\item{\code{conc}}{Concentration of the drug.}
+\item{\code{conc}}{The estimated concentration values for each patient at each dose.}
 
-\item{\code{p0}}{The skeleton of CRM.}
+\item{\code{p0}}{The skeleton of CRM for \code{\link{pkcrm}}; defaults to NULL.}
 
-\item{\code{L}}{A threshold set before starting the trial.}
+\item{\code{L}}{The AUC threshold to be set before starting the trial for \code{\link{pkcrm}}; defaults to NULL.}
 
-\item{\code{nchains}}{Number of chains for the stan model.}
+\item{\code{nchains}}{The number of chains for the Stan model.}
 
-\item{\code{niter}}{Number of iterations for the stan model.}
+\item{\code{niter}}{The number of iterations for the Stan model.}
 
-\item{\code{nadapt}}{Number of warmup iterations for the stan model.}
+\item{\code{nadapt}}{The number of warmup iterations for the Stan model.}
 
-\item{\code{newDose}}{The next maximum tolerated dose (MTD) if TR=1 else the selected percentage of MTD.}
+\item{\code{newDose}}{The next maximum tolerated dose (MTD) if TR=1 otherwise the percentage of MTD selection for each dose level after all trials starting from dose 0; equals to 0 if the trial has stopped before the end, according to the stopping rules.}
 
-\item{\code{MTD}}{The vector containing all the maximum tolerated dose for each TR.}
+\item{\code{MTD}}{A vector containing the next maximum tolerated doses (MTD) of each trial (TR); equals to 0 if the trial has stopped before the end, according to the stopping rules.}
 
-\item{\code{MtD}}{The next maximum tolerated dose (MTD).}
+\item{\code{MtD}}{The final next maximum tolerated (MTD) dose after all the trials.}
 
-\item{\code{theta}}{The toxicity (probability) target.}
+\item{\code{theta}}{The toxicity target.}
 
 \item{\code{doseLevels}}{A vector of dose levels assigned to patients in the trial.}
 
-\item{\code{toxicity}}{The toxicity outcome.}
+\item{\code{toxicity}}{The estimated toxicity outcome.}
 
 \item{\code{AUCs}}{A vector with the computed AUC values of each patient.}
 
-\item{\code{TR}}{The number of replicates clinical trials.}
+\item{\code{TR}}{The total number of trials to be simulated.}
 
-\item{\code{preal}}{The real probability of toxicity.}
+\item{\code{preal}}{The prior toxicity probabilities.}
 
 \item{\code{pstim}}{The estimated mean probabilities of toxicity.}
 
@@ -54,6 +54,6 @@ An S4 class to represent a dosefinding results.
 
 \item{\code{pstimQ3}}{The 3rd quartile of estimated probability of toxicity.}
 
-\item{\code{model}}{A character string to specify the working model used in the method.}
+\item{\code{model}}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}..}
 }}
 

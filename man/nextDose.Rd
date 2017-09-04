@@ -9,9 +9,9 @@ nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
   deltaAUC = NULL)
 }
 \arguments{
-\item{model}{A character string to specify the working model used in the method.}
+\item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 
-\item{y}{A binary vector of patient's toxicity outcomes; 1 indicates a toxicity, 0 otherwise.}
+\item{y}{A binary vector of the toxicity outcomes from previous patients; 1 indicates a toxicity, 0 otherwise.}
 
 \item{AUCs}{A vector with the computed AUC values of each patient for pktox, pkcrm, pklogit and pkpop; defaults to NULL.}
 
@@ -19,42 +19,42 @@ nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
 
 \item{x}{A vector with the dose level assigned to the patients.}
 
-\item{theta}{The toxicity target.}
+\item{theta}{The toxicity threshold.}
 
-\item{options}{List with the Stan model's options.}
+\item{options}{A list with the Stan model's options.}
 
 \item{prob}{The probability of toxicity for the corresponding stopping rule of the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 
 \item{betapriors}{A vector with the value for the prior distribution of the regression parameters in the model; defaults to NULL.}
 
-\item{thetaL}{A second threshold of AUC; must be defined only in the PKCRM model.}
+\item{thetaL}{A second threshold of AUC in the \code{\link{pkcrm}} model; defaults to theta in the PKCRM model and NULL for the models \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pktox}}, \code{\link{pkpop}} and \code{\link{pklogit}}.}
 
-\item{p0}{The skeleton of CRM for pkcrm; defaults to NULL. (must be defined only in the PKCRM model).}
+\item{p0}{The skeleton of CRM for \code{\link{pkcrm}}; defaults to NULL.}
 
-\item{L}{The AUC threshold to be set before starting the trial for pklogit, pkcrm and pktox; defaults to NULL. (must be defined only in the PKCRM model).}
+\item{L}{The AUC threshold to be set before starting the trial for \code{\link{pkcrm}}; defaults to NULL.}
 
-\item{deltaAUC}{The difference between computed individual AUC and the AUC of the population at the same dose level (defined as an average); argument for pkcov; defaults to NULL.}
+\item{deltaAUC}{A vector of the difference between computed individual AUC and the AUC of the population at the same dose level (defined as an average); argument for \code{\link{pkcov}}; defaults to NULL.}
 }
 \value{
 An object of class "dose" is returned, consisting of determination of the next recommended dose and estimations. Objects generated 
 by nextDose contain at least the following components:
 
 \item{N}{The total number of enrolled patients.}
-\item{y}{A binary vector of patient's toxicity outcomes; 1 indicates a toxicity, 0 otherwise.}
+\item{y}{A binary vector of toxicity outcomes from previous patients; 1 indicates a toxicity, 0 otherwise.}
 \item{AUCs}{A vector with the computed AUC values of each patient.}
 \item{doses}{A vector with the doses panel.}
 \item{x}{A vector with the dose level assigned to the patients.}
-\item{theta}{Tocixity target.}
+\item{theta}{The tocixity threshold.}
 \item{options}{List with the Stan model's options.}
-\item{newDose}{The next recommended dose level; equals to "NA" if the trial has stopped, according to the stopping rules.}
-\item{pstim}{The mean values of estimated probabilities of toxicity.}
-\item{pstimQ1}{The 1st quartile of estimated probabilities of toxicity.}
-\item{pstimQ3}{The 3rd quartile of estimated probabilities of toxicity.}
+\item{newDose}{The next recommended dose (RD) level; equals to 0 if the trial has stopped, according to the stopping rules.}
+\item{pstim}{The mean values of the estimated probabilities of toxicity.}
+\item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity.}
+\item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity.}
 \item{parameters}{The estimated model's parameters.}
-\item{model}{A character string of the selected working dose-finding model.}
+\item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 }
 \description{
-nextDose is used to determine the next or recommended dose level in a phase I clinical trial using Pharmacokinetics (PK).
+nextDose is used to perform parameter estimation at each step during a dose-finding trial. Determines the next or recommended dose level in a phase I clinical trial.
 }
 \examples{
   \dontrun{

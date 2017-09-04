@@ -2,29 +2,29 @@ setClassUnion("ClassNewDose", c("numeric", "logical", "NULL"))
 
 #' An S4 class to represent a dosefinding results.
 #'
-#' @slot pid Patient's ID provided in the study.
-#' @slot N  The total number of patients.
-#' @slot time The time sampling.
-#' @slot doses The dose levels of the drug.
-#' @slot conc Concentration of the drug.
-#' @slot p0  The skeleton of CRM. 
-#' @slot L  A threshold set before starting the trial.
-#' @slot nchains Number of chains for the stan model.
-#' @slot niter Number of iterations for the stan model.
-#' @slot nadapt  Number of warmup iterations for the stan model.
-#' @slot newDose  The next maximum tolerated dose (MTD) if TR=1 else the selected percentage of MTD.
-#' @slot MTD The vector containing all the maximum tolerated dose for each TR.
-#' @slot MtD The next maximum tolerated dose (MTD).
-#' @slot theta  The toxicity (probability) target.
+#' @slot pid The patient's ID provided in the study.
+#' @slot N  The total sample size per trial.
+#' @slot time The sampling time points.
+#' @slot doses A vector with the doses panel.
+#' @slot conc The estimated concentration values for each patient at each dose.
+#' @slot p0  The skeleton of CRM for \code{\link{pkcrm}}; defaults to NULL. 
+#' @slot L  The AUC threshold to be set before starting the trial for \code{\link{pkcrm}}; defaults to NULL.
+#' @slot nchains The number of chains for the Stan model.
+#' @slot niter The number of iterations for the Stan model.
+#' @slot nadapt  The number of warmup iterations for the Stan model.
+#' @slot newDose  The next maximum tolerated dose (MTD) if TR=1 otherwise the percentage of MTD selection for each dose level after all trials starting from dose 0; equals to 0 if the trial has stopped before the end, according to the stopping rules.
+#' @slot MTD A vector containing the next maximum tolerated doses (MTD) of each trial (TR); equals to 0 if the trial has stopped before the end, according to the stopping rules.
+#' @slot MtD The final next maximum tolerated (MTD) dose after all the trials.
+#' @slot theta  The toxicity target.
 #' @slot doseLevels A vector of dose levels assigned to patients in the trial.
-#' @slot toxicity The toxicity outcome.
+#' @slot toxicity The estimated toxicity outcome.
 #' @slot AUCs A vector with the computed AUC values of each patient.
-#' @slot TR The number of replicates clinical trials.
-#' @slot preal The real probability of toxicity.
+#' @slot TR The total number of trials to be simulated.
+#' @slot preal The prior toxicity probabilities.
 #' @slot pstim The estimated mean probabilities of toxicity.
 #' @slot pstimQ1 The 1st quartile of estimated probability of toxicity.
 #' @slot pstimQ3 The 3rd quartile of estimated probability of toxicity.
-#' @slot model A character string to specify the working model used in the method.
+#' @slot model A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}..
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
@@ -36,22 +36,22 @@ setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric"
 
 #' An S4 class to represent a simulated scenarios.
 #'
-#' @slot PKparameters The subject's PK parameters.
-#' @slot nPK The length of time sampling.
-#' @slot time The time sampling.
+#' @slot PKparameters Subject's pharmacokinetic's (PK) parameters from the population distributions defined by the population mean.
+#' @slot nPK The length of the time points.
+#' @slot time The sampling time points.
 #' @slot idtr The id number of the corresponding simulated dataset.
-#' @slot N  The total number of patients.
-#' @slot doses The doses levels of the drug. 
-#' @slot preal The real probability of toxicity.
-#' @slot limitTox  Threshold in the toxicity. 
-#' @slot omegaIIV  A standard deviation of clearance (CL) and volume (V).
-#' @slot omegaAlpha A standard deviation omegaAlpha.
-#' @slot conc The concentration of the drug (concentration without error).
-#' @slot concPred The predicted concentration of the drug (concentration with error). 
-#' @slot tox The toxicity outcomes.
-#' @slot tab The data summary of scenarios' outcomes.
-#' @slot parameters The PK parameter's estimations of each patient.
-#' @slot alphaAUC AUC with sensitivity parameter. 
+#' @slot N  The total sample size per trial.
+#' @slot doses A vector with the doses panel. 
+#' @slot preal The prior toxicity probabilities.
+#' @slot limitTox The toxicity threshold. 
+#' @slot omegaIIV  The inter-individual variability for the clearance and the volume of distribution.
+#' @slot omegaAlpha The patient's sensitivity parameter.
+#' @slot conc The concentration computed at the PK population values.
+#' @slot concPred The concentration values with proportional errors for each patient at each dose. 
+#' @slot tox The toxicity outcome.
+#' @slot tab A summary matrix containing the sampling time points at the first row followed by concPred, parameters and alphaAUC. It used by the simulation function nsim.
+#' @slot parameters The simulated PK parameters of each patient.
+#' @slot alphaAUC A vector with the computed AUC values of each patient. 
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
@@ -61,21 +61,21 @@ setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numer
         tox="matrix", tab="matrix", parameters = "matrix", alphaAUC="numeric"))
 
 
-#' An S4 class to present the next recommended dose level in an ongoing trial.
+#' An S4 class to perform parameter estimation at each step during a dose-finding trial.
 #'
 #' @slot N The total number of enrolled patients.
-#' @slot y The toxicity outcome of each patient.
+#' @slot y A binary vector of toxicity outcomes from previous patients; 1 indicates a toxicity, 0 otherwise.
 #' @slot AUCs A vector with the computed AUC values of each patient.
-#' @slot doses The doses levels of the drug.
-#' @slot x A vector of dose levels assigned to patients in the trial.
-#' @slot theta The toxicity (probability) target.
-#' @slot options The Stan model's options.
-#' @slot newDose The next recommended dose level.
+#' @slot doses A vector with the doses panel.
+#' @slot x A vector with the dose level assigned to the patients.
+#' @slot theta The toxicity threshold.
+#' @slot options a list of Stan model's options.
+#' @slot newDose The next recommended dose (RD) level; equals to 0 if the trial has stopped, according to the stopping rules.
 #' @slot pstim The estimated mean probabilities of toxicity.
 #' @slot pstimQ1 The 1st quartile of estimated probability of toxicity.
 #' @slot pstimQ3 The 3rd quartile of estimated probability of toxicity.
 #' @slot parameters The Stan model's estimated parameters.
-#' @slot model A character string to specify the working model used in the method.
+#' @slot model A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
@@ -194,14 +194,15 @@ setMethod(f = "show",
 ###########################################
 
 setGeneric("plot")
-#' The graphical representation of dose escalation for each patient in the trial. 
+#' The graphical representation of dose-finding results. 
 #' 
 #' @param x a "dosefinding" object.
-#' @param y the "y" argument is not used in the plot-method for "scen" object.
-#' @param TR The number of replicates clinical trials.
+#' @param y the "y" argument is not used in the plot-method for "dosefinding" object.
+#' @param TR The number of the selected trial that user wants to plot.
 #' @param ask Choose plot or not.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
+#' @description A plot selection showing either the dose escalation allocation of the selected trial or the plot of the final posterior distributions of the probability of toxicity at each dose or the boxplot of the sampling distribution of the probability of toxicity at each dose in the end of the trial over the total number of trials. 
 #' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
 #' 
 #' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
@@ -281,7 +282,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
 
 #' The graphical representation of the drug's concentration in the plasma at time t after the drug administration. 
 #'  
-#' @param x a "scen" object.
+#' @param x a "scen" object or a list of the selected trial from a "scen" object.
 #' @param y the "y" argument is not used in the plot-method for "scen" object.
 #' @param col the color argument to the \code{\link[=graphics]{plot.default}} function.
 #' @param xlab the label of x-axis.
@@ -301,9 +302,9 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
 #' @export
 setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, y=NA, col = rainbow(length(x@doses)), xlab="Time (hours)", 
           ylab="Concentration (mg/L)", main="Pharmacokinetics: Concentration vs Time", ...){
-    plot(x@time, x@conc[,1], type="l", col=col[1], xlab=xlab, ylab=ylab, main=main, ylim=c(0,max(x@conc)),...)
+    plot(x@time, x@conc[,1], type="l", col=col[1], xlab=xlab, ylab=ylab, main=main, ylim=c(0,max(x@conc)), ...)
     for(i in 2:length(x@doses)){
-        lines(x@time, x@conc[,i], col=col[i], lty=i,...)
+        lines(x@time, x@conc[,i], col=col[i], lty=i, ...)
     }
 }
 )
@@ -312,7 +313,7 @@ setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, 
 #' The graphical representation of dose escalation for each patient in the trial. 
 #'
 #' @param x a "dose" object.
-#' @param y the "y" argument is not used in the plot-method for "Dose" object.
+#' @param y the "y" argument is not used in the plot-method for "dose" object.
 #' @param ask Choose plot or not.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'

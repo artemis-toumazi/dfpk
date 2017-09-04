@@ -10,7 +10,7 @@
   main = "Pharmacokinetics: Concentration vs Time", ...)
 }
 \arguments{
-\item{x}{a "scen" object.}
+\item{x}{a "scen" object or a list of the selected trial from a "scen" object.}
 
 \item{y}{the "y" argument is not used in the plot-method for "scen" object.}
 

@@ -10,36 +10,36 @@ An S4 class to represent a simulated scenarios.
 \section{Slots}{
 
 \describe{
-\item{\code{PKparameters}}{The subject's PK parameters.}
+\item{\code{PKparameters}}{Subject's pharmacokinetic's (PK) parameters from the population distributions defined by the population mean.}
 
-\item{\code{nPK}}{The length of time sampling.}
+\item{\code{nPK}}{The length of the time points.}
 
-\item{\code{time}}{The time sampling.}
+\item{\code{time}}{The sampling time points.}
 
 \item{\code{idtr}}{The id number of the corresponding simulated dataset.}
 
-\item{\code{N}}{The total number of patients.}
+\item{\code{N}}{The total sample size per trial.}
 
-\item{\code{doses}}{The doses levels of the drug.}
+\item{\code{doses}}{A vector with the doses panel.}
 
-\item{\code{preal}}{The real probability of toxicity.}
+\item{\code{preal}}{The prior toxicity probabilities.}
 
-\item{\code{limitTox}}{Threshold in the toxicity.}
+\item{\code{limitTox}}{The toxicity threshold.}
 
-\item{\code{omegaIIV}}{A standard deviation of clearance (CL) and volume (V).}
+\item{\code{omegaIIV}}{The inter-individual variability for the clearance and the volume of distribution.}
 
-\item{\code{omegaAlpha}}{A standard deviation omegaAlpha.}
+\item{\code{omegaAlpha}}{The patient's sensitivity parameter.}
 
-\item{\code{conc}}{The concentration of the drug (concentration without error).}
+\item{\code{conc}}{The concentration computed at the PK population values.}
 
-\item{\code{concPred}}{The predicted concentration of the drug (concentration with error).}
+\item{\code{concPred}}{The concentration values with proportional errors for each patient at each dose.}
 
-\item{\code{tox}}{The toxicity outcomes.}
+\item{\code{tox}}{The toxicity outcome.}
 
-\item{\code{tab}}{The data summary of scenarios' outcomes.}
+\item{\code{tab}}{A summary matrix containing the sampling time points at the first row followed by concPred, parameters and alphaAUC. It used by the simulation function nsim.}
 
-\item{\code{parameters}}{The PK parameter's estimations of each patient.}
+\item{\code{parameters}}{The simulated PK parameters of each patient.}
 
-\item{\code{alphaAUC}}{AUC with sensitivity parameter.}
+\item{\code{alphaAUC}}{A vector with the computed AUC values of each patient.}
 }}
 
