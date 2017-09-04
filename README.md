@@ -1,5 +1,5 @@
  [![CRAN Version](https://www.r-pkg.org/badges/version/dfpk)](https://cran.r-project.org/package=dfpk)
- http://cranlogs.r-pkg.org/badges/grand-total/dfpk
+ [http://cranlogs.r-pkg.org/badges/grand-total/dfpk]
  
 # dfpk
 
