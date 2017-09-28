@@ -26,7 +26,7 @@ then, no dose are suggested and the trial is stopped.
 \usage{
 pkcov(y,auc,doses,x,theta, deltaAUC, prob = 0.9, options=list(nchains = 4,
       niter = 4000, nadapt = 0.8), betapriors = c(-14.76, 3.23), 
-      thetaL = NULL, p0 = NULL, L = NULL)
+      thetaL = NULL, p0 = NULL, L = NULL, CI =TRUE)
 }
 
 \arguments{
@@ -64,7 +64,10 @@ pkcov(y,auc,doses,x,theta, deltaAUC, prob = 0.9, options=list(nchains = 4,
     The AUC threshold to be set before starting the trial for pklogit, pkcrm and pktox; defaults to NULL (must be defined only in the PKCRM model).
 }
 \item{thetaL}{
-    A second threshold of AUC; must be defined only in the PKCRM model.
+    A second threshold of AUC; must be defined only in the PKCRM model. 
+}
+\item{CI}{
+    A logical constant indicating the estimated 95\% credible interval; defaults to TRUE.
 }
 }
 
@@ -73,7 +76,7 @@ A list is returned, consisting of determination of the next recommended dose and
 
 \item{newDose}{The next maximum tolerated dose (MTD); equals to "NA" if the trial has stopped before the end, according to the stopping rules.}
 \item{pstim}{The mean values of estimated probabilities of toxicity.}
-\item{p_sum}{The summary of the estimated probabilities of toxicity.}
+\item{p_sum}{The summary of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
 \item{parameters}{The estimated model's parameters.}
 }
 

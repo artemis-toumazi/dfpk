@@ -55,5 +55,7 @@ An S4 class to represent a dosefinding results.
 \item{\code{pstimQ3}}{The 3rd quartile of estimated probability of toxicity.}
 
 \item{\code{model}}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}..}
+
+\item{\code{seed}}{The seed of the random number generator that is used at the beginning of each trial.}
 }}
 

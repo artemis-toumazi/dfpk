@@ -6,13 +6,13 @@ Simulate a single or n prospective clinical trial(s) using the PK measure in the
 }
 
 \description{ 
-nsim is used to simulate a single or "n" prospective clinical trial(s) using the PK data and then link them to toxicity under a specified dose-toxicity configuration. The objective is to determine the maximum tolerated dose (MTD).
+nsim is used to simulate a single or "n" prospective clinical trial(s) using the PK data and then link them to toxicity under a specified dose-toxicity configuration. The objective is to determine the maximum tolerated dose (MTD). 
 }
 
 \usage{ 
 nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmethod = 2, 
      options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = NULL,
-     thetaL=NULL, p0 = 0, L = 0, seed = 190591)
+     thetaL=NULL, p0 = 0, L = 0, CI = FALSE, seed = 190591)
 }
 
 \arguments{
@@ -26,19 +26,19 @@ nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmet
         The cohort size in the trial.
     }
     \item{icon}{
-        A vector containing the index of real blood sampling.
+        A vector containing the index of real blood sampling. 
     }
     \item{theta}{
-        The toxicity threshold.
+        The toxicity threshold. 
     }
     \item{model}{
-        A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
+        A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}. 
     }
     \item{simulatedData}{
         A list for each trial containing the simulated datasets; a "scen" object. See for details \code{\link{sim.data}}.
     }
     \item{TR}{
-        The total number of trials to be simulated.
+        The total number of trials to be simulated. 
     }
     \item{prob}{
         The probability of toxicity for the corresponding stopping rule of the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
@@ -61,8 +61,11 @@ nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmet
     \item{L}{
         The AUC threshold to be set before starting the trial for \code{\link{pkcrm}}; defaults to NULL.
     }
+    \item{CI}{
+        A logical constant indicating the estimated 95\% credible interval; defaults to FALSE.
+    }
     \item{seed}{
-        Seed of the random number generator. Default value is set at 190591.  
+        The seed of the random number generator that is used at the beginning of each trial; defaults to 190591.
     }
 }
 
@@ -86,9 +89,10 @@ nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmet
     \item{TR}{The total number of trials to be simulated.}
     \item{preal}{The prior toxicity probabilities.}
     \item{pstim}{The mean values of the estimated probabilities of toxicity.}
-    \item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity.}
-    \item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity.}
+    \item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
+    \item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
     \item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
+    \item{seed}{The seed of the random number generator that is used at the beginning of each trial.}
 }
 
 \references{
@@ -123,7 +127,7 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
         cohort = 1
         simulatedData <- gen.scen  
         icon <- c(2:6, round(seq(9, 48, ((48-9)/4))))      
-        theta <- 0.2                             
+        theta <- 0.2                           
 
         ##############################################
         ############### Select a model ###############
@@ -137,7 +141,7 @@ Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using
         
         results_sim <- nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, 
                             AUCmethod = 1)
-        results_sim
+        results_sim 
     }
 }
 

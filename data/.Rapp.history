@@ -1,7 +1,0 @@
-load("/Users/Artemis/Dropbox/dfpk_5Juin2017/data/stan_f.rda")
-head(stan_f)
-logit_reg_pklogit
-stan_f$
-logit_reg_pklogit
-stan_f
-stan_f[4]

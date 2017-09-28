@@ -6,7 +6,7 @@
 \usage{
 nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
   betapriors = NULL, thetaL = NULL, p0 = NULL, L = NULL,
-  deltaAUC = NULL)
+  deltaAUC = NULL, CI = TRUE)
 }
 \arguments{
 \item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
@@ -34,6 +34,8 @@ nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
 \item{L}{The AUC threshold to be set before starting the trial for \code{\link{pkcrm}}; defaults to NULL.}
 
 \item{deltaAUC}{A vector of the difference between computed individual AUC and the AUC of the population at the same dose level (defined as an average); argument for \code{\link{pkcov}}; defaults to NULL.}
+
+\item{CI}{A logical constant indicating the estimated 95\% credible interval; defaults to TRUE.}
 }
 \value{
 An object of class "dose" is returned, consisting of determination of the next recommended dose and estimations. Objects generated 
@@ -48,8 +50,8 @@ by nextDose contain at least the following components:
 \item{options}{List with the Stan model's options.}
 \item{newDose}{The next recommended dose (RD) level; equals to 0 if the trial has stopped, according to the stopping rules.}
 \item{pstim}{The mean values of the estimated probabilities of toxicity.}
-\item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity.}
-\item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity.}
+\item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
+\item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
 \item{parameters}{The estimated model's parameters.}
 \item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 }

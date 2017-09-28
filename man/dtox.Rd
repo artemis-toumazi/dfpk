@@ -25,7 +25,7 @@ then, no dose are suggested and the trial is stopped.
 \usage{
 dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, 
      nadapt = 0.8), betapriors = c(6.71, 1.43), thetaL = NULL, 
-     auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL)
+     auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL, CI = TRUE)
 }
 
 \arguments{
@@ -33,7 +33,7 @@ dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000,
     A binary vector of patient's toxicity outcomes; TRUE indicates a toxicity, FALSE otherwise.
 }
 \item{doses}{
-    A vector with the doses panel. 
+    A vector with the doses panel.
 }
 \item{x}{
     A vector with the dose level assigned to the patients.
@@ -65,6 +65,9 @@ dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000,
 \item{thetaL}{
     A second threshold of AUC; must be defined only in the PKCRM model.
 }
+\item{CI}{
+    A logical constant indicating the estimated 95\% credible interval; defaults to TRUE.
+}
 }
 
 \value{
@@ -72,7 +75,7 @@ A list is returned, consisting of determination of the next recommended dose and
 
 \item{newDose}{The next maximum tolerated dose (MTD); equals to "NA" if the trial has stopped before the end, according to the stopping rules.}
 \item{pstim}{The mean values of estimated probabilities of toxicity.}
-\item{p_sum}{The summary of the estimated probabilities of toxicity.}
+\item{p_sum}{The summary of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
 \item{parameters}{The estimated model's parameters.}
 }
 

@@ -1,6 +1,4 @@
  [![CRAN Version](https://www.r-pkg.org/badges/version/dfpk)](https://cran.r-project.org/package=dfpk)
- ![](https://cranlogs.r-pkg.org/badges/grand-total/dfpk)
-
 # dfpk
 
 The **dfpk** R package provides an interface to fit Bayesian generalized (non-)linear mixed models using Stan, which is a C++ package for obtaining Bayesian inference using the No-U-turn sampler (see http://mc-stan.org/). 

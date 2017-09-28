@@ -3,7 +3,7 @@
 #' @export
 nsim <- 
 function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulatedData), prob = 0.9, AUCmethod = 2, options = list(nchains = 4, niter = 4000, 
-         nadapt = 0.8), betapriors = NULL, thetaL=NULL, p0 = 0, L = 0, seed = 190591){
+         nadapt = 0.8), betapriors = NULL, thetaL=NULL, p0 = 0, L = 0, CI = FALSE, seed = 190591){
 
     if(TR > length(simulatedData)) stop("Subscript out of bounds. TR must be less or equal to the length of simulatedData")
         
@@ -17,6 +17,10 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
         pstim1 = list()
         pstim3 = list()
         pstim_mean = list()
+        seed_trial <- matrix(NA, nrow = 1, ncol = TR + 1)
+        rownames(seed_trial) <- "Seed"
+        colnames(seed_trial) <- c("Initial", paste("Trial ", 1:TR, sep = ""))
+        seed_trial[1, 1] <- seed
         sel = rep(0,length(doses)+1)
 
         if (model == "pktox" & is.null(betapriors)){
@@ -85,8 +89,13 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
                         nd[x[k]] <- nd[x[k]] + 1 
                     }
                     pstim_auctox = cbind(pstim_auctox, rep(0,length(doses)))
-                    pstim_Q1 = cbind(pstim_Q1, rep(0,length(doses)))
-                    pstim_Q3 = cbind(pstim_Q3, rep(0,length(doses)))
+                    if(CI == TRUE){
+                        pstim_Q1 = cbind(pstim_Q1, rep(0,length(doses)))
+                        pstim_Q3 = cbind(pstim_Q3, rep(0,length(doses)))
+                    }else{
+                        pstim_Q1 = NULL
+                        pstim_Q3 = NULL
+                    }
                     
                     for(s in which(nd!=0)){
                         AUCpop[s] = mean(AUCs[which(x==s)])
@@ -97,7 +106,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
                 } else {
                     
                     results <- model1(y=y, auc = AUCs, doses = doses, x=x, theta=theta, prob = prob, betapriors = betapriors, 
-                                     thetaL=thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)
+                                     thetaL=thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC, CI = CI)
                     
                     if (is.na(results$newDose) == "TRUE") break
 
@@ -140,7 +149,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
                 pstim_mean[[trial]] = pstim_auctox
             }else{
                 MtD = model1(y = y, auc = AUCs, doses = doses, x = x, theta = theta, prob = prob, betapriors = betapriors, 
-                            thetaL = thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)$newDose
+                            thetaL = thetaL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC, CI = CI)$newDose
                 sel[MtD+1] <- sel[MtD+1] + 1
                 MTD = c(MTD, MtD)
                 doseLevels = rbind(doseLevels, x)
@@ -155,6 +164,7 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
                 niter = options$niter
                 nadapt = options$nadapt
                 pid = c(1:N)
+                seed_trial[1, tr+1] = seed+tr
         }
 
         if(TR == 1){
@@ -166,6 +176,6 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
         new("dosefinding", pid = pid, N = N, time = time1, doses = doses, conc = conci, p0 = p0,
              L = L,  nchains = options$nchains, niter = options$niter, nadapt = options$nadapt, newDose = newDose, MTD = MTD, MtD=MtD,
              theta = theta, doseLevels = doseLevels, toxicity = toxicity, AUCs = AUC_s, TR = TR, preal = preal, 
-             pstim  = pstim_mean, pstimQ1 = pstim1, pstimQ3 = pstim3, model = model)
+             pstim  = pstim_mean, pstimQ1 = pstim1, pstimQ3 = pstim3, model = model, seed = seed_trial)
 
 }

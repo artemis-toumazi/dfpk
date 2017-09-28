@@ -5,14 +5,16 @@
 \alias{plot,dose,missing-method}
 \title{The graphical representation of dose escalation for each patient in the trial.}
 \usage{
-\S4method{plot}{dose,missing}(x, y = NA, ask = TRUE, ...)
+\S4method{plot}{dose,missing}(x, y = NA, ask = TRUE, CI = TRUE, ...)
 }
 \arguments{
 \item{x}{a "dose" object.}
 
 \item{y}{the "y" argument is not used in the plot-method for "dose" object.}
 
-\item{ask}{Choose plot or not.}
+\item{ask}{Choose plot or not; defaults to TRUE.}
+
+\item{CI}{Indicate if the "dose" object includes the 95\% credible interval for the posterior dose response plot; defaults to TRUE.}
 
 \item{\dots}{other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.}
 }

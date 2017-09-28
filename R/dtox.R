@@ -6,7 +6,8 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 dtox <-
-function(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = c(6.71, 1.43), thetaL=NULL, auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL){
+function(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, nadapt = 0.8), 
+         betapriors = c(6.71, 1.43), thetaL=NULL, auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
             sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
@@ -32,11 +33,15 @@ function(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000,
         Beta1 <- sampl1$bet1[,2]
         pstim_sum <- matrix(0, ncol = options$nchains*options$niter/2, nrow = length(doses))
         p_sum <- NULL 
-        for(o in 1:length(doses)){
-            for(i in 1:ncol(pstim_sum)){
-                pstim_sum[o,i] <- pnorm(Beta0[i] + Beta1[i]*log(doses[o])) 
+        if(CI == "TRUE"){
+            for(o in 1:length(doses)){
+                for(i in 1:ncol(pstim_sum)){
+                    pstim_sum[o,i] <- pnorm(Beta0[i] + Beta1[i]*log(doses[o])) 
+                }
+                p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
             }
-            p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
+        }else{
+            p_sum <- NULL
         }
         
         

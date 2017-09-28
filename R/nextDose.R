@@ -13,7 +13,8 @@
 #' @param p0 The skeleton of CRM for \code{\link{pkcrm}}; defaults to NULL.
 #' @param L The AUC threshold to be set before starting the trial for \code{\link{pkcrm}}; defaults to NULL.
 #' @param deltaAUC A vector of the difference between computed individual AUC and the AUC of the population at the same dose level (defined as an average); argument for \code{\link{pkcov}}; defaults to NULL.
-#' 
+#' @param CI A logical constant indicating the estimated 95\% credible interval; defaults to TRUE. 
+#'
 #' @description
 #' nextDose is used to perform parameter estimation at each step during a dose-finding trial. Determines the next or recommended dose level in a phase I clinical trial.
 #'
@@ -29,8 +30,8 @@
 #' \item{options}{List with the Stan model's options.}
 #' \item{newDose}{The next recommended dose (RD) level; equals to 0 if the trial has stopped, according to the stopping rules.}
 #' \item{pstim}{The mean values of the estimated probabilities of toxicity.}
-#' \item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity.}
-#' \item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity.}
+#' \item{pstimQ1}{The 1st quartile of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
+#' \item{pstimQ3}{The 3rd quartile of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
 #' \item{parameters}{The estimated model's parameters.}
 #' \item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 #'
@@ -59,7 +60,7 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 nextDose <- function(model, y, AUCs, doses, x, theta, options, prob = 0.9, betapriors = NULL, 
-					 thetaL=NULL, p0 = NULL, L = NULL, deltaAUC = NULL){
+					 thetaL=NULL, p0 = NULL, L = NULL, deltaAUC = NULL, CI = TRUE){
 	model1 = NULL
 	eval(parse(text = paste("model1 =", model, sep="")))
 	N <- length(x)
@@ -69,15 +70,21 @@ nextDose <- function(model, y, AUCs, doses, x, theta, options, prob = 0.9, betap
 	}else if (model == "dtox" & is.null(betapriors)){betapriors = c(6.71, 1.43)
 	}else if(model == "pkcov" & is.null(betapriors)){betapriors = c(-14.76, 3.23)
 	}else if (model == "pklogit" & is.null(betapriors)){betapriors = c(10, 10000, 20, 10)}
-	m <- model1(y, AUCs, d = doses, x, theta, prob = prob, betapriors = betapriors, thetaL=NULL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC)
+	m <- model1(y, AUCs, d = doses, x, theta, prob = prob, betapriors = betapriors, thetaL=NULL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC, CI = CI)
 	MTD <- m$newDose
 	if(is.na(MTD) == TRUE){
-		MTD =0
+		MTD = 0
 	}
 
 	pstim <- m$pstim
-	pstim_Q1 <- m$p_sum[,2]
-    pstim_Q3 <- m$p_sum[,5]
+	if(CI == TRUE && length(m$p_sum) != 0){
+		pstim_Q1 <- m$p_sum[,2]
+    	pstim_Q3 <- m$p_sum[,5]
+	}else{
+		pstim_Q1 <- NULL
+    	pstim_Q3 <- NULL
+	}
+
 	parameters <- m$parameters
 	new("dose", N = N, y = y, AUCs = AUCs, doses = doses, x = x, theta = theta, options = options, 
 		newDose = MTD, pstim = pstim, pstimQ1 = pstim_Q1, pstimQ3 = pstim_Q3, parameters = parameters, 

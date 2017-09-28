@@ -7,7 +7,8 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 pkcrm <-
-function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = c(10, 10000), thetaL=NULL, deltaAUC = NULL){
+function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), 
+         betapriors = c(10, 10000), thetaL=NULL, deltaAUC = NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
             sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
@@ -42,12 +43,16 @@ function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4,
         
         pstim_sum <- matrix(0, ncol = options$nchains*options$niter/2, nrow = length(doses))
         p_sum <- NULL
-        for(o in 1:length(doses)){
-            m <- b1 + b2*log(doses[o])
-            for(i in 1:ncol(pstim_sum)){
-                pstim_sum[o,i] <- round(1-pnorm((L-m[i])/sqrt(n[i])), options$nchains+1)
+        if(CI == "TRUE"){
+            for(o in 1:length(doses)){
+                m <- b1 + b2*log(doses[o])
+                for(i in 1:ncol(pstim_sum)){
+                    pstim_sum[o,i] <- round(1-pnorm((L-m[i])/sqrt(n[i])), options$nchains+1)
+                }
+                p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
             }
-            p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
+        }else{
+            p_sum <- NULL
         }
         
         pstop <-  checking1(p_new, target=theta, error=0)

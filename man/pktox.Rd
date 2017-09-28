@@ -29,7 +29,7 @@ then, no dose are suggested and the trial is stopped.
 \usage{
 pktox(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4000, 
       nadapt = 0.8), betapriors = c(10, 10000, 20, 10), thetaL = NULL, 
-      p0=NULL, L=NULL, deltaAUC=NULL)
+      p0=NULL, L=NULL, deltaAUC=NULL, CI = TRUE)
 }
 
 
@@ -69,7 +69,10 @@ pktox(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4
 }
 \item{thetaL}{
     A second threshold of AUC; must be defined only in the PKCRM model.
-}         
+}   
+\item{CI}{
+    A logical constant indicating the estimated 95\% credible interval; defaults to TRUE.
+}      
 }
 
 \value{
@@ -77,7 +80,7 @@ A list is returned, consisting of determination of the next recommended dose and
 
 \item{newDose}{The next maximum tolerated dose (MTD); equals to "NA" if the trial has stopped before the end, according to the stopping rules.}
 \item{pstim}{The mean values of estimated probabilities of toxicity.}
-\item{p_sum}{The summary of the estimated probabilities of toxicity.}
+\item{p_sum}{The summary of the estimated probabilities of toxicity if CI = TRUE, otherwise is NULL.}
 \item{parameters}{The estimated model's parameters.}
 }
 

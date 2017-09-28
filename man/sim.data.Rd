@@ -43,7 +43,7 @@ The total sample size per trial.
 The total number of simulated datasets.  
 }
   \item{seed}{
-Seed of the random number generator. Default value is set at 190591.  
+The seed of the random number generator that is used at the beginning of each trial; defaults to 190591.   
 }
 }
 

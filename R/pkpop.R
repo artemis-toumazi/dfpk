@@ -6,8 +6,8 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 pkpop <-
-function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = c(10, 10000, 10, 5), thetaL=NULL, p0 = NULL, L = NULL, 
-             deltaAUC = NULL){
+function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), 
+         betapriors = c(10, 10000, 10, 5), thetaL=NULL, p0 = NULL, L = NULL, deltaAUC = NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
             sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
@@ -54,12 +54,16 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         pstim_sum <- matrix(0, ncol = options$nchains*options$niter/2, nrow = length(doses))
         p_sum <- NULL
         m <- NULL
-        for(o in 1:length(doses)){
-            m <- sampl1$b[,1] + sampl1$b[,2]*log(doses[o])
-            for(i in 1:ncol(pstim_sum)){
-                pstim_sum[o,i] <- invlogit(-Beta1[i] - Beta2[i]*m[i])
+        if(CI == "TRUE"){
+            for(o in 1:length(doses)){
+                m <- sampl1$b[,1] + sampl1$b[,2]*log(doses[o])
+                for(i in 1:ncol(pstim_sum)){
+                    pstim_sum[o,i] <- invlogit(-Beta1[i] - Beta2[i]*m[i])
+                }
+                p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
             }
-            p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
+        }else{
+            p_sum <- NULL
         }
         
         pstop <-  checking1(pstim, target=theta, error=0)

@@ -6,7 +6,8 @@
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 pktox <-
-function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), betapriors = c(10, 10000, 20, 10), thetaL=NULL, p0=NULL, L=NULL, deltaAUC=NULL){
+function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter = 4000, nadapt = 0.8), 
+         betapriors = c(10, 10000, 20, 10), thetaL=NULL, p0=NULL, L=NULL, deltaAUC=NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
             sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
@@ -52,14 +53,18 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
             parmt = c(a1[1,options$nchains+1] + a1[2,options$nchains+1]*log(doses[o]), a1[3,options$nchains+1])
             pstim <- c(pstim, integrate(f,-Inf, Inf, lambda=a2[3:4,options$nchains+1], parmt=parmt)$value)
         }
-        for(o in 1:length(doses)){
-            parmt1 = sampl1$b[,1] + sampl1$b[,2]*log(doses[o])
-            parmt2 = sampl1$sigma
-            for(i in 1:ncol(pstim_sum)){
-                pstim_sum[o,i] <- integrate(f2,-Inf, Inf, lambda1 = sampl2$bet1[i,1], lambda2 = sampl2$bet1[i,2], 
-                                            parmt1 = parmt1[i], parmt2 = parmt2[i])$value
+        if(CI == "TRUE"){
+            for(o in 1:length(doses)){
+                parmt1 = sampl1$b[,1] + sampl1$b[,2]*log(doses[o])
+                parmt2 = sampl1$sigma
+                for(i in 1:ncol(pstim_sum)){
+                    pstim_sum[o,i] <- integrate(f2,-Inf, Inf, lambda1 = sampl2$bet1[i,1], lambda2 = sampl2$bet1[i,2], 
+                                                parmt1 = parmt1[i], parmt2 = parmt2[i])$value
+                }
+                p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
             }
-            p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
+        }else{
+            p_sum <- NULL
         }
         
         pstop <-  checking1(pstim, target=theta, error=0)

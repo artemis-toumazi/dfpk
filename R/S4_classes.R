@@ -25,13 +25,14 @@ setClassUnion("ClassNewDose", c("numeric", "logical", "NULL"))
 #' @slot pstimQ1 The 1st quartile of estimated probability of toxicity.
 #' @slot pstimQ3 The 3rd quartile of estimated probability of toxicity.
 #' @slot model A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}..
+#' @slot seed The seed of the random number generator that is used at the beginning of each trial.
 #' @import methods
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 setClass("dosefinding", slots = list(pid="numeric", N ="numeric", time="numeric", doses = "numeric", conc="numeric", 
         p0 = "numeric", L = "numeric",  nchains = "numeric", niter = "numeric", nadapt = "numeric", newDose = "ClassNewDose", 
         MTD = "ClassNewDose", MtD = "numeric", theta = "numeric", doseLevels="matrix", toxicity= "matrix", AUCs="matrix", TR="numeric", 
-        preal = "numeric", pstim = "list", pstimQ1 = "list", pstimQ3 = "list", model = "character"))
+        preal = "numeric", pstim = "list", pstimQ1 = "list", pstimQ3 = "list", model = "character", seed= "matrix"))
 
 
 #' An S4 class to represent a simulated scenarios.
@@ -80,16 +81,16 @@ setClass("scen", slots = list(PKparameters="numeric", nPK="numeric", time="numer
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
 setClass("dose", slots = list(N = "numeric", y = "numeric", AUCs = "numeric", doses ="numeric", x = "numeric", 
-        theta = "numeric", options = "list", newDose="ClassNewDose", pstim="numeric", pstimQ1="numeric", pstimQ3="numeric", 
+        theta = "numeric", options = "list", newDose="ClassNewDose", pstim="numeric", pstimQ1="ClassNewDose", pstimQ3="ClassNewDose", 
         parameters="numeric", model = "character"))
 
 
 setGeneric("show")
 #' @export 
-setMethod(f = "show", signature ="dosefinding", definition = function(object)
+setMethod(f = "show", signature = "dosefinding", definition = function(object)
     {
         cat("Today: ", date(), "\n") 
-        cat("\n","A. Data Summary (", object@model, "model)", "\n")
+        cat("\n","A. Data Summary (", object@model,"model)", "\n")
         cat("Number of simulations:", object@TR, "\n")
         cat("Total number of patients in the trial:", object@N, "\n")
         cat("The time sampling:", round(object@time, digits = 3), "\n")
@@ -104,7 +105,12 @@ setMethod(f = "show", signature ="dosefinding", definition = function(object)
         cat("The Stan model runs with", object@nchains, "MCMC chains ")
         cat("which each chain has", object@niter, "iterations ")
         cat("and", object@nadapt, "warmup iterations \n")
-
+        #cat("The seed of the random number generator that is used at the beginning of each trial is given below: \n")
+        #s <- matrix(NA, nrow = 1, ncol = object@TR + 1)
+        #colnames(s) <- c("Initial", paste("Trial ", 1:object@TR, sep = ""))
+        #rownames(s) <- "Seed"
+        #s[1, ] <- c(object@seed[1]-1, object@seed)
+        #print(s)
         if(object@TR == "1"){
             cat("\n","C. Dose-Finding Results: \n")
             cat("PID", "\t", "Level", "\t", "Toxicity", "\t", "AUCs", "\n")
@@ -120,17 +126,24 @@ setMethod(f = "show", signature ="dosefinding", definition = function(object)
             t <- matrix(NA, nrow=4, ncol=length(object@doses)+1)
             rownames(t) <- c("Dose", "Truth Probabilities", "Dose-Allocation (%)", "Selected % MTD")
             colnames(t) <- rep("", length(object@doses)+1)
-            t[1, ] <- seq(0, 6)
-            t[2, ] <- c(0, round(object@preal, digits=3))
+            stop <- as.character("STOP")
+            dd <- paste("", 1:length(object@doses), sep = "")
+            t[1, ] <- c(stop, dd)
+            t[2, ] <- c("NA", round(object@preal, digits=3))
             for(i in 1:length(object@doses)){
               n_levels = length(which(doselevels == i))
               t[3, i+1] <- round(n_levels/length(doselevels), digits=2)
             }
             zeroDose <- length(which(doselevels == "NA"))
-            t[3,1] <- zeroDose / length(doselevels)
+            if(zeroDose == "0"){
+              t[3,1] <- "NA"
+            }else{
+              t[3,1] <- zeroDose / length(doselevels)
+            }
             t[4, ] <- round(object@newDose, digits=2)
-            print(t)
+            print(t, quote = FALSE)
             cat("Recommendation is based on a target toxicity probability of:",object@theta, "\n")
+            #cat("Seed of each trial:",object@seed, "\n")
         }
     }
 )
@@ -198,8 +211,9 @@ setGeneric("plot")
 #' 
 #' @param x a "dosefinding" object.
 #' @param y the "y" argument is not used in the plot-method for "dosefinding" object.
-#' @param TR The number of the selected trial that user wants to plot.
-#' @param ask Choose plot or not.
+#' @param TR The number of the selected trial that user wants to plot; defaults to 1.
+#' @param ask Choose plot or not; defaults to TRUE.
+#' @param CI Indicate if the "dosefinding" object includes the 95\% credible interval for the posterior dose response plot; defaults to TRUE.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
 #' @description A plot selection showing either the dose escalation allocation of the selected trial or the plot of the final posterior distributions of the probability of toxicity at each dose or the boxplot of the sampling distribution of the probability of toxicity at each dose in the end of the trial over the total number of trials. 
@@ -214,8 +228,13 @@ setGeneric("plot")
 #' @useDynLib dfpk, .registration = TRUE
 #' @importFrom utils menu
 #' @export
-setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = function(x, y=NA, TR=1, ask=TRUE, ...){
-    choices <- c("1: Plot trial summary", "2: Plot posterior dose response with 95% CI", "3: Boxplot of sampling dose response\n")
+setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = function(x, y=NA, TR=1, ask=TRUE, CI = TRUE,...){
+    if(CI == "TRUE" && length(x@pstimQ1) != 0){
+      choices <- c("1: Plot trial summary", "2: Boxplot of sampling dose response", "3: Plot posterior dose response with 95% CI\n")
+    }else{
+      choices <- c("1: Plot trial summary", "2: Boxplot of sampling dose response\n")
+    }
+
     if (ask == "TRUE") {
         cat("Make a plot selection (or 0 to exit)\n\n")
         for (i in 1:length(choices)) {
@@ -223,7 +242,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         }
         pick <- readline("Selection: ")
     } else {
-        pick <- 1
+        pick <- 2
     }
     num_choices <- c(0:length(choices))
     while(!(pick %in% num_choices)) {
@@ -243,7 +262,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         points((1:length(x@toxicity[TR,]))[-nontox],x@doseLevels[TR,-nontox], pch="X")
         mtext("Each point represents a patient", line=2)
         mtext("A circle indicates no toxicity, a cross toxicity", line=0.5)
-    } else if (pick == 2) {
+    } else if (pick == 3) {
         par(las=1)
         n <- x@N
         ndoses <- length(x@doses)
@@ -252,6 +271,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         #    PropTox[i,] <-  rbind(summary(x@pstim_post[i,]))
         # }
         if (x@MtD == 0) stop("Unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
+        if (length(x@pstimQ1) == 0 && length(x@pstimQ3) == 0) stop("Error in plot.window(...) : need finite 'CI' values. \n In addition: Warning messages: \n The nsim and plot function must use the same logical value for CI. \n \n", call. = FALSE)
         plot(1:ndoses, x@pstim[[TR]][1:ndoses,n],type="l",xlab="Dose level",ylab="Probability of toxicity", ylim=c(0,max(x@pstim[[TR]][1:ndoses,n]) + 0.15))
         points(1:ndoses,x@pstim[[TR]][1:ndoses,n], pch="X")
         lines(1:ndoses,x@preal, lty=2)
@@ -263,7 +283,7 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
         # lines(1:ndoses, PropTox[,5], lwd=2, lty=3, col = "orange") 
         mtext("Prior (dashed) and updated (solid) dose-toxicity curves", line=2)
         mtext("95% CI (dotted) of the updated dose-toxicity curve", line=0.5)
-    } else {
+    } else if (pick == 2){
         par(las=1)
         ndoses <- length(x@doses)
         if (x@MtD == 0) stop("Unable to plot! The trial stopped based on the stopping rules \n \n", call. = FALSE)
@@ -314,7 +334,8 @@ setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, 
 #'
 #' @param x a "dose" object.
 #' @param y the "y" argument is not used in the plot-method for "dose" object.
-#' @param ask Choose plot or not.
+#' @param ask Choose plot or not; defaults to TRUE.
+#' @param CI Indicate if the "dose" object includes the 95\% credible interval for the posterior dose response plot; defaults to TRUE.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
 #' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
@@ -327,8 +348,12 @@ setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, 
 #' @importFrom grDevices  rainbow
 #' @useDynLib dfpk, .registration = TRUE
 #' @export
-setMethod(f = "plot", signature =c("dose", "missing"), definition = function(x, y=NA, ask=TRUE, ...){
-    choices <- c("1: Plot trial summary", "2: Plot posterior dose response with 95% CI\n")
+setMethod(f = "plot", signature =c("dose", "missing"), definition = function(x, y=NA, ask=TRUE, CI = TRUE, ...){
+    if(CI == "TRUE" && length(x@pstimQ1) != 0){
+      choices <- c("1: Plot trial summary", "2: Plot posterior dose response with 95% CI\n")
+    }else{
+      choices <- c("1: Plot trial summary\n")
+    }
     if (ask == "TRUE") {
         cat("Make a plot selection (or 0 to exit)\n\n")
         for (i in 1:length(choices)) {
