@@ -10,21 +10,19 @@ The DTOX model enables us to estimate posterior probability of toxicity \eqn{p_T
 \deqn{p_T(d_k,\boldsymbol{\beta}) = \Phi(-\beta_0 + \beta_1 log(d_k))}
 
 where \eqn{\beta_q \sim U(l_q, u_q)} \eqn{\forall} \eqn{q = 0,1} and
-\deqn{l_0 = max(0,beta0mean - 10)}
-\deqn{u_0 = beta0mean + 10}
-\deqn{l_1 = max(0,beta1mean - 5)}
-\deqn{u_1 = beta1mean + 5}
-where default choices are beta0mean = 6.71 and beta1mean = 1.43.
+\deqn{beta0mean = c(l_0, u_0),}
+\deqn{beta1mean = c(l_1, u_1)}
+where default choices are beta0mean = c(0, 16.71) and beta1mean = c(0, 6.43). So the default choices for model's priors are given by \deqn{betapriors = c(l_0 = 0, u_0 = 16.71, l_1 = 0, u_1 = 6.43)}
 
 Finally, the DTOX model has the following stopping rule in toxicity:
 if
 \deqn{P(p_T(dose) > theta) > prob}
-then, no dose are suggested and the trial is stopped. 
+then, no dose is suggested and the trial is stopped. 
 }
 
 \usage{
 dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, 
-     nadapt = 0.8), betapriors = c(6.71, 1.43), thetaL = NULL, 
+     nadapt = 0.8), betapriors = c(0, 16.71, 0, 6.43), thetaL = NULL, 
      auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL, CI = TRUE)
 }
 
@@ -42,10 +40,10 @@ dtox(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000,
     The toxicity target.
 }
 \item{prob}{
-    The probability for the stopping rule.
+    The threshold of the posterior probability of toxicity for the stopping rule; defaults to 0.9.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to beta0mean = 6.71 and beta1mean = 1.43.
+    A vector with the value for the prior distribution of the regression parameters in the model; defaults to betapriors = c(beta0mean, beta1mean), where beta0mean = c(0, 16.71) and beta1mean = c(0, 6.43).
 }
 \item{options}{
     A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).

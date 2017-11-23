@@ -13,10 +13,10 @@ and the Continual Reassessment Method's (CRM) model:
 \deqn{p_T(d_k, \beta) = d^\beta_k(CRM)}
 
 The default choices of the priors are:
-\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0)}
-\deqn{\nu \sim Beta(1,1)}
+\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0),}
+\deqn{\nu \sim Beta(1,1),}
 \deqn{m = (-log(CL_{pop}), 1)} where \eqn{Cl_{pop}} is the population clearance.
-Default choices are \eqn{Cl_{pop} = 10} and beta0 = 10000.
+where default choices are \eqn{Cl_{pop} = 10} and beta0 = 10000. Therefore, the default choices for model's priors are given by \deqn{betapriors = c(Cl_{pop} = 10, beta0 = 10000)}
 
 For the CRM model:
 
@@ -26,7 +26,7 @@ Skeleton CRM = (0.01, 0.05, 0.1, 0.2, 0.35, 0.45) and
 Finally, the PKCRM model has the following stopping rule in toxicity:
 if
 \deqn{P(p_T(dose) > theta) > prob}
-then, no dose are suggested and the trial is stopped. 
+then, no dose is suggested and the trial is stopped. 
 }
 
 \usage{
@@ -49,10 +49,10 @@ pkcrm(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4,
     The toxicity target.
 }
 \item{prob}{
-    The probability for the stopping rule.
+    The threshold of the posterior probability of toxicity for the stopping rule; defaults to 0.9.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to \eqn{Cl_{pop}} = 10 and beta0 = 10000.
+    A vector with the value for the prior distribution of the regression parameters in the model; defaults to betapriors = c(\eqn{Cl_{pop}}, beta0), where \eqn{Cl_{pop}} = 10 and beta0 = 10000.
 }
 \item{options}{
     A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).

@@ -11,12 +11,12 @@ function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4,
          betapriors = c(10, 10000), thetaL=NULL, deltaAUC = NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
-            sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
+            sum(x>(target+error))/length(x)              
         }
         
         num <- length(x)    		     # how many patients
         dose1 <- cbind(rep(1,num), log(doses[x]))
-        mu1 <- seq(-log10(betapriors[1])+1, 1-1)
+        mu1 <- -log(betapriors[1])
         
         # For STAN
         data_s <- list(N=num, auc=log(auc), dose=dose1, mu = mu1, beta0=betapriors[2])
@@ -43,8 +43,25 @@ function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4,
         
         pstim_sum <- matrix(0, ncol = options$nchains*options$niter/2, nrow = length(doses))
         p_sum <- NULL
+        
+        m <- b1 + b2*log(doses[1])
+        for(i in 1:ncol(pstim_sum)){
+            pstim_sum[1,i] <- round(1-pnorm((L-m[i])/sqrt(n[i])), options$nchains+1)
+        }
+
+        #######################
+        #### Stopping Rule ####
+        #######################
+
+        pstop <-  checking1(pstim_sum[1,], target=theta, error=0)
+        stoptox <- (pstop >= prob)
+        stoptrial <- stoptox
+
+
+
         if(CI == "TRUE"){
-            for(o in 1:length(doses)){
+            p_sum <- summary(pstim_sum[1,])
+            for(o in 2:length(doses)){
                 m <- b1 + b2*log(doses[o])
                 for(i in 1:ncol(pstim_sum)){
                     pstim_sum[o,i] <- round(1-pnorm((L-m[i])/sqrt(n[i])), options$nchains+1)
@@ -55,16 +72,13 @@ function(y, auc, doses, x, theta, p0, L, prob = 0.9, options = list(nchains = 4,
             p_sum <- NULL
         }
         
-        pstop <-  checking1(p_new, target=theta, error=0)
-        stoptox <- (pstop >= prob)
-        stoptrial <- stoptox
         
         # check if we will stop the trial or not
         
         if (stoptrial){
             newDose = NA 
             message("The trial stopped based on the stopping rule \n \n")
-        }else{                                          # if we not stop
+        }else{             # if we not stop
             if(is.null(thetaL) == FALSE){
                 result_safety <- order(abs(p_new - thetaL))[1]
                 newDose = min(results_crm, result_safety)

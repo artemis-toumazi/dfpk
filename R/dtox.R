@@ -7,34 +7,50 @@
 #' @export
 dtox <-
 function(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000, nadapt = 0.8), 
-         betapriors = c(6.71, 1.43), thetaL=NULL, auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL, CI = TRUE){
+         betapriors = c(0, 16.71, 0, 6.43), thetaL=NULL, auc = NULL, deltaAUC = NULL, p0 = NULL, L = NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
-            sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
+            sum(x>(target+error))/length(x)              
         }
         
         num <- length(x)  	# how many patients
-        dose1 <- cbind(rep(1,num), log(doses[x]))
+        dose1 <- log(doses[x])
         # For STAN model
         
-        data_s <- list(N=num, y=y, dose=dose1, beta0mean=betapriors[1], beta1mean=betapriors[2])
+        data_s <- list(N=num, y=y, dose=dose1, beta0mean=c(betapriors[1], betapriors[2]), beta1mean=c(betapriors[3], betapriors[4]))
         sm_lrDtox <- stanmodels$cdf_reg_dtox
         reg1 <- sampling(sm_lrDtox, data=data_s, iter=options$niter, chains=options$nchains, control = list(adapt_delta = options$nadapt))
         a1 = get_posterior_mean(reg1)
         sampl1 <- extract(reg1)
         
-        beta <- a1[3:4, options$nchains + 1]
+        beta <- a1[1:2, options$nchains + 1]
         
-        beta0 <- beta[1]
+        beta0 <- -beta[1]
         beta1 <- beta[2]
-        pnew <- pnorm(beta0 + beta1*log(doses))   
+        pnew <- pnorm(beta0 + beta1*log(doses))
         
-        Beta0 <- sampl1$bet1[,1]
-        Beta1 <- sampl1$bet1[,2]
+        Beta0 <- -sampl1$beta0
+        Beta1 <- sampl1$beta1
         pstim_sum <- matrix(0, ncol = options$nchains*options$niter/2, nrow = length(doses))
         p_sum <- NULL 
+        
+
+        for(i in 1:ncol(pstim_sum)){
+            pstim_sum[1,i] <- pnorm(Beta0[i] + Beta1[i]*log(doses[1])) 
+        }
+
+        #######################
+        #### Stopping Rule ####
+        #######################
+
+        pstop <- checking1(pstim_sum[1,], target=theta, error=0)
+        stoptox <- (pstop >= prob)
+        stoptrial <- stoptox
+
+
         if(CI == "TRUE"){
-            for(o in 1:length(doses)){
+            p_sum <- summary(pstim_sum[1,])
+            for(o in 2:length(doses)){
                 for(i in 1:ncol(pstim_sum)){
                     pstim_sum[o,i] <- pnorm(Beta0[i] + Beta1[i]*log(doses[o])) 
                 }
@@ -44,10 +60,6 @@ function(y, doses, x, theta, prob = 0.9, options=list(nchains = 4, niter = 4000,
             p_sum <- NULL
         }
         
-        
-        pstop <-  checking1(pnew, target=theta, error=0)
-        stoptox <- (pstop >= prob)
-        stoptrial <- stoptox
         
         # check if we will stop the trial or not
         

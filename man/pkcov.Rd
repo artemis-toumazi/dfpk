@@ -13,19 +13,18 @@ where \eqn{\boldsymbol{\beta} = (\beta_1, \beta_2)}, \eqn{\beta_0} is a constant
 with \eqn{\beta_0 = -beta0mean},
 \deqn{\beta_1 \sim U(l_1, u_1),}
 \deqn{\beta_2 \sim U(0,5),}
-\deqn{l_1 = max(0, beta1mean - 5),}
-\deqn{u_1 = beta1mean + 5}
-where default choices are beta0mean = -14.76, beta1mean = 3.23 and \eqn{\Delta {z_d}_k} is the difference between the logarithm of population AUC at dose \eqn{d_k} and z, the logarithm of AUC of the subject at the same dose.
+\deqn{beta1mean = c(l_1, u_1)}
+where default choices are beta0mean = -14.76, beta1mean = c(0, 8.23) and \eqn{\Delta {z_d}_k} is the difference between the logarithm of population AUC at dose \eqn{d_k} and z, the logarithm of AUC of the subject at the same dose. Therefore, the default choices for model's priors are given by \deqn{betapriors = c(beta0mean = -14.76, l_1 = 0, u_1 = 8.23)}
 
 Finally, the PKCOV model has the following stopping rule in toxicity:
 if
 \deqn{P(p_T(dose) > theta) > prob}
-then, no dose are suggested and the trial is stopped. 
+then, no dose is suggested and the trial is stopped. 
 }
 
 \usage{
 pkcov(y,auc,doses,x,theta, deltaAUC, prob = 0.9, options=list(nchains = 4,
-      niter = 4000, nadapt = 0.8), betapriors = c(-14.76, 3.23), 
+      niter = 4000, nadapt = 0.8), betapriors = c(-14.76, 0, 3.23+5), 
       thetaL = NULL, p0 = NULL, L = NULL, CI =TRUE)
 }
 
@@ -43,10 +42,10 @@ pkcov(y,auc,doses,x,theta, deltaAUC, prob = 0.9, options=list(nchains = 4,
     The toxicity target.
 }
 \item{prob}{
-    The probability for the stopping rule.
+    The threshold of the posterior probability of toxicity for the stopping rule; defaults to 0.9.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to beta0mean = -14.76 and beta1mean = 3.23.
+    A vector with the value for the prior distribution of the regression parameters in the model; defaults to betapriors = c(beta0mean, beta1mean), where beta0mean = -14.76 and beta1mean = c(0, 8.23).
 }
 \item{options}{
     A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).
@@ -96,6 +95,7 @@ Piantadosi, S. and Liu, G. (1996) Improved designs for dose escalation studies u
 }
 
 \examples{
+\dontrun{
 doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
 theta <- 0.2
 AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
@@ -104,6 +104,7 @@ y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
 deltaAUC <- c(0, 1.3, -0.34, -2.7, 0.39, -2.45)
 options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
 res <- pkcov(y, AUCs, doses, x, theta, deltaAUC, options=options)
+}
 }
 
 \keyword{models}

@@ -23,7 +23,7 @@ nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
 
 \item{options}{A list with the Stan model's options.}
 
-\item{prob}{The probability of toxicity for the corresponding stopping rule of the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
+\item{prob}{The threshold of the posterior probability of toxicity for the stopping rule in the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
 
 \item{betapriors}{A vector with the value for the prior distribution of the regression parameters in the model; defaults to NULL.}
 

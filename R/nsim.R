@@ -30,9 +30,9 @@ function(doses, N, cohort, icon, theta, model, simulatedData, TR=length(simulate
         }else if (model == "pkpop" & is.null(betapriors)){
         	betapriors = c(10, 10000, 10, 5)
         }else if (model == "dtox" & is.null(betapriors)){
-        	betapriors = c(6.71, 1.43)
+        	betapriors = c(0, 16.71, 0, 6.43)
         }else if(model == "pkcov" & is.null(betapriors)){
-        	betapriors = c(-14.76, 3.23)
+        	betapriors = c(-14.76, 0, 3.23 + 5)
         }else if (model == "pklogit" & is.null(betapriors)){
         	betapriors = c(10, 10000, 20, 10)
         }

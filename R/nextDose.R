@@ -7,7 +7,7 @@
 #' @param x A vector with the dose level assigned to the patients.
 #' @param theta The toxicity threshold.
 #' @param options A list with the Stan model's options.
-#' @param prob The probability of toxicity for the corresponding stopping rule of the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
+#' @param prob The threshold of the posterior probability of toxicity for the stopping rule in the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
 #' @param betapriors A vector with the value for the prior distribution of the regression parameters in the model; defaults to NULL.
 #' @param thetaL A second threshold of AUC in the \code{\link{pkcrm}} model; defaults to theta in the PKCRM model and NULL for the models \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pktox}}, \code{\link{pkpop}} and \code{\link{pklogit}}.
 #' @param p0 The skeleton of CRM for \code{\link{pkcrm}}; defaults to NULL.
@@ -67,8 +67,8 @@ nextDose <- function(model, y, AUCs, doses, x, theta, options, prob = 0.9, betap
 	if (model == "pktox" & is.null(betapriors)){betapriors = c(10, 10000, 20, 10)
 	}else if(model == "pkcrm" & is.null(betapriors)){betapriors = c(10, 10000)
 	}else if (model == "pkpop" & is.null(betapriors)){betapriors = c(10, 10000, 10, 5)
-	}else if (model == "dtox" & is.null(betapriors)){betapriors = c(6.71, 1.43)
-	}else if(model == "pkcov" & is.null(betapriors)){betapriors = c(-14.76, 3.23)
+	}else if (model == "dtox" & is.null(betapriors)){betapriors = c(0, 16.71, 0, 6.43)
+	}else if(model == "pkcov" & is.null(betapriors)){betapriors = c(-14.76, 0, 3.23 + 5)
 	}else if (model == "pklogit" & is.null(betapriors)){betapriors = c(10, 10000, 20, 10)}
 	m <- model1(y, AUCs, d = doses, x, theta, prob = prob, betapriors = betapriors, thetaL=NULL, options = options, p0 = p0, L = L, deltaAUC = deltaAUC, CI = CI)
 	MTD <- m$newDose

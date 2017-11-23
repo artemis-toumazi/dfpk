@@ -13,17 +13,17 @@ with a bivariate Uniform distribution as prior distribution for \eqn{\boldsymbol
 where \eqn{\boldsymbol{\beta} = (\beta_0,\beta_1)} are the regression parameters and \eqn{\nu} is the standard deviation.
 
 The default choices of the priors are:
-\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0)}
-\deqn{\nu \sim Beta(1,1)}
-\deqn{m = (-log(CL_{pop}), 1)}  where \eqn{Cl_{pop}} is the population clearance.
-\deqn{\beta_2 \sim U(0, beta2mean)}
+\deqn{\boldsymbol{\beta} \vert \nu \sim N(m, \nu*beta0),}
+\deqn{\nu \sim Beta(1,1),}
+\deqn{m = (-log(CL_{pop}), 1),}  where \eqn{Cl_{pop}} is the population clearance.
+\deqn{\beta_2 \sim U(0, beta2mean),}
 \deqn{\beta_3 \sim U(0, beta3mean)}
-where default choices are \eqn{Cl_{pop} = 10}, beta0 = 10000, beta2mean = 20 and beta3mean = 10.
+where default choices are \eqn{Cl_{pop} = 10}, beta0 = 10000, beta2mean = 20 and beta3mean = 10. Therefore, the default choices for model's priors are given by \deqn{betapriors = c(Cl_{pop} = 10, beta0 = 10000, beta2mean = 20, beta3mean = 10)}
 
 Finally, the PKLOGIT model has the following stopping rule in toxicity:
 if
 \deqn{P(p_T(dose) > theta) > prob}
-then, no dose are suggested and the trial is stopped. 
+then, no dose is suggested and the trial is stopped. 
 }
 
 \usage{
@@ -46,10 +46,10 @@ pklogit(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter =
     The toxicity target.
 }
 \item{prob}{
-    The probability for the stopping rule.
+    The threshold of the posterior probability of toxicity for the stopping rule; defaults to 0.9.
 }
 \item{betapriors}{
-    A vector with the value for the prior distribution of the regression parameters in the model; defaults to \eqn{Cl_{pop} = 10}, beta0 = 10000, beta2mean = 20 and beta3mean = 10.
+    A vector with the values for the prior distribution of the regression parameters in the model; defaults to betapriors = c(\eqn{Cl_{pop}}, beta0, beta2mean, beta3mean), where \eqn{Cl_{pop} = 10}, beta0 = 10000, beta2mean = 20 and beta3mean = 10.
 }
 \item{options}{
     A list with the Stan model's options; the number of chains, how many iterations for each chain and the number of warmup iterations; defaults to options = list(nchains = 4, niter = 4000, nadapt = 0.8).
@@ -99,7 +99,6 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
 }
 
 \examples{
-\dontrun{
     doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
     theta <- 0.2
     options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
@@ -108,7 +107,6 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
     y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
 
     res <- pklogit(y, AUCs, doses, x, theta, options = options)
-}
 }
 
 \keyword{models}

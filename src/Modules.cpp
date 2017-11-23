@@ -7,7 +7,7 @@ RCPP_MODULE(stan_fit4cdf_reg_dtox_mod) {
 
     class_<rstan::stan_fit<model_cdf_reg_dtox_namespace::model_cdf_reg_dtox, boost::random::ecuyer1988> >("model_cdf_reg_dtox")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_cdf_reg_dtox_namespace::model_cdf_reg_dtox, boost::random::ecuyer1988> ::call_sampler)
@@ -36,7 +36,7 @@ RCPP_MODULE(stan_fit4cdf_reg_pktox_mod) {
 
     class_<rstan::stan_fit<model_cdf_reg_pktox_namespace::model_cdf_reg_pktox, boost::random::ecuyer1988> >("model_cdf_reg_pktox")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_cdf_reg_pktox_namespace::model_cdf_reg_pktox, boost::random::ecuyer1988> ::call_sampler)
@@ -65,7 +65,7 @@ RCPP_MODULE(stan_fit4logit_reg_pkcov_mod) {
 
     class_<rstan::stan_fit<model_logit_reg_pkcov_namespace::model_logit_reg_pkcov, boost::random::ecuyer1988> >("model_logit_reg_pkcov")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_logit_reg_pkcov_namespace::model_logit_reg_pkcov, boost::random::ecuyer1988> ::call_sampler)
@@ -94,7 +94,7 @@ RCPP_MODULE(stan_fit4logit_reg_pklogit_mod) {
 
     class_<rstan::stan_fit<model_logit_reg_pklogit_namespace::model_logit_reg_pklogit, boost::random::ecuyer1988> >("model_logit_reg_pklogit")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_logit_reg_pklogit_namespace::model_logit_reg_pklogit, boost::random::ecuyer1988> ::call_sampler)
@@ -123,7 +123,7 @@ RCPP_MODULE(stan_fit4logit_reg_pkpop_mod) {
 
     class_<rstan::stan_fit<model_logit_reg_pkpop_namespace::model_logit_reg_pkpop, boost::random::ecuyer1988> >("model_logit_reg_pkpop")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_logit_reg_pkpop_namespace::model_logit_reg_pkpop, boost::random::ecuyer1988> ::call_sampler)
@@ -152,7 +152,7 @@ RCPP_MODULE(stan_fit4reg_auc_mod) {
 
     class_<rstan::stan_fit<model_reg_auc_namespace::model_reg_auc, boost::random::ecuyer1988> >("model_reg_auc")
 
-    .constructor<SEXP,SEXP>()
+    .constructor<SEXP,SEXP,SEXP>()
 
 
     .method("call_sampler", &rstan::stan_fit<model_reg_auc_namespace::model_reg_auc, boost::random::ecuyer1988> ::call_sampler)

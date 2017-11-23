@@ -10,7 +10,7 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
          betapriors = c(10, 10000, 20, 10), thetaL=NULL, p0=NULL, L=NULL, deltaAUC=NULL, CI = TRUE){
         
         checking1 <- function(x,target,error){
-            sum(x>(target+error))/length(x)              ## how many x are greater than (target+error) / length(x) =  the probability
+            sum(x>(target+error))/length(x)             
         }
         
         f <- function(v,lambda,parmt){
@@ -23,7 +23,7 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         
         num <- length(x)           # how many patients
         dose1 <- cbind(rep(1,num), log(doses[x]))
-        mu1 <- seq(-log10(betapriors[1])+1, 1-1)
+        mu1 <- -log(betapriors[1])
         
         # For STAN model
         data_s <- list(N=num, auc=log(auc), dose=dose1, mu = mu1, beta0=betapriors[2])
@@ -34,7 +34,7 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         a1=get_posterior_mean(reg1)
         beta1 <- a1[1:2,options$nchains+1]
         nu <- a1[3,options$nchains+1]
-        auc1 <- cbind(rep(1,num), log(auc))
+        auc1 <- log(auc)
         
         # For STAN model
         data_s <- list(N=num, y=y, dose=auc1, beta2mean = betapriors[3], beta3mean = betapriors[4])
@@ -43,22 +43,45 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         reg2 <- sampling(sm_lr, data=data_s, iter=options$niter, chains=options$nchains, control = list(adapt_delta = options$nadapt))
         sampl2 <- extract(reg2)
         a2 = get_posterior_mean(reg2)
-        Beta <- a2[3:4,options$nchains+1]
         
-        # Computation probability  
+        Beta <- a2[1:2,options$nchains+1]
+        Beta2 <- Beta[1]
+        Beta3 <- Beta[2]
+
+        # Computation probability 
         pstim <- NULL
         pstim_sum <- matrix(0, ncol = options$nchains*options$niter/2, nrow = length(doses))
         p_sum <- NULL
         for (o in 1:length(doses)){
             parmt = c(a1[1,options$nchains+1] + a1[2,options$nchains+1]*log(doses[o]), a1[3,options$nchains+1])
-            pstim <- c(pstim, integrate(f,-Inf, Inf, lambda=a2[3:4,options$nchains+1], parmt=parmt)$value)
+            pstim <- c(pstim, integrate(f,-Inf, Inf, lambda=c(-Beta2, Beta3), parmt=parmt)$value)
         }
+
+        ## Calculating the credible interval for one sample to check the stopping rule ##
+
+        parmt1 = sampl1$b[,1] + sampl1$b[,2]*log(doses[1])
+        parmt2 = sampl1$sigma
+        for(i in 1:ncol(pstim_sum)){
+            pstim_sum[1,i] <- integrate(f2,-Inf, Inf, lambda1 = -sampl2$beta2[i], lambda2 = sampl2$beta3[i], 
+                                        parmt1 = parmt1[i], parmt2 = parmt2[i])$value
+        }
+
+        #######################
+        #### Stopping Rule ####
+        #######################
+        
+        pstop <-  checking1(pstim_sum[1,], target=theta, error=0)
+        stoptox <- (pstop >= prob)
+        stoptrial <- stoptox
+
+
         if(CI == "TRUE"){
-            for(o in 1:length(doses)){
+            p_sum <- summary(pstim_sum[1,])
+            for(o in 2:length(doses)){
                 parmt1 = sampl1$b[,1] + sampl1$b[,2]*log(doses[o])
                 parmt2 = sampl1$sigma
                 for(i in 1:ncol(pstim_sum)){
-                    pstim_sum[o,i] <- integrate(f2,-Inf, Inf, lambda1 = sampl2$bet1[i,1], lambda2 = sampl2$bet1[i,2], 
+                    pstim_sum[o,i] <- integrate(f2,-Inf, Inf, lambda1 = -sampl2$beta2[i], lambda2 = sampl2$beta3[i], 
                                                 parmt1 = parmt1[i], parmt2 = parmt2[i])$value
                 }
                 p_sum <- rbind(p_sum, summary(pstim_sum[o,]))
@@ -67,9 +90,6 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
             p_sum <- NULL
         }
         
-        pstop <-  checking1(pstim, target=theta, error=0)
-        stoptox <- (pstop >= prob)
-        stoptrial <- stoptox
         
         # check if we will stop the trial or not
         

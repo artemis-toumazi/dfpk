@@ -1,26 +1,22 @@
 data {
   int<lower=0> N;         // number of previous patients
   int y[N];               // binary response
-  matrix[N,2] dose;       // log dose + intercept
+  real dose[N];           // log dose 
   real beta3mean;
   real beta4mean;
 }
 parameters {
-  vector[2] bet;
-}
-transformed parameters {
-  vector[2] bet1;
-  bet1[1] = bet[1];
-  bet1[2] = -bet[2];
+  real<lower=0, upper=beta3mean> beta3; 
+  real<lower=0, upper=beta4mean> beta4;
 }
 model {
   real p[N];          // probabilities
   vector[N] z;        // logistic transformation
-  z = dose*bet1;
   for (n in 1:N){
+  z[n] = beta3 - dose[n]*beta4;
   p[n] = 1 / (1 + exp(z[n]));
   }
   y ~ bernoulli(p);
-  bet[1] ~ uniform(0.0, beta3mean);
-  bet[2] ~ uniform(0.0, beta4mean);
+  beta3 ~ uniform(0.0, beta3mean);
+  beta4 ~ uniform(0.0, beta4mean);
 }

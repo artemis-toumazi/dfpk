@@ -1,12 +1,15 @@
 Package: dfpk
 Type: Package
-Title: Bayesian Dose-Finding Designs using Pharmacokinetics(PK) for
+Title: Bayesian Dose-Finding Designs using Pharmacokinetics (PK) for
         Phase I Clinical Trials
-Version: 3.3.2
-Date: 2017-09-25
+Version: 3.4.0
+Date: 2017-10-24
 Author: Artemis Toumazi <artemis.toumazi@inserm.fr>, Moreno Ursino <moreno.ursino@inserm.fr> 
 		and Sarah Zohar <sarah.zohar@inserm.fr>
 Maintainer: Artemis Toumazi <artemis.toumazi@inserm.fr>
+Copyright: stanmodels.R is copyright 2015, 2016 Trustees of Columbia University. 
+			All other files are copyright French National Institute of Health and Medical 
+			Research.
 Description: Statistical methods involving PK measures are provided, in the dose allocation 
 						process during a Phase I clinical trials. These methods enter pharmacokinetics 
 						(PK) in the dose finding designs in different ways, including covariates models,
@@ -14,7 +17,7 @@ Description: Statistical methods involving PK measures are provided, in the dose
 						This package provides functions to generate data from several scenarios and functions 
 						to run simulations which their objective is to determine the maximum tolerated dose (MTD).
 License: GPL (>= 3) | file LICENSE
-Depends: R (>= 3.0.2), Rcpp (>= 0.12.0), rstan (>= 2.12.1)
+Depends: R (>= 3.0.2), Rcpp (>= 0.12.11), rstan (>= 2.12.1)
 Imports: ggplot2 (>= 2.0.0), dfcrm, methods, stats, graphics,
         grDevices, PK
 LinkingTo: StanHeaders (>= 2.12.0), rstan (>= 2.12.1), BH (>= 1.60),

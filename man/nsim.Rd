@@ -41,7 +41,7 @@ nsim(doses, N, cohort, icon, theta, model, simulatedData, TR, prob = 0.9, AUCmet
         The total number of trials to be simulated. 
     }
     \item{prob}{
-        The probability of toxicity for the corresponding stopping rule of the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
+        The threshold of the posterior probability of toxicity for the stopping rule in the selected model; defaults to 0.9. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.
     }
     \item{AUCmethod}{
         A string number specifying the estimation method for AUC. Valid choices are "1" for a "compartmental method" and "2" for non-compartmental method; defaults to 2.
