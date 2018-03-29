@@ -80,12 +80,14 @@ A list is returned, consisting of determination of the next recommended dose and
 }
 
 \references{
-Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
+Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal, <doi:10.1002/bimj.201600084>.
+
+Toumazi, A., et al, (2018) dfpk: An R-package for Bayesian dose-finding designs using pharmacokinetics (PK) for phase I clinical trials, Computer Methods and Programs in Biomedicine, <doi:10.1016/j.cmpb.2018.01.023>.
 
 Piantadosi, S. and Liu, G. (1996) Improved designs for dose escalation studies using pharmacokinetic measurements. Statistics in Medicine, 15 (15), 1605-1618.
 }
 
-\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr},
+\author{Artemis Toumazi \email{artemis.toumazi@gmail.com},
         Moreno Ursino \email{moreno.ursino@inserm.fr},
         Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
@@ -95,16 +97,16 @@ Piantadosi, S. and Liu, G. (1996) Improved designs for dose escalation studies u
 }
 
 \examples{
-\dontrun{
-doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2
-AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
-x <- c(1,2,3,4,5,6)
-y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
-deltaAUC <- c(0, 1.3, -0.34, -2.7, 0.39, -2.45)
-options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
-res <- pkcov(y, AUCs, doses, x, theta, deltaAUC, options=options)
-}
+    \dontrun{
+        doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+        theta <- 0.2
+        AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
+        x <- c(1,2,3,4,5,6)
+        y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
+        deltaAUC <- c(0, 1.3, -0.34, -2.7, 0.39, -2.45)
+        options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
+        res <- pkcov(y, AUCs, doses, x, theta, deltaAUC, options=options)
+    }
 }
 
 \keyword{models}

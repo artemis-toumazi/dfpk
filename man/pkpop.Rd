@@ -85,7 +85,9 @@ A list is returned, consisting of determination of the next recommended dose and
 }
 
 \references{
-Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
+Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal, <doi:10.1002/bimj.201600084>.
+
+Toumazi, A., et al, (2018) dfpk: An R-package for Bayesian dose-finding designs using pharmacokinetics (PK) for phase I clinical trials, Computer Methods and Programs in Biomedicine, <doi:10.1016/j.cmpb.2018.01.023>.
 
 Patterson, S., Francis, S., Ireson, M., Webber, D., and Whitehead, J. (1999) A novel bayesian decision procedure for early-phase dose-finding studies. Journal of Biopharmaceutical Statistics, 9 (4), 583-597.
 
@@ -94,7 +96,7 @@ Whitehead, J., Patterson, S., Webber, D., Francis, S., and Zhou, Y. (2001) Easy-
 Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayesian approach for dose-escalation in a phase i clinical trial incorporating pharmacodynamic endpoints. Journal of Biopharmaceutical Statistics, 17 (6), 1117-1129.
 }
 
-\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr},
+\author{Artemis Toumazi \email{artemis.toumazi@gmail.com},
         Moreno Ursino \email{moreno.ursino@inserm.fr},
         Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
@@ -104,14 +106,16 @@ Whitehead, J., Zhou, Y., Hampson, L., Ledent, E., and Pereira, A. (2007) A bayes
 }
 
 \examples{
-doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
-theta <- 0.2      # choice
-options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
-AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
-x <- c(1,2,3,4,5,6)
-y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
+    \dontrun{
+        doses <- c(12.59972,34.65492,44.69007,60.80685,83.68946,100.37111)
+        theta <- 0.2      # choice
+        options <- list(nchains = 2, niter = 4000, nadapt = 0.8)
+        AUCs <-  c(0.43, 1.4, 5.98, 7.98, 11.90, 3.45)
+        x <- c(1,2,3,4,5,6)
+        y <- c(FALSE,FALSE,FALSE,FALSE,TRUE,FALSE)
 
-res <- pkpop(y, AUCs, doses, x, theta, options = options)
+        res <- pkpop(y, AUCs, doses, x, theta, options = options)
+    }
 }
 
 \keyword{models}

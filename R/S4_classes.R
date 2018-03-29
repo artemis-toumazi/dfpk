@@ -217,9 +217,11 @@ setGeneric("plot")
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
 #' @description A plot selection showing either the dose escalation allocation of the selected trial or the plot of the final posterior distributions of the probability of toxicity at each dose or the boxplot of the sampling distribution of the probability of toxicity at each dose in the end of the trial over the total number of trials. 
-#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' @author Artemis Toumazi \email{artemis.toumazi@@artemis.com}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
 #' 
-#' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
+#' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal, <doi:10.1002/bimj.201600084>.
+#'
+#' Toumazi, A., et al, (2018) dfpk: An R-package for Bayesian dose-finding designs using pharmacokinetics (PK) for phase I clinical trials, Computer Methods and Programs in Biomedicine, <doi:10.1016/j.cmpb.2018.01.023>.
 #' 
 #' @import methods
 #' @import stats
@@ -310,10 +312,12 @@ setMethod(f = "plot", signature =c("dosefinding", "missing"), definition = funct
 #' @param main the title of the graph.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
-#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' @author Artemis Toumazi \email{artemis.toumazi@@gmail.com}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
 #'
-#' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
+#' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal, <doi:10.1002/bimj.201600084>.
 #'
+#' Toumazi, A., et al, (2018) dfpk: An R-package for Bayesian dose-finding designs using pharmacokinetics (PK) for phase I clinical trials, Computer Methods and Programs in Biomedicine, <doi:10.1016/j.cmpb.2018.01.023>.
+#' 
 #' @import methods
 #' @import stats
 #' @import graphics
@@ -338,10 +342,12 @@ setMethod(f = "plot", signature =c("scen", "missing"), definition = function(x, 
 #' @param CI Indicate if the "dose" object includes the 95\% credible interval for the posterior dose response plot; defaults to TRUE.
 #' @param \dots other arguments to the \code{\link[=graphics]{plot.default}} function can be passed here.
 #'
-#' @author Artemis Toumazi \email{artemis.toumazi@@inserm.fr}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
+#' @author Artemis Toumazi \email{artemis.toumazi@@gmail.com}, Moreno Ursino \email{moreno.ursino@@inserm.fr}, Sarah Zohar \email{sarah.zohar@@inserm.fr}
 #'
-#' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal.
+#' @references Ursino, M., et al, (2017) Dose-finding methods for Phase I clinical trials using pharmacokinetics in small populations, Biometrical Journal, <doi:10.1002/bimj.201600084>.
 #'
+#' Toumazi, A., et al, (2018) dfpk: An R-package for Bayesian dose-finding designs using pharmacokinetics (PK) for phase I clinical trials, Computer Methods and Programs in Biomedicine, <doi:10.1016/j.cmpb.2018.01.023>.
+#' 
 #' @import methods
 #' @import stats
 #' @import graphics 

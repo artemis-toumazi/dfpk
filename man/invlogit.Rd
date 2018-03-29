@@ -25,7 +25,7 @@ invlogit(x)
   A vector of estimated probabilities
 }
 
-\author{Artemis Toumazi \email{artemis.toumazi@inserm.fr}, 
+\author{Artemis Toumazi \email{artemis.toumazi@gmail.com}, 
         Moreno Ursino \email{moreno.ursino@inserm.fr},
         Sarah Zohar \email{sarah.zohar@inserm.fr}
         }
