@@ -14,11 +14,11 @@ function(y, auc, doses, x, theta, prob = 0.9, options = list(nchains = 4, niter 
         }
         
         f_logit <- function(v,lambda,parmt){
-            invlogit(-lambda[1]+lambda[2]*v)*dnorm(v,parmt[1],sqrt(parmt[2]))
+            invlogit(-lambda[1]+lambda[2]*v)*dnorm(v,parmt[1],parmt[2])
         }
         
         f2_logit <- function(v, lambda1, lambda2, parmt1, parmt2){
-            invlogit(-lambda1+lambda2*v)*dnorm(v,parmt1,sqrt(parmt2))
+            invlogit(-lambda1+lambda2*v)*dnorm(v,parmt1,parmt2)
         }
         
         num <- length(x)                        # how many patients
