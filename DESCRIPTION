@@ -3,7 +3,7 @@ Type: Package
 Title: Bayesian Dose-Finding Designs using Pharmacokinetics (PK) for
         Phase I Clinical Trials
 Version: 3.5.1
-Date: 2018-10-16
+Date: 2018-11-07
 Authors@R: c(person("Artemis", "Toumazi", email = "artemis.toumazi@gmail.com", role = c("cre", "aut")), 
 			 person("Sarah", "Zohar", email = "sarah.zohar@inserm.fr", role = "aut"),
 			 person("Moreno", "Ursino", email = "moreno.ursino@inserm.fr", role = "aut"),
@@ -24,6 +24,7 @@ RcppModules: stan_fit4logit_reg_pkcov_mod, stan_fit4cdf_reg_dtox_mod,
         stan_fit4logit_reg_pklogit_mod, stan_fit4reg_auc_mod
 LazyData: true
 NeedsCompilation: yes
+SystemRequirements: GNU make
 URL: http://github.com/artemis-toumazi/dfpk
 BugReports: http://github.com/artemis-toumazi/dfpk/issues
 RoxygenNote: 6.0.1
