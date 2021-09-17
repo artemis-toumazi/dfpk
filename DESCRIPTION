@@ -15,10 +15,10 @@ Copyright: stanmodels.R is copyright 2015, 2016, 2017 Trustees of Columbia Unive
 Description: Statistical methods involving PK measures are provided, in the dose allocation process during a Phase I clinical trials. These methods, proposed by Ursino et al, (2017) <doi:10.1002/bimj.201600084>, enter pharmacokinetics (PK) in the dose finding designs in different ways, including covariates models, dependent variable or hierarchical models. This package provides functions to generate data from several scenarios and functions to run simulations which their objective is to determine the maximum tolerated dose (MTD).
 License: GPL (>= 3) | file LICENSE
 Depends: R (>= 3.4.0), Rcpp (>= 0.12.11), rstan (>= 2.18.1)
-Imports: ggplot2 (>= 2.0.0), dfcrm, methods, stats, graphics,
+Imports: ggplot2 (>= 2.0.0), RcppParallel (>= 5.0.1), rstantools (>= 2.1.1), dfcrm, methods, stats, graphics,
         grDevices, PK
 LinkingTo: StanHeaders (>= 2.18.0), rstan (>= 2.18.1), BH (>= 1.66),
-        Rcpp (>= 0.12.0), RcppEigen
+        Rcpp (>= 0.12.0), RcppEigen, RcppParallel (>= 5.0.1)
 RcppModules: stan_fit4logit_reg_pkcov_mod, stan_fit4cdf_reg_dtox_mod,
         stan_fit4logit_reg_pkpop_mod, stan_fit4cdf_reg_pktox_mod,
         stan_fit4logit_reg_pklogit_mod, stan_fit4reg_auc_mod
@@ -27,7 +27,7 @@ NeedsCompilation: yes
 SystemRequirements: GNU make
 URL: http://github.com/artemis-toumazi/dfpk
 BugReports: http://github.com/artemis-toumazi/dfpk/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
 Packaged: 2017-06-30 10:15:14 UTC; artemistoumazi
 Repository: CRAN
 Date/Publication: 2017-06-30 13:28:18 UTC
