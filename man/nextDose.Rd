@@ -4,9 +4,22 @@
 \alias{nextDose}
 \title{Next dose determination of a phase I clinical trial.}
 \usage{
-nextDose(model, y, AUCs, doses, x, theta, options, prob = 0.9,
-  betapriors = NULL, thetaL = NULL, p0 = NULL, L = NULL,
-  deltaAUC = NULL, CI = TRUE)
+nextDose(
+  model,
+  y,
+  AUCs,
+  doses,
+  x,
+  theta,
+  options,
+  prob = 0.9,
+  betapriors = NULL,
+  thetaL = NULL,
+  p0 = NULL,
+  L = NULL,
+  deltaAUC = NULL,
+  CI = TRUE
+)
 }
 \arguments{
 \item{model}{A character string to specify the selected dose-finding model. See for details \code{\link{dtox}}, \code{\link{pkcov}}, \code{\link{pkcrm}}, \code{\link{pktox}}, \code{\link{pkpop}}, \code{\link{pklogit}}.}
